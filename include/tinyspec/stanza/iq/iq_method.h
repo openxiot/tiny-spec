@@ -50,7 +50,8 @@ typedef enum
     /*
      * device/node
      */
-    IQ_METHOD_GET_NODES             = 0x41
+    IQ_METHOD_GET_NODES             = 0x41,
+    IQ_METHOD_GET_CHILDREN          = 0x42
 } IQMethod;
 
 TINYSPEC_API

@@ -80,6 +80,7 @@ static bool addQueryContent(IQQuery *query, JsonObject *content)
 
             // node/control
         case IQ_METHOD_GET_NODES:
+        case IQ_METHOD_GET_CHILDREN:
             break;
 
         default:
@@ -146,6 +147,7 @@ static TINYCORE_RET decodeQueryContent(IQQuery *query, JsonObject *content)
             break;
 
         case IQ_METHOD_GET_NODES:
+        case IQ_METHOD_GET_CHILDREN:
             break;
 
         default:

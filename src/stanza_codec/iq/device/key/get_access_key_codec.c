@@ -45,7 +45,10 @@ TINYCORE_RET GetAccessKeyCodec_DecodeResult(JsonObject *content, ResultGetAccess
             break;
         }
 
-        strncpy(result->key, key->value, STANZA_ACCESS_KEY_LEN);
+        /* Leave room for the terminator even when the server sends a key
+         * of the maximum length. */
+        strncpy(result->key, key->value, STANZA_ACCESS_KEY_LEN - 1);
+        result->key[STANZA_ACCESS_KEY_LEN - 1] = '\0';
     } while (false);
 
     return ret;

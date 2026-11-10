@@ -12,6 +12,9 @@
 #define STRING_MESSAGE_TOPIC_UNDEFINED      "undefined"
 #define STRING_MESSAGE_TOPIC_DEVICE         "urn:xiot:device"
 #define STRING_MESSAGE_TOPIC_XAN            "urn:xiot:node"
+#define STRING_MESSAGE_TOPIC_OWNERSHIP      "urn:xiot:ownership"
+#define STRING_MESSAGE_TOPIC_OWNERSHIP_ALT  "urn:xiot:owner"
+#define STRING_MESSAGE_TOPIC_CONNECTION     "urn:xiot:connection"
 
 const char * message_topic_to_string(MessageTopic topic)
 {
@@ -22,6 +25,12 @@ const char * message_topic_to_string(MessageTopic topic)
 
         case MESSAGE_TOPIC_DEVICE:
             return STRING_MESSAGE_TOPIC_DEVICE;
+
+        case MESSAGE_TOPIC_OWNERSHIP:
+            return STRING_MESSAGE_TOPIC_OWNERSHIP;
+
+        case MESSAGE_TOPIC_CONNECTION:
+            return STRING_MESSAGE_TOPIC_CONNECTION;
 
         default:
             return STRING_MESSAGE_TOPIC_UNDEFINED;
@@ -40,6 +49,17 @@ MessageTopic message_topic_from_string(const char *string)
     if (STR_EQUAL(STRING_MESSAGE_TOPIC_XAN, string))
     {
         return MESSAGE_TOPIC_NODE;
+    }
+
+    if (STR_EQUAL(STRING_MESSAGE_TOPIC_OWNERSHIP, string)
+        || STR_EQUAL(STRING_MESSAGE_TOPIC_OWNERSHIP_ALT, string))
+    {
+        return MESSAGE_TOPIC_OWNERSHIP;
+    }
+
+    if (STR_EQUAL(STRING_MESSAGE_TOPIC_CONNECTION, string))
+    {
+        return MESSAGE_TOPIC_CONNECTION;
     }
 
     return MESSAGE_TOPIC_UNDEFINED;

@@ -1,0 +1,11 @@
+{
+    "message": {
+        "id": "6002",
+        "topic": "urn:xiot:connection",
+        "type": "status-changed",
+        "payload": {
+            "ready": true,
+            "timestamp": 1762742402
+        }
+    }
+}

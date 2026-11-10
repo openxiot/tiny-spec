@@ -12,6 +12,7 @@
 #include <tinyspec/stanza_codec/iq/device/control/get_property_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/set_property_codec.h>
 #include <tinyspec/stanza_codec/iq/node/control/get_nodes_codec.h>
+#include <tinyspec/stanza_codec/iq/node/control/get_children_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/get_properties_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/set_properties_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/invoke_action_codec.h>
@@ -74,6 +75,10 @@ static bool addResultContent(IQResult *result, JsonObject *content)
             // node/control
         case IQ_METHOD_GET_NODES:
             done = GetNodesCodec_EncodeResult(&result->content.getNodes, content);
+            break;
+
+        case IQ_METHOD_GET_CHILDREN:
+            done = GetChildrenCodec_EncodeResult(&result->content.getChildren, content);
             break;
 
         default:
@@ -140,6 +145,10 @@ static TINYCORE_RET decodeResultContent(IQResult *result, JsonObject *content)
         // node/control
         case IQ_METHOD_GET_NODES:
             ret = GetNodesCodec_DecodeResult(content, &result->content.getNodes);
+            break;
+
+        case IQ_METHOD_GET_CHILDREN:
+            ret = GetChildrenCodec_DecodeResult(content, &result->content.getChildren);
             break;
 
         default:

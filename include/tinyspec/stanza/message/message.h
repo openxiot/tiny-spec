@@ -21,7 +21,9 @@ typedef enum
 {
     MESSAGE_TOPIC_UNDEFINED = 0,
     MESSAGE_TOPIC_DEVICE    = 1,
-    MESSAGE_TOPIC_NODE      = 2
+    MESSAGE_TOPIC_NODE      = 2,
+    MESSAGE_TOPIC_OWNERSHIP = 3,
+    MESSAGE_TOPIC_CONNECTION = 4
 } MessageTopic;
 
 typedef struct

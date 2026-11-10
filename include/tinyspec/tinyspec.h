@@ -37,6 +37,12 @@
 #include <tinyspec/iot_typedef/notice/device/impl/device_event_occurred_codec.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed_codec.h>
+#include <tinyspec/iot_typedef/notice/device/impl/device_properties_changed.h>
+#include <tinyspec/iot_typedef/notice/device/impl/device_properties_changed_codec.h>
+#include <tinyspec/iot_typedef/notice/owner/owner_notice.h>
+#include <tinyspec/iot_typedef/notice/owner/owner_notice_codec.h>
+#include <tinyspec/iot_typedef/notice/connection/connection_notice.h>
+#include <tinyspec/iot_typedef/notice/connection/connection_notice_codec.h>
 #include <tinyspec/iot_typedef/notice/node/impl/node_changed_codec.h>
 #include <tinyspec/iot_typedef/notice/node/node_notice.h>
 #include <tinyspec/iot_typedef/notice/node/node_notice_codec.h>
@@ -103,6 +109,8 @@
 #include <tinyspec/stanza/iq/iq_query.h>
 #include <tinyspec/stanza/iq/iq_result.h>
 #include <tinyspec/stanza/iq/node/control/get_nodes.h>
+#include <tinyspec/stanza/iq/node/control/get_children.h>
+#include <tinyspec/stanza/iq/node/control/factory/get_children_factory.h>
 #include <tinyspec/stanza/message/message.h>
 #include <tinyspec/stanza/stanza.h>
 #include <tinyspec/stanza/stanza_constant.h>
@@ -123,6 +131,7 @@
 #include <tinyspec/stanza_codec/iq/iq_query_codec.h>
 #include <tinyspec/stanza_codec/iq/iq_result_codec.h>
 #include <tinyspec/stanza_codec/iq/node/control/get_nodes_codec.h>
+#include <tinyspec/stanza_codec/iq/node/control/get_children_codec.h>
 #include <tinyspec/stanza_codec/message/message_codec.h>
 #include <tinyspec/stanza_codec/stanza_codec.h>
 

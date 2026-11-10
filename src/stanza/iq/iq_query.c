@@ -66,6 +66,7 @@ TINYCORE_RET IQQuery_Initialize(IQQuery *thiz)
 
         // node/control
         case IQ_METHOD_GET_NODES:
+        case IQ_METHOD_GET_CHILDREN:
             break;
 
         default:
@@ -130,6 +131,7 @@ void IQQuery_Dispose(IQQuery *thiz)
 
         // node/control
         case IQ_METHOD_GET_NODES:
+        case IQ_METHOD_GET_CHILDREN:
             break;
 
         default:

@@ -1,0 +1,12 @@
+{
+    "message": {
+        "id": "5",
+        "topic": "urn:xiot:ownership",
+        "type": "ownership-disclaimed",
+        "payload": {
+            "appId": "jdsmart-device-iot",
+            "ownerId": "owner-1234",
+            "did": "did-0001"
+        }
+    }
+}

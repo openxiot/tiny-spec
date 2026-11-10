@@ -37,12 +37,26 @@ static void test_type_strings(void)
     TINY_TEST_CHECK(node_notice_type_from_string("unknown") == NODE_NOTICE_UNDEFINED);
     TINY_TEST_CHECK(node_notice_type_from_string(NULL) == NODE_NOTICE_UNDEFINED);
 
+    TINY_TEST_CHECK(strcmp(device_notice_type_to_string(DEVICE_NOTICE_PROPERTIES_CHANGED), "properties-changed") == 0);
+    TINY_TEST_CHECK(strcmp(device_notice_type_to_string(DEVICE_NOTICE_PROPERTIES_NOTIFY), "properties-notify") == 0);
+    TINY_TEST_CHECK(device_notice_type_from_string("properties-changed") == DEVICE_NOTICE_PROPERTIES_CHANGED);
+    TINY_TEST_CHECK(device_notice_type_from_string("properties-notify") == DEVICE_NOTICE_PROPERTIES_NOTIFY);
+
+    TINY_TEST_CHECK(strcmp(owner_notice_type_to_string(OWNER_NOTICE_OWNERSHIP_TAKEN), "ownership-taken") == 0);
+    TINY_TEST_CHECK(strcmp(owner_notice_type_to_string(OWNER_NOTICE_OWNERSHIP_DISCLAIMED), "ownership-disclaimed") == 0);
+    TINY_TEST_CHECK(owner_notice_type_from_string("ownership-taken") == OWNER_NOTICE_OWNERSHIP_TAKEN);
+    TINY_TEST_CHECK(owner_notice_type_from_string("ownership-disclaimed") == OWNER_NOTICE_OWNERSHIP_DISCLAIMED);
+    TINY_TEST_CHECK(owner_notice_type_from_string("unknown") == OWNER_NOTICE_UNDEFINED);
+
     TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_DEVICE), "urn:xiot:device") == 0);
     TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_NODE), "urn:xiot:node") == 0);
+    TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_OWNERSHIP), "urn:xiot:ownership") == 0);
     TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_UNDEFINED), "undefined") == 0);
 
     TINY_TEST_CHECK(message_topic_from_string("urn:xiot:device") == MESSAGE_TOPIC_DEVICE);
     TINY_TEST_CHECK(message_topic_from_string("urn:xiot:node") == MESSAGE_TOPIC_NODE);
+    TINY_TEST_CHECK(message_topic_from_string("urn:xiot:ownership") == MESSAGE_TOPIC_OWNERSHIP);
+    TINY_TEST_CHECK(message_topic_from_string("urn:xiot:owner") == MESSAGE_TOPIC_OWNERSHIP);
     TINY_TEST_CHECK(message_topic_from_string("urn:xiot:unknown") == MESSAGE_TOPIC_UNDEFINED);
     TINY_TEST_CHECK(message_topic_from_string(NULL) == MESSAGE_TOPIC_UNDEFINED);
 }

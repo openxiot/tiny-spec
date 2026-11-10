@@ -1,0 +1,14 @@
+{
+    "message": {
+        "id": "4",
+        "topic": "urn:xiot:ownership",
+        "type": "ownership-taken",
+        "payload": {
+            "appId": "jdsmart-device-iot",
+            "ownerId": "owner-1234",
+            "userId": "user-5678",
+            "did": "did-0001",
+            "timestamp": 1762742402
+        }
+    }
+}

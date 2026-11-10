@@ -10,6 +10,7 @@
 #include <tinycore/tiny_log.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_event_occurred_codec.h>
 #include <tinyspec/iot_typedef/notice/device/device_notice_codec.h>
+#include <tinyspec/iot_typedef/notice/device/impl/device_properties_changed_codec.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed_codec.h>
 
 TINYCORE_RET DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotice *notice)
@@ -27,6 +28,11 @@ TINYCORE_RET DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotic
 
         case DEVICE_NOTICE_EVENT_OCCURRED:
             ret = DeviceEventOccurredCodec_Encode(payload, & notice->payload.eventOccurred);
+            break;
+
+        case DEVICE_NOTICE_PROPERTIES_CHANGED:
+        case DEVICE_NOTICE_PROPERTIES_NOTIFY:
+            ret = DevicePropertiesChangedCodec_Encode(payload, & notice->payload.propertiesChanged);
             break;
 
         default:
@@ -53,6 +59,11 @@ TINYCORE_RET DeviceNoticeCodec_Decode(DeviceNotice *notice, int type, JsonObject
 
         case DEVICE_NOTICE_EVENT_OCCURRED:
             ret = DeviceEventOccurredCodec_Decode(&notice->payload.eventOccurred, payload);
+            break;
+
+        case DEVICE_NOTICE_PROPERTIES_CHANGED:
+        case DEVICE_NOTICE_PROPERTIES_NOTIFY:
+            ret = DevicePropertiesChangedCodec_Decode(&notice->payload.propertiesChanged, payload);
             break;
 
         default:

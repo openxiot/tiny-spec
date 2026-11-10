@@ -31,6 +31,26 @@ TINYCORE_RET ActionOperationCodec_Invoke_Query_Decode(JsonObject *content, Actio
     {
         JsonArray *in = JsonObject_GetArray(content, "in");
         JsonString *aid = JsonObject_GetString(content, "aid");
+
+        /* The on-the-wire invoke-actions query wraps the action in an
+         * "actions" array; accept that shape as well as the flat one. */
+        if (aid == NULL)
+        {
+            JsonArray *actions = JsonObject_GetArray(content, "actions");
+            if (actions != NULL && JsonArray_GetSize(actions) > 0)
+            {
+                JsonObject *action = JsonArray_GetObject(actions, 0);
+                if (action != NULL)
+                {
+                    aid = JsonObject_GetString(action, "aid");
+                    if (in == NULL)
+                    {
+                        in = JsonObject_GetArray(action, "in");
+                    }
+                }
+            }
+        }
+
         if (aid == NULL)
         {
             TINY_LOG_ERROR("aid not found");
@@ -91,6 +111,8 @@ bool ActionOperationCodec_Invoke_Result_Encode(ActionOperation *operation, JsonO
 
         if (operation->out.values.size == 0)
         {
+            /* Valid result without any output arguments. */
+            done = true;
             break;
         }
 

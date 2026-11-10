@@ -7,7 +7,41 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <tinycore/tiny_alloc.h>
+#include <tinycore/tiny_log.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed.h>
+
+DevicePropertyChanged * DevicePropertyChanged_New(void)
+{
+    DevicePropertyChanged *thiz = NULL;
+
+    do
+    {
+        thiz = (DevicePropertyChanged *) tiny_malloc(sizeof(DevicePropertyChanged));
+        if (thiz == NULL)
+        {
+            TINY_LOG_DEBUG("tiny_malloc FAILED");
+            break;
+        }
+
+        if (RET_FAILED(DevicePropertyChanged_Construct(thiz)))
+        {
+            DevicePropertyChanged_Delete(thiz);
+            thiz = NULL;
+            break;
+        }
+    } while (false);
+
+    return thiz;
+}
+
+void DevicePropertyChanged_Delete(DevicePropertyChanged *thiz)
+{
+    RETURN_IF_FAIL(thiz);
+
+    DevicePropertyChanged_Dispose(thiz);
+    tiny_free(thiz);
+}
 
 TINYCORE_RET DevicePropertyChanged_Construct(DevicePropertyChanged *thiz)
 {

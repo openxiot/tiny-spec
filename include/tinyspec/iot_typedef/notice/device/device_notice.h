@@ -13,6 +13,7 @@
 #include <tinyspec/tinyspec_base.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_event_occurred.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed.h>
+#include <tinyspec/iot_typedef/notice/device/impl/device_properties_changed.h>
 
 TINYSPEC_BEGIN_DECLS
 
@@ -21,6 +22,8 @@ typedef enum
     DEVICE_NOTICE_UNDEFINED = 0,
     DEVICE_NOTICE_PROPERTY_CHANGED  = 1,
     DEVICE_NOTICE_EVENT_OCCURRED  = 2,
+    DEVICE_NOTICE_PROPERTIES_CHANGED = 3,
+    DEVICE_NOTICE_PROPERTIES_NOTIFY = 4,
 } DeviceNoticeType;
 
 typedef struct
@@ -31,6 +34,7 @@ typedef struct
     {
         DevicePropertyChanged   propertyChanged;
         DeviceEventOccurred     eventOccurred;
+        DevicePropertiesChanged propertiesChanged;
     } payload;
 } DeviceNotice;
 

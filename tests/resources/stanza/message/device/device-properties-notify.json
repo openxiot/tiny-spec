@@ -1,0 +1,16 @@
+{
+    "message": {
+        "id": "3",
+        "topic": "urn:xiot:device",
+        "type": "properties-notify",
+        "payload": {
+            "properties": [
+                {
+                    "pid": "47a5521d-4d28-4ad1-8126-03bd2910bcdc.1.1",
+                    "value": true
+                }
+            ],
+            "timestamp": 1762742401
+        }
+    }
+}

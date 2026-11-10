@@ -1,0 +1,10 @@
+{
+    "iq": {
+        "id": "6001",
+        "type": "result",
+        "method": "urn:xiot:get-children",
+        "content": {
+            "children": []
+        }
+    }
+}

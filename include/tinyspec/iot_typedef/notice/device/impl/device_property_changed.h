@@ -23,6 +23,12 @@ typedef struct
 } DevicePropertyChanged;
 
 TINYSPEC_API
+DevicePropertyChanged * DevicePropertyChanged_New(void);
+
+TINYSPEC_API
+void DevicePropertyChanged_Delete(DevicePropertyChanged *thiz);
+
+TINYSPEC_API
 TINYCORE_RET DevicePropertyChanged_Construct(DevicePropertyChanged *thiz);
 
 TINYSPEC_API

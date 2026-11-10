@@ -12,7 +12,7 @@
 
 #define STANZA_INITIALIZE_VERSION_LEN      32
 #define STANZA_AUTHENTICATION_LEN          32
-#define STANZA_ACCESS_KEY_LEN              32
+#define STANZA_ACCESS_KEY_LEN              128
 #define STANZA_SIGNATURE_LENGTH            128
 #define STANZA_PUBLIC_KEY_LENGTH           128
 #define STANZA_DESCRIPTION_LENGTH          128

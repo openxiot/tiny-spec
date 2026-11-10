@@ -11,6 +11,8 @@
 #include <tinycore/tiny_log.h>
 #include <tinyspec/iot_typedef/notice/device/device_notice_codec.h>
 #include <tinyspec/iot_typedef/notice/node/node_notice_codec.h>
+#include <tinyspec/iot_typedef/notice/owner/owner_notice_codec.h>
+#include <tinyspec/iot_typedef/notice/connection/connection_notice_codec.h>
 
 TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message)
 {
@@ -87,6 +89,32 @@ TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message)
                 if (RET_SUCCEEDED(ret))
                 {
                     ret = NodeNoticeCodec_Encode(payload, message->type, &message->payload.data.node);
+                }
+                else
+                {
+                    TINY_LOG_ERROR("JsonObject_PutString: %s", TinyRet_GetDescription(ret));
+                }
+                break;
+
+            case MESSAGE_TOPIC_OWNERSHIP:
+                type = owner_notice_type_to_string((OwnerNoticeType) (message->type));
+                ret = JsonObject_PutString(object, "type", type);
+                if (RET_SUCCEEDED(ret))
+                {
+                    ret = OwnerNoticeCodec_Encode(payload, message->type, &message->payload.data.owner);
+                }
+                else
+                {
+                    TINY_LOG_ERROR("JsonObject_PutString: %s", TinyRet_GetDescription(ret));
+                }
+                break;
+
+            case MESSAGE_TOPIC_CONNECTION:
+                type = connection_notice_type_to_string((ConnectionNoticeType) (message->type));
+                ret = JsonObject_PutString(object, "type", type);
+                if (RET_SUCCEEDED(ret))
+                {
+                    ret = ConnectionNoticeCodec_Encode(payload, message->type, &message->payload.data.connection);
                 }
                 else
                 {
@@ -179,6 +207,16 @@ TINYCORE_RET MessageCodec_Decode(Message* message, JsonObject *object)
             case MESSAGE_TOPIC_NODE:
                 message->type = (int) node_notice_type_from_string(type->value);
                 ret = NodeNoticeCodec_Decode(&message->payload.data.node, message->type, payload);
+                break;
+
+            case MESSAGE_TOPIC_OWNERSHIP:
+                message->type = (int) owner_notice_type_from_string(type->value);
+                ret = OwnerNoticeCodec_Decode(&message->payload.data.owner, message->type, payload);
+                break;
+
+            case MESSAGE_TOPIC_CONNECTION:
+                message->type = (int) connection_notice_type_from_string(type->value);
+                ret = ConnectionNoticeCodec_Decode(&message->payload.data.connection, message->type, payload);
                 break;
 
             default:

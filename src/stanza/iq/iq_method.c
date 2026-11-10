@@ -26,6 +26,9 @@ static IQMethod_String _method_string_mappings[] =
                 {IQ_METHOD_GET_PROPERTY, "urn:xiot:get-property"},
                 {IQ_METHOD_SET_PROPERTY, "urn:xiot:set-property"},
                 {IQ_METHOD_INVOKE_ACTION, "urn:xiot:invoke-action"},
+                /* Production xiot firmware uses the plural form on the wire.
+                 * Accepted on decode, never emitted (see list order). */
+                {IQ_METHOD_INVOKE_ACTION, "urn:xiot:invoke-actions"},
 
                 {IQ_METHOD_GET_ACCESS_KEY, "urn:xiot:get-access-key"},
                 {IQ_METHOD_SET_ACCESS_KEY, "urn:xiot:set-access-key"},
@@ -34,7 +37,8 @@ static IQMethod_String _method_string_mappings[] =
                 {IQ_METHOD_VERIFY_START, "urn:xiot:verify-start"},
                 {IQ_METHOD_VERIFY_FINISH, "urn:xiot:verify-finish"},
 
-                {IQ_METHOD_GET_NODES, "urn:xiot:get-nodes"}
+                {IQ_METHOD_GET_NODES, "urn:xiot:get-nodes"},
+                {IQ_METHOD_GET_CHILDREN, "urn:xiot:get-children"}
         };
 
 const char * IQMethod_ToString(IQMethod method)

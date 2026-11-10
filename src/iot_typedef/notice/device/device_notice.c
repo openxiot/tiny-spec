@@ -12,6 +12,8 @@
 #define STRING_DEVICE_NOTICE_UNDEFINED            "undefined"
 #define STRING_DEVICE_NOTICE_PROPERTY_CHANGED     "property-changed"
 #define STRING_DEVICE_EVENT_OCCURRED_CHANGED      "event-occurred"
+#define STRING_DEVICE_NOTICE_PROPERTIES_CHANGED   "properties-changed"
+#define STRING_DEVICE_NOTICE_PROPERTIES_NOTIFY    "properties-notify"
 
 DeviceNoticeType device_notice_type_from_string(const char *string)
 {
@@ -27,6 +29,16 @@ DeviceNoticeType device_notice_type_from_string(const char *string)
         return DEVICE_NOTICE_EVENT_OCCURRED;
     }
 
+    if (STR_EQUAL(STRING_DEVICE_NOTICE_PROPERTIES_CHANGED, string))
+    {
+        return DEVICE_NOTICE_PROPERTIES_CHANGED;
+    }
+
+    if (STR_EQUAL(STRING_DEVICE_NOTICE_PROPERTIES_NOTIFY, string))
+    {
+        return DEVICE_NOTICE_PROPERTIES_NOTIFY;
+    }
+
     return DEVICE_NOTICE_UNDEFINED;
 }
 
@@ -39,6 +51,12 @@ const char * device_notice_type_to_string(DeviceNoticeType type)
 
         case DEVICE_NOTICE_EVENT_OCCURRED:
             return STRING_DEVICE_EVENT_OCCURRED_CHANGED;
+
+        case DEVICE_NOTICE_PROPERTIES_CHANGED:
+            return STRING_DEVICE_NOTICE_PROPERTIES_CHANGED;
+
+        case DEVICE_NOTICE_PROPERTIES_NOTIFY:
+            return STRING_DEVICE_NOTICE_PROPERTIES_NOTIFY;
 
         default:
             return STRING_DEVICE_NOTICE_UNDEFINED;

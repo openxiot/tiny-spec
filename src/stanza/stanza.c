@@ -34,6 +34,11 @@ static void Message_Dispose(Message *thiz)
                     DeviceEventOccurred_Dispose(&thiz->payload.data.device.payload.eventOccurred);
                     break;
 
+                case DEVICE_NOTICE_PROPERTIES_CHANGED:
+                case DEVICE_NOTICE_PROPERTIES_NOTIFY:
+                    DevicePropertiesChanged_Dispose(&thiz->payload.data.device.payload.propertiesChanged);
+                    break;
+
                 default:
                     break;
             }
