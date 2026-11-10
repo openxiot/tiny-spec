@@ -1,0 +1,30 @@
+/*
+ * TinySpec - device framework for xiot
+ *
+ * Copyright (c) 2017-2020 jxfengzi@gmail.com
+ * Copyright (c) 2024-2026 openxiot contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#ifndef TINYSPEC_STANZA_CODEC_IQ_DEVICE_VERIFY_VERIFY_START_CODEC_H
+#define TINYSPEC_STANZA_CODEC_IQ_DEVICE_VERIFY_VERIFY_START_CODEC_H
+
+#include <tinyspec/tinyspec_base.h>
+#include <tinycore/json_object.h>
+#include <tinyspec/stanza/iq/device/verify/verify_start.h>
+
+TINYSPEC_BEGIN_DECLS
+
+TINYSPEC_API
+bool VerifyStartCodec_EncodeQuery(QueryVerifyStart *query, JsonObject *content);
+TINYSPEC_API
+TINYCORE_RET VerifyStartCodec_DecodeQuery(JsonObject *content, QueryVerifyStart *query);
+TINYSPEC_API
+bool VerifyStartCodec_EncodeResult(ResultVerifyStart *result, JsonObject *content);
+TINYSPEC_API
+TINYCORE_RET VerifyStartCodec_DecodeResult(JsonObject *content, ResultVerifyStart *result);
+
+TINYSPEC_END_DECLS
+
+#endif /* TINYSPEC_STANZA_CODEC_IQ_DEVICE_VERIFY_VERIFY_START_CODEC_H */

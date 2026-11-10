@@ -53,3 +53,10 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# CMake build trees
+build/
+b/
+build-*/
+cmake-build-*/
+out/

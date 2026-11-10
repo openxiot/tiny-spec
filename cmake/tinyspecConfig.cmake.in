@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+find_dependency(tinycore 1.0)
+
+include("${CMAKE_CURRENT_LIST_DIR}/tinyspecTargets.cmake")
+
+check_required_components(tinyspec)

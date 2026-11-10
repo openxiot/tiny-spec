@@ -1,0 +1,46 @@
+/*
+ * TinySpec - device framework for xiot
+ *
+ * Copyright (c) 2017-2020 jxfengzi@gmail.com
+ * Copyright (c) 2024-2026 openxiot contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#ifndef TINYSPEC_IOT_TYPEDEF_PRODUCT_CONFIG_ACCESSORY_CATEGORY_IDENTIFIER_H
+#define TINYSPEC_IOT_TYPEDEF_PRODUCT_CONFIG_ACCESSORY_CATEGORY_IDENTIFIER_H
+
+#include <tinyspec/tinyspec_base.h>
+
+TINYSPEC_BEGIN_DECLS
+
+#define ACCESSORY_CATEGORY_UNKNOWN                  0
+#define ACCESSORY_CATEGORY_OTHER                    1
+#define ACCESSORY_CATEGORY_BRIDGES                  2
+#define ACCESSORY_CATEGORY_FANS                     3
+#define ACCESSORY_CATEGORY_GARAGE_DOOR_OPENERS      4
+#define ACCESSORY_CATEGORY_LIGHTING                 5
+#define ACCESSORY_CATEGORY_LOCKS                    6
+#define ACCESSORY_CATEGORY_OUTLETS                  7
+#define ACCESSORY_CATEGORY_SWITCHES                 8
+#define ACCESSORY_CATEGORY_THERMOSTATS              9
+#define ACCESSORY_CATEGORY_SENSORS                  10
+#define ACCESSORY_CATEGORY_SECURITY_SYSTEMS         11
+#define ACCESSORY_CATEGORY_DOORS                    12
+#define ACCESSORY_CATEGORY_WINDOWS                  13
+#define ACCESSORY_CATEGORY_WINDOW_COVERINGS         14
+#define ACCESSORY_CATEGORY_PROGRAMMABLE_SWITCHES    15
+#define ACCESSORY_CATEGORY_IP_CAMERAS               17
+#define ACCESSORY_CATEGORY_VIDEO_DOORBELLS          18
+#define ACCESSORY_CATEGORY_AIR_PURIFIERS            19
+#define ACCESSORY_CATEGORY_HEATERS                  20
+#define ACCESSORY_CATEGORY_AIR_CONDITIONERS         21
+#define ACCESSORY_CATEGORY_HUMIDIFIERS              22
+#define ACCESSORY_CATEGORY_DEHUMIDIFIERS            23
+#define ACCESSORY_CATEGORY_SPRINKLERS               28
+#define ACCESSORY_CATEGORY_FAUCETS                  29
+#define ACCESSORY_CATEGORY_SHOWER_SYSTEMS           30
+
+TINYSPEC_END_DECLS
+
+#endif /* TINYSPEC_IOT_TYPEDEF_PRODUCT_CONFIG_ACCESSORY_CATEGORY_IDENTIFIER_H */

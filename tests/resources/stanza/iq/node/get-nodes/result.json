@@ -1,0 +1,26 @@
+{
+    "iq": {
+        "type": "result",
+        "method": "urn:xiot:get-nodes",
+        "id": "5009",
+        "content": {
+            "nodes": [
+                {
+                    "serialNumber": "xxx",
+                    "productId": 1,
+                    "productVersion": 2
+                },
+                {
+                    "serialNumber": "yyy",
+                    "productId": 3,
+                    "productVersion": 4
+                },
+                {
+                    "serialNumber": "zzz",
+                    "productId": 5,
+                    "productVersion": 6
+                }
+            ]
+        }
+    }
+}

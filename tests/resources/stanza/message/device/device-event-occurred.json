@@ -1,0 +1,28 @@
+{
+    "message": {
+        "id": "1",
+        "topic": "urn:xiot:device",
+        "type": "event-occurred",
+        "payload": {
+            "eid": "47a5521d-4d28-4ad1-8126-03bd2910bcdc.11.3",
+            "arguments": [
+                {
+                    "piid": 1,
+                    "values": ["hello"]
+                },
+                {
+                    "piid": 2,
+                    "values": [1]
+                },
+                {
+                    "piid": 3,
+                    "values": [100, 200, 300]
+                },
+                {
+                    "piid": 4,
+                    "values": [10.7, 10.9]
+                }
+            ]
+        }
+    }
+}
