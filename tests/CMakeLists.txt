@@ -36,6 +36,7 @@ endfunction()
 
 tinyspec_add_test(test_json_util test_json_util.c)
 tinyspec_add_test(test_model test_model.c)
+tinyspec_add_test(test_property test_property.c)
 tinyspec_add_test(test_typedef test_typedef.c)
 tinyspec_add_test(test_operations test_operations.c)
 tinyspec_add_test(test_notice test_notice.c)

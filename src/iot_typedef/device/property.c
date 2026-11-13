@@ -9,13 +9,45 @@
 
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
+#include <tinycore/tiny_strdup.h>
+#include <tinycore/tiny_snprintf.h>
 #include <tinyspec/iot_typedef/status/iot_status.h>
 #include <tinycore/json_number.h>
+#include <tinycore/json_string.h>
+#include <tinycore/json_object.h>
 #include <tinyspec/iot_typedef/device/property.h>
 
 static TINYCORE_RET Property_Construct(Property *thiz, uint16_t iid);
 
 static void Property_Dispose(Property *thiz);
+
+static const char * Property_UnitToString(Unit unit)
+{
+    switch (unit)
+    {
+        case HOMEKIT_PERCENTAGE:
+            return "percentage";
+
+        case HOMEKIT_CELSIUS:
+            return "celsius";
+
+        case HOMEKIT_LUX:
+            return "lux";
+
+        case HOMEKIT_UNITLESS:
+            return "unitless";
+
+        case HOMEKIT_SECONDS:
+            return "seconds";
+
+        case HOMEKIT_ARC_DEGREES:
+            return "arcdegrees";
+
+        case NONE:
+        default:
+            return NULL;
+    }
+}
 
 Property* Property_New(uint16_t iid)
 {
@@ -70,7 +102,7 @@ Property *Property_NewInstance(uint16_t iid,
 
         thiz->format = format;
         thiz->access = access;
-        thiz->unit = unit;
+        Property_SetUnit(thiz, Property_UnitToString(unit));
     } while (false);
 
     return thiz;
@@ -86,6 +118,8 @@ static TINYCORE_RET Property_Construct(Property *thiz, uint16_t iid)
     {
         memset(thiz, 0, sizeof(Property));
         thiz->iid = iid;
+
+        TinyList_Construct(&thiz->members);
 
         ret = Urn_Construct(&thiz->type);
         if (RET_FAILED(ret))
@@ -103,6 +137,14 @@ static void Property_Dispose(Property *thiz)
     RETURN_IF_FAIL(thiz);
 
     Urn_Dispose(&thiz->type);
+
+    if (thiz->unit != NULL)
+    {
+        tiny_free(thiz->unit);
+        thiz->unit = NULL;
+    }
+
+    TinyList_Dispose(&thiz->members);
 
     if (thiz->valueList != NULL)
     {
@@ -131,6 +173,50 @@ void Property_Delete(Property *thiz)
 
     Property_Dispose(thiz);
     tiny_free(thiz);
+}
+
+void Property_SetUnit(Property *thiz, const char *unit)
+{
+    RETURN_IF_FAIL(thiz);
+
+    if (thiz->unit != NULL)
+    {
+        tiny_free(thiz->unit);
+        thiz->unit = NULL;
+    }
+
+    if (unit != NULL && unit[0] != '\0')
+    {
+        thiz->unit = tiny_strdup(unit);
+    }
+}
+
+TINYCORE_RET Property_MemberAdd(Property *thiz, Property *member)
+{
+    RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(member, TINY_RET_E_NULL_PTR);
+
+    if (TinyList_AddTail(&thiz->members, member) == NULL)
+    {
+        TINY_LOG_ERROR("Property_MemberAdd FAILED");
+        return TINY_RET_E_OUT_OF_MEMORY;
+    }
+
+    return TINY_RET_OK;
+}
+
+uint32_t Property_GetMemberCount(Property *thiz)
+{
+    RETURN_VAL_IF_FAIL(thiz, 0);
+
+    return thiz->members.size;
+}
+
+Property* Property_GetMemberAt(Property *thiz, uint32_t index)
+{
+    RETURN_VAL_IF_FAIL(thiz, NULL);
+
+    return (Property *) TinyList_GetAt(&thiz->members, index);
 }
 
 static bool Property_CheckValueType(Property *thiz, JsonValue* value)
@@ -244,9 +330,62 @@ static bool Property_CheckValueType(Property *thiz, JsonValue* value)
         case FORMAT_TLV8:
             return (value->type == JSON_STRING);
 
+        case FORMAT_COMBINATION:
+            return (value->type == JSON_OBJECT);
+
         default:
             return false;
     }
+}
+
+static bool Property_CheckMembers(Property *thiz, JsonValue *value)
+{
+    JsonObject *object = NULL;
+    uint32_t size = 0;
+    uint32_t i = 0;
+
+    RETURN_VAL_IF_FAIL(thiz, false);
+    RETURN_VAL_IF_FAIL(value, false);
+
+    object = value->data.object;
+    if (object == NULL)
+    {
+        TINY_LOG_ERROR("combination value is not an object");
+        return false;
+    }
+
+    size = Property_GetMemberCount(thiz);
+    for (i = 0; i < size; ++i)
+    {
+        Property *member = Property_GetMemberAt(thiz, i);
+        char key[16];
+        JsonValue *memberValue = NULL;
+
+        RETURN_VAL_IF_FAIL(member, false);
+
+        tiny_snprintf(key, sizeof(key), "%u", member->iid);
+
+        if (! JsonObject_ContainsKey(object, key))
+        {
+            TINY_LOG_ERROR("combination missing member, iid: %u", member->iid);
+            return false;
+        }
+
+        memberValue = JsonObject_GetValue(object, key);
+        if (memberValue == NULL)
+        {
+            TINY_LOG_ERROR("combination member value is null, iid: %u", member->iid);
+            return false;
+        }
+
+        if (! Property_CheckValue(member, memberValue))
+        {
+            TINY_LOG_ERROR("combination member value invalid, iid: %u", member->iid);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool Property_CheckValue(Property *thiz, JsonValue* value)
@@ -265,6 +404,20 @@ bool Property_CheckValue(Property *thiz, JsonValue* value)
     {
         TINY_LOG_ERROR("value type invalid: %s, property format: %s", JsonValueType_ToString(value->type), Format_ToString(thiz->format));
         return false;
+    }
+
+    if (thiz->format == FORMAT_COMBINATION)
+    {
+        return Property_CheckMembers(thiz, value);
+    }
+
+    if (thiz->format == FORMAT_STRING && thiz->maxLength > 0)
+    {
+        if (JsonString_GetLength(value->data.string) > thiz->maxLength)
+        {
+            TINY_LOG_ERROR("string too long, max-length: %u", thiz->maxLength);
+            return false;
+        }
     }
 
     if (thiz->valueRange != NULL)

@@ -546,7 +546,9 @@ static void test_property_value_types(void)
         TINY_TEST_CHECK(property->type.value == 0x30);
         TINY_TEST_CHECK(property->format == FORMAT_BOOL);
         TINY_TEST_CHECK(property->access == ACCESS_RWN);
-        TINY_TEST_CHECK(property->unit == NONE);
+        TINY_TEST_CHECK(property->unit == NULL);
+        TINY_TEST_CHECK(property->maxLength == 0);
+        TINY_TEST_CHECK(Property_GetMemberCount(property) == 0U);
         TINY_TEST_CHECK(property->value == NULL);
         TINY_TEST_CHECK(property->valueList == NULL);
         TINY_TEST_CHECK(property->valueRange == NULL);

@@ -24,6 +24,7 @@
 #define FORMAT_STRING_HEX         "hex"
 #define FORMAT_STRING_TLV8        "tlv8"
 #define FORMAT_STRING_INT         "int"
+#define FORMAT_STRING_COMBINATION "combination"
 
 const char * Format_ToString(Format type)
 {
@@ -67,6 +68,9 @@ const char * Format_ToString(Format type)
 
         case FORMAT_INT:
             return FORMAT_STRING_INT;
+
+        case FORMAT_COMBINATION:
+            return FORMAT_STRING_COMBINATION;
 
         default:
             break;
@@ -142,6 +146,11 @@ Format Format_FromString(const char *value)
     if (STR_EQUAL(FORMAT_STRING_INT, value))
     {
         return FORMAT_INT;
+    }
+
+    if (STR_EQUAL(FORMAT_STRING_COMBINATION, value))
+    {
+        return FORMAT_COMBINATION;
     }
 
     return FORMAT_UNDEFINED;

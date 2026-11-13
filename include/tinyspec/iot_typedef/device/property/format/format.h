@@ -30,6 +30,7 @@ typedef enum
     FORMAT_HEX        = 11,
     FORMAT_TLV8       = 12,
     FORMAT_INT        = 13,
+    FORMAT_COMBINATION = 14,
 } Format;
 
 TINYSPEC_API

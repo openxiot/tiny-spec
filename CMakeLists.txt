@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(tinyspec
-        VERSION 1.0.0
+        VERSION 1.0.1
         DESCRIPTION "TinySpec - a device framework for xiot"
         HOMEPAGE_URL "https://github.com/openxiot/tiny-spec"
         LANGUAGES C)
@@ -82,6 +82,7 @@ set(TINYSPEC_SOURCES
         src/iot_typedef/operation/codec/property_operations_codec.c
         src/iot_typedef/product/product.c
         src/iot_typedef/product/operator/product_operator.c
+        src/iot_typedef/product/handler/property_handler.c
         src/iot_typedef/xid/codec/xid3_codec.c
 
         # Stanza: IQ and message model
