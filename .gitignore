@@ -60,3 +60,6 @@ b/
 build-*/
 cmake-build-*/
 out/
+
+# IDE
+.idea/
