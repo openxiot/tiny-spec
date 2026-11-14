@@ -52,33 +52,33 @@ endif()
 # ---------------------------------------------------------------------------
 set(TINYSPEC_SOURCES
         # IotTypedef: device description model
-        src/iot_typedef/device/action.c
-        src/iot_typedef/device/argument.c
-        src/iot_typedef/device/device.c
-        src/iot_typedef/device/event.c
-        src/iot_typedef/device/property.c
-        src/iot_typedef/device/service.c
-        src/iot_typedef/device/property/access/access.c
-        src/iot_typedef/device/property/constraint/value_list.c
-        src/iot_typedef/device/property/constraint/value_range.c
-        src/iot_typedef/device/property/format/format.c
-        src/iot_typedef/device/urn/urn.c
-        src/iot_typedef/device/urn/urn_type.c
-        src/iot_typedef/notice/device/device_notice.c
-        src/iot_typedef/notice/device/device_notice_codec.c
-        src/iot_typedef/notice/device/impl/device_event_occurred.c
-        src/iot_typedef/notice/device/impl/device_event_occurred_codec.c
-        src/iot_typedef/notice/device/impl/device_property_changed.c
-        src/iot_typedef/notice/device/impl/device_property_changed_codec.c
-        src/iot_typedef/operation/action_operation.c
-        src/iot_typedef/operation/event_operation.c
-        src/iot_typedef/operation/property_operation.c
-        src/iot_typedef/operation/property_operations.c
-        src/iot_typedef/operation/codec/action_operation_codec.c
-        src/iot_typedef/operation/codec/property_operations_codec.c
-        src/iot_typedef/product/product.c
-        src/iot_typedef/product/operator/product_operator.c
-        src/iot_typedef/xid/codec/xid3_codec.c
+        src/typedef/device/action.c
+        src/typedef/device/argument.c
+        src/typedef/device/device.c
+        src/typedef/device/event.c
+        src/typedef/device/property.c
+        src/typedef/device/service.c
+        src/typedef/device/property/access/access.c
+        src/typedef/device/property/constraint/value_list.c
+        src/typedef/device/property/constraint/value_range.c
+        src/typedef/device/property/format/format.c
+        src/typedef/device/urn/urn.c
+        src/typedef/device/urn/urn_type.c
+        src/typedef/notice/device/device_notice.c
+        src/typedef/notice/device/device_notice_codec.c
+        src/typedef/notice/device/impl/device_event_occurred.c
+        src/typedef/notice/device/impl/device_event_occurred_codec.c
+        src/typedef/notice/device/impl/device_property_changed.c
+        src/typedef/notice/device/impl/device_property_changed_codec.c
+        src/typedef/operation/action_operation.c
+        src/typedef/operation/event_operation.c
+        src/typedef/operation/property_operation.c
+        src/typedef/operation/property_operations.c
+        src/typedef/operation/codec/action_operation_codec.c
+        src/typedef/operation/codec/property_operations_codec.c
+        src/typedef/product/product.c
+        src/typedef/product/operator/product_operator.c
+        src/typedef/xid/codec/xid3_codec.c
 
         # Stanza: IQ and message model
         src/stanza/stanza.c
@@ -115,22 +115,22 @@ set(TINYSPEC_SOURCES
         src/stanza/message/message.c
 
         # StanzaCodec: JSON codecs
-        src/stanza_codec/stanza_codec.c
-        src/stanza_codec/iq/iq_codec.c
-        src/stanza_codec/iq/iq_error_codec.c
-        src/stanza_codec/iq/iq_query_codec.c
-        src/stanza_codec/iq/iq_result_codec.c
-        src/stanza_codec/iq/device/control/get_properties_codec.c
-        src/stanza_codec/iq/device/control/get_property_codec.c
-        src/stanza_codec/iq/device/control/invoke_action_codec.c
-        src/stanza_codec/iq/device/control/set_properties_codec.c
-        src/stanza_codec/iq/device/control/set_property_codec.c
-        src/stanza_codec/iq/device/key/get_access_key_codec.c
-        src/stanza_codec/iq/device/key/set_access_key_codec.c
-        src/stanza_codec/iq/device/verify/initialize_codec.c
-        src/stanza_codec/iq/device/verify/verify_finish_codec.c
-        src/stanza_codec/iq/device/verify/verify_start_codec.c
-        src/stanza_codec/message/message_codec.c
+        src/codec/stanza_codec.c
+        src/codec/iq/iq_codec.c
+        src/codec/iq/iq_error_codec.c
+        src/codec/iq/iq_query_codec.c
+        src/codec/iq/iq_result_codec.c
+        src/codec/iq/device/control/get_properties_codec.c
+        src/codec/iq/device/control/get_property_codec.c
+        src/codec/iq/device/control/invoke_action_codec.c
+        src/codec/iq/device/control/set_properties_codec.c
+        src/codec/iq/device/control/set_property_codec.c
+        src/codec/iq/device/key/get_access_key_codec.c
+        src/codec/iq/device/key/set_access_key_codec.c
+        src/codec/iq/device/verify/initialize_codec.c
+        src/codec/iq/device/verify/verify_finish_codec.c
+        src/codec/iq/device/verify/verify_start_codec.c
+        src/codec/message/message_codec.c
 
         # Shared helpers
         src/util/json_util.c)

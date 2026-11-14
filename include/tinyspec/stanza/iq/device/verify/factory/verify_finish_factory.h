@@ -11,7 +11,7 @@
 #define TINYSPEC_STANZA_IQ_DEVICE_VERIFY_FACTORY_VERIFY_FINISH_FACTORY_H
 
 #include <tinyspec/tinyspec_base.h>
-#include <tinyspec/iot_typedef/constant/typedef_constant.h>
+#include <tinyspec/typedef/constant/typedef_constant.h>
 #include <tinyspec/stanza/stanza_constant.h>
 #include <tinyspec/stanza/stanza.h>
 

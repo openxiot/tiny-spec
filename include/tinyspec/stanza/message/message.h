@@ -11,7 +11,7 @@
 #define TINYSPEC_STANZA_MESSAGE_MESSAGE_H
 
 #include <tinyspec/tinyspec_base.h>
-#include <tinyspec/iot_typedef/notice/notice.h>
+#include <tinyspec/typedef/notice/notice.h>
 
 TINYSPEC_BEGIN_DECLS
 

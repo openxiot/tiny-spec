@@ -11,8 +11,8 @@
 
 #include <string.h>
 
-#include <tinyspec/iot_typedef/device/property.h>
-#include <tinyspec/iot_typedef/status/iot_status.h>
+#include <tinyspec/typedef/device/property.h>
+#include <tinyspec/typedef/status/iot_status.h>
 #include <tinycore/json_object.h>
 #include <tinycore/json_value.h>
 

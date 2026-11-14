@@ -11,7 +11,7 @@
 #define TINYSPEC_STANZA_IQ_DEVICE_CONTROL_INVOKE_ACTION_H
 
 #include <tinyspec/tinyspec_base.h>
-#include <tinyspec/iot_typedef/operation/action_operation.h>
+#include <tinyspec/typedef/operation/action_operation.h>
 
 TINYSPEC_BEGIN_DECLS
 

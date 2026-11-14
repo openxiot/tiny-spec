@@ -11,7 +11,7 @@
 #define TINYSPEC_STANZA_IQ_DEVICE_CONTROL_SET_PROPERTIES_H
 
 #include <tinyspec/tinyspec_base.h>
-#include <tinyspec/iot_typedef/operation/property_operations.h>
+#include <tinyspec/typedef/operation/property_operations.h>
 
 TINYSPEC_BEGIN_DECLS
 
