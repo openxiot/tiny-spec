@@ -39,6 +39,15 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
+For convenience `scripts/build.sh` configures, builds and runs the suite in one
+step, and drives the sanitizer build below:
+
+```sh
+./scripts/build.sh        # default build  -> build/
+./scripts/build.sh asan   # sanitizer build -> build-asan/
+./scripts/build.sh shared # shared library  -> build-shared/
+```
+
 To use an installed TinyCore instead, put it on the CMake search path
 (`-DCMAKE_PREFIX_PATH=/some/prefix`) or point at a source tree explicitly:
 
@@ -147,16 +156,19 @@ The JSON document shape is unchanged from the original tiny-spec project:
 ctest --test-dir build --output-on-failure
 ```
 
-For a sanitizer build:
+For a sanitizer build, `scripts/build.sh asan` is the equivalent of:
 
 ```sh
 cmake -S . -B build-asan -DTINYSPEC_ENABLE_SANITIZERS=ON
 cmake --build build-asan
-ASAN_OPTIONS=detect_leaks=0 ctest --test-dir build-asan --output-on-failure
+ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 \
+    ctest --test-dir build-asan --output-on-failure
 ```
 
-(`detect_leaks` is not supported by AddressSanitizer on macOS, so it is turned
-off there; Linux builds can leave it at the default.)
+(`detect_leaks` is not supported by AddressSanitizer on macOS, so `build.sh`
+turns it off there; on Linux it leaves it at the default, which also verifies
+for memory leaks. `UBSAN_OPTIONS=halt_on_error=1` makes UBSan stop on the
+first error instead of drowning it in the suite output.)
 
 | Test | Contents |
 | --- | --- |
