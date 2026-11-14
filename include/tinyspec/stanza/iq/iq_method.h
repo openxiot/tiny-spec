@@ -46,11 +46,6 @@ typedef enum
     IQ_METHOD_INITIALIZE            = 0x31,
     IQ_METHOD_VERIFY_FINISH         = 0x32,
     IQ_METHOD_VERIFY_START          = 0x33,
-
-    /*
-     * device/node
-     */
-    IQ_METHOD_GET_NODES             = 0x41
 } IQMethod;
 
 TINYSPEC_API

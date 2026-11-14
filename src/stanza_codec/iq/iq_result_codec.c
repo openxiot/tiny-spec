@@ -11,7 +11,6 @@
 #include <tinycore/json_string.h>
 #include <tinyspec/stanza_codec/iq/device/control/get_property_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/set_property_codec.h>
-#include <tinyspec/stanza_codec/iq/node/control/get_nodes_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/get_properties_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/set_properties_codec.h>
 #include <tinyspec/stanza_codec/iq/device/control/invoke_action_codec.h>
@@ -69,11 +68,6 @@ static bool addResultContent(IQResult *result, JsonObject *content)
             break;
 
         case IQ_METHOD_VERIFY_FINISH:
-            break;
-
-            // node/control
-        case IQ_METHOD_GET_NODES:
-            done = GetNodesCodec_EncodeResult(&result->content.getNodes, content);
             break;
 
         default:
@@ -135,11 +129,6 @@ static TINYCORE_RET decodeResultContent(IQResult *result, JsonObject *content)
             break;
 
         case IQ_METHOD_VERIFY_FINISH:
-            break;
-
-        // node/control
-        case IQ_METHOD_GET_NODES:
-            ret = GetNodesCodec_DecodeResult(content, &result->content.getNodes);
             break;
 
         default:

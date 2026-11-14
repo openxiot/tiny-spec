@@ -18,19 +18,6 @@
 #include <tinycore/json_value.h>
 #include <tinyspec/tinyspec.h>
 
-static Node * make_node(const char *serialNumber, int productId, int productVersion)
-{
-    Node *node = Node_New();
-    if (node != NULL)
-    {
-        strncpy(node->serialNumber, serialNumber, NODE_SERIAL_NUMBER_LENGTH);
-        node->productId = productId;
-        node->productVersion = productVersion;
-    }
-
-    return node;
-}
-
 static void test_method_strings(void)
 {
     static const struct
@@ -51,8 +38,7 @@ static void test_method_strings(void)
                     {IQ_METHOD_SET_ACCESS_KEY, "urn:xiot:set-access-key"},
                     {IQ_METHOD_INITIALIZE, "urn:xiot:initialize"},
                     {IQ_METHOD_VERIFY_START, "urn:xiot:verify-start"},
-                    {IQ_METHOD_VERIFY_FINISH, "urn:xiot:verify-finish"},
-                    {IQ_METHOD_GET_NODES, "urn:xiot:get-nodes"}
+                    {IQ_METHOD_VERIFY_FINISH, "urn:xiot:verify-finish"}
             };
 
     for (size_t i = 0; i < DIM(mappings); ++i)
@@ -96,8 +82,7 @@ static void test_iq_lifecycle(void)
                         IQ_METHOD_GET_PROPERTY, IQ_METHOD_SET_PROPERTY,
                         IQ_METHOD_INVOKE_ACTION,
                         IQ_METHOD_GET_ACCESS_KEY, IQ_METHOD_SET_ACCESS_KEY,
-                        IQ_METHOD_INITIALIZE, IQ_METHOD_VERIFY_START, IQ_METHOD_VERIFY_FINISH,
-                        IQ_METHOD_GET_NODES
+                        IQ_METHOD_INITIALIZE, IQ_METHOD_VERIFY_START, IQ_METHOD_VERIFY_FINISH
                 };
 
         for (size_t i = 0; i < DIM(queries); ++i)
@@ -117,8 +102,7 @@ static void test_iq_lifecycle(void)
                         IQ_METHOD_GET_PROPERTY, IQ_METHOD_SET_PROPERTY,
                         IQ_METHOD_INVOKE_ACTION,
                         IQ_METHOD_GET_ACCESS_KEY, IQ_METHOD_SET_ACCESS_KEY,
-                        IQ_METHOD_INITIALIZE, IQ_METHOD_VERIFY_START, IQ_METHOD_VERIFY_FINISH,
-                        IQ_METHOD_GET_NODES
+                        IQ_METHOD_INITIALIZE, IQ_METHOD_VERIFY_START, IQ_METHOD_VERIFY_FINISH
                 };
 
         for (size_t i = 0; i < DIM(results); ++i)
@@ -889,76 +873,6 @@ static void test_control_results(void)
     PropertyOperations_Dispose(&operations);
 }
 
-static void test_get_nodes(void)
-{
-    Stanza *stanza = Stanza_New(STANZA_IQ);
-    JsonObject *document = NULL;
-
-    TINY_TEST_CHECK(stanza != NULL);
-    if (stanza == NULL)
-    {
-        return;
-    }
-
-    TINY_TEST_CHECK(IQ_InitializeResult(&stanza->data.iq, "id-nodes", IQ_METHOD_GET_NODES) == TINY_RET_OK);
-    {
-        TinyList *nodes = &stanza->data.iq.content.result.content.getNodes.nodes;
-
-        TINY_TEST_CHECK(nodes->size == 0);
-        TINY_TEST_CHECK(TinyList_AddTail(nodes, make_node("SN-1", 100, 1)) != NULL);
-        TINY_TEST_CHECK(TinyList_AddTail(nodes, make_node("SN-2", 200, 2)) != NULL);
-        TINY_TEST_CHECK(nodes->size == 2);
-    }
-
-    document = StanzaCodec_Encode(stanza);
-    TINY_TEST_CHECK(document != NULL);
-    if (document != NULL)
-    {
-        JsonObject *iq = JsonObject_GetObject(document, "iq");
-        if (iq != NULL)
-        {
-            JsonObject *content = JsonObject_GetObject(iq, "content");
-            if (content != NULL)
-            {
-                JsonArray *array = JsonObject_GetArray(content, "nodes");
-                TINY_TEST_CHECK(array != NULL);
-                if (array != NULL)
-                {
-                    TINY_TEST_CHECK(array->values.size == 2);
-                }
-            }
-        }
-
-        Stanza *decoded = StanzaCodec_Decode(document);
-        TINY_TEST_CHECK(decoded != NULL);
-        if (decoded != NULL)
-        {
-            TinyList *nodes = &decoded->data.iq.content.result.content.getNodes.nodes;
-
-            TINY_TEST_CHECK(decoded->data.iq.content.result.method == IQ_METHOD_GET_NODES);
-            TINY_TEST_CHECK(nodes->size == 2);
-            if (nodes->size == 2)
-            {
-                Node *first = (Node *) TinyList_GetAt(nodes, 0);
-                Node *second = (Node *) TinyList_GetAt(nodes, 1);
-
-                TINY_TEST_CHECK(strcmp(first->serialNumber, "SN-1") == 0);
-                TINY_TEST_CHECK(first->productId == 100);
-                TINY_TEST_CHECK(first->productVersion == 1);
-                TINY_TEST_CHECK(strcmp(second->serialNumber, "SN-2") == 0);
-                TINY_TEST_CHECK(second->productId == 200);
-                TINY_TEST_CHECK(second->productVersion == 2);
-            }
-
-            Stanza_Delete(decoded);
-        }
-
-        JsonObject_Delete(document);
-    }
-
-    Stanza_Delete(stanza);
-}
-
 static void test_encode_errors(void)
 {
     Stanza *stanza = NULL;
@@ -1109,7 +1023,6 @@ int main(void)
     test_verify_stanzas();
     test_control_queries();
     test_control_results();
-    test_get_nodes();
     test_encode_errors();
     test_decode_errors();
 

@@ -18,7 +18,6 @@
 #include <tinyspec/stanza/iq/device/control/set_property.h>
 #include <tinyspec/stanza/iq/device/verify/verify_start.h>
 #include <tinyspec/stanza/iq/device/key/get_access_key.h>
-#include <tinyspec/stanza/iq/node/control/get_nodes.h>
 #include <tinyspec/stanza/iq/iq_method.h>
 
 TINYSPEC_BEGIN_DECLS
@@ -39,8 +38,6 @@ typedef struct
         ResultGetAccessKey              getAccessKey;
 
         ResultVerifyStart               verifyStart;
-
-        ResultGetNodes                  getNodes;
     } content;
 } IQResult;
 

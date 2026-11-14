@@ -78,10 +78,6 @@ static bool addQueryContent(IQQuery *query, JsonObject *content)
             done = VerifyFinishCodec_EncodeQuery(&query->content.verifyFinish, content);
             break;
 
-            // node/control
-        case IQ_METHOD_GET_NODES:
-            break;
-
         default:
             TINY_LOG_DEBUG("not support method: %s", IQMethod_ToString(query->method));
             done = false;
@@ -143,9 +139,6 @@ static TINYCORE_RET decodeQueryContent(IQQuery *query, JsonObject *content)
 
         case IQ_METHOD_VERIFY_FINISH:
             ret = VerifyFinishCodec_DecodeQuery(content, &query->content.verifyFinish);
-            break;
-
-        case IQ_METHOD_GET_NODES:
             break;
 
         default:

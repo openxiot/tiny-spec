@@ -64,16 +64,12 @@ set(TINYSPEC_SOURCES
         src/iot_typedef/device/property/format/format.c
         src/iot_typedef/device/urn/urn.c
         src/iot_typedef/device/urn/urn_type.c
-        src/iot_typedef/node/node.c
         src/iot_typedef/notice/device/device_notice.c
         src/iot_typedef/notice/device/device_notice_codec.c
         src/iot_typedef/notice/device/impl/device_event_occurred.c
         src/iot_typedef/notice/device/impl/device_event_occurred_codec.c
         src/iot_typedef/notice/device/impl/device_property_changed.c
         src/iot_typedef/notice/device/impl/device_property_changed_codec.c
-        src/iot_typedef/notice/node/node_notice.c
-        src/iot_typedef/notice/node/node_notice_codec.c
-        src/iot_typedef/notice/node/impl/node_changed_codec.c
         src/iot_typedef/operation/action_operation.c
         src/iot_typedef/operation/event_operation.c
         src/iot_typedef/operation/property_operation.c
@@ -116,7 +112,6 @@ set(TINYSPEC_SOURCES
         src/stanza/iq/device/verify/factory/initialize_factory.c
         src/stanza/iq/device/verify/factory/verify_finish_factory.c
         src/stanza/iq/device/verify/factory/verify_start_factory.c
-        src/stanza/iq/node/control/get_nodes.c
         src/stanza/message/message.c
 
         # StanzaCodec: JSON codecs
@@ -135,7 +130,6 @@ set(TINYSPEC_SOURCES
         src/stanza_codec/iq/device/verify/initialize_codec.c
         src/stanza_codec/iq/device/verify/verify_finish_codec.c
         src/stanza_codec/iq/device/verify/verify_start_codec.c
-        src/stanza_codec/iq/node/control/get_nodes_codec.c
         src/stanza_codec/message/message_codec.c
 
         # Shared helpers

@@ -11,9 +11,6 @@
 #define TINYSPEC_IOT_TYPEDEF_PRODUCT_CONFIG_PRODUCT_CONFIG_H
 
 #include <tinyspec/tinyspec_base.h>
-#include <tinyspec/iot_typedef/product/config/accessory_config.h>
-#include <tinyspec/iot_typedef/product/config/ipv4_config.h>
-#include <tinyspec/iot_typedef/product/config/product_key.h>
 
 TINYSPEC_BEGIN_DECLS
 
@@ -24,9 +21,6 @@ typedef struct
     char                        type[IOT_DEVICE_TYPE_LENGTH + 1];
     uint16_t                    productId;
     uint16_t                    productVersion;
-    ProductKey                  key;
-    IPv4Config                  ipv4;
-    AccessoryConfig             accessoryConfig;
 } ProductConfig;
 
 TINYSPEC_END_DECLS

@@ -12,17 +12,12 @@
 
 #include <tinyspec/tinyspec_base.h>
 #include <tinycore/tiny_list.h>
-#include <tinyspec/iot_typedef/device/urn/urn.h>
-#include <tinyspec/iot_typedef/constant/typedef_constant.h>
-#include <tinyspec/iot_typedef/product/config/accesspoint.h>
 #include <tinyspec/iot_typedef/product/config/product_config.h>
 #include <tinyspec/iot_typedef/product/handler/action_handler.h>
 #include <tinyspec/iot_typedef/product/handler/property_handler.h>
 #include <tinyspec/iot_typedef/product/handler/identify_listener.h>
-#include <tinyspec/iot_typedef/product/lock/product_locker.h>
 #include <tinyspec/iot_typedef/product/observer/property_observer.h>
 #include <tinyspec/iot_typedef/product/observer/event_observer.h>
-#include <tinyspec/iot_typedef/operation/property_operations.h>
 #include <tinyspec/iot_typedef/operation/action_operation.h>
 #include <tinyspec/iot_typedef/operation/event_operation.h>
 #include <tinyspec/iot_typedef/device/device.h>
@@ -31,7 +26,6 @@ TINYSPEC_BEGIN_DECLS
 
 typedef struct
 {
-    Accesspoint                 ap;
     ProductConfig               config;
     Device                      device;
     TinyList                    children;

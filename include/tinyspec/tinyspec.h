@@ -30,16 +30,12 @@
 #include <tinyspec/iot_typedef/device/service.h>
 #include <tinyspec/iot_typedef/device/urn/urn.h>
 #include <tinyspec/iot_typedef/device/urn/urn_type.h>
-#include <tinyspec/iot_typedef/node/node.h>
 #include <tinyspec/iot_typedef/notice/device/device_notice.h>
 #include <tinyspec/iot_typedef/notice/device/device_notice_codec.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_event_occurred.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_event_occurred_codec.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed.h>
 #include <tinyspec/iot_typedef/notice/device/impl/device_property_changed_codec.h>
-#include <tinyspec/iot_typedef/notice/node/impl/node_changed_codec.h>
-#include <tinyspec/iot_typedef/notice/node/node_notice.h>
-#include <tinyspec/iot_typedef/notice/node/node_notice_codec.h>
 #include <tinyspec/iot_typedef/notice/notice.h>
 #include <tinyspec/iot_typedef/operation/action_operation.h>
 #include <tinyspec/iot_typedef/operation/codec/action_operation_codec.h>
@@ -47,12 +43,7 @@
 #include <tinyspec/iot_typedef/operation/event_operation.h>
 #include <tinyspec/iot_typedef/operation/property_operation.h>
 #include <tinyspec/iot_typedef/operation/property_operations.h>
-#include <tinyspec/iot_typedef/product/config/accessory_category_identifier.h>
-#include <tinyspec/iot_typedef/product/config/accessory_config.h>
-#include <tinyspec/iot_typedef/product/config/accesspoint.h>
-#include <tinyspec/iot_typedef/product/config/ipv4_config.h>
 #include <tinyspec/iot_typedef/product/config/product_config.h>
-#include <tinyspec/iot_typedef/product/config/product_key.h>
 #include <tinyspec/iot_typedef/product/handler/action_handler.h>
 #include <tinyspec/iot_typedef/product/handler/identify_listener.h>
 #include <tinyspec/iot_typedef/product/handler/property_handler.h>
@@ -102,7 +93,6 @@
 #include <tinyspec/stanza/iq/iq_method.h>
 #include <tinyspec/stanza/iq/iq_query.h>
 #include <tinyspec/stanza/iq/iq_result.h>
-#include <tinyspec/stanza/iq/node/control/get_nodes.h>
 #include <tinyspec/stanza/message/message.h>
 #include <tinyspec/stanza/stanza.h>
 #include <tinyspec/stanza/stanza_constant.h>
@@ -122,7 +112,6 @@
 #include <tinyspec/stanza_codec/iq/iq_error_codec.h>
 #include <tinyspec/stanza_codec/iq/iq_query_codec.h>
 #include <tinyspec/stanza_codec/iq/iq_result_codec.h>
-#include <tinyspec/stanza_codec/iq/node/control/get_nodes_codec.h>
 #include <tinyspec/stanza_codec/message/message_codec.h>
 #include <tinyspec/stanza_codec/stanza_codec.h>
 

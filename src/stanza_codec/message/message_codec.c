@@ -10,7 +10,6 @@
 #include <tinyspec/stanza_codec/message/message_codec.h>
 #include <tinycore/tiny_log.h>
 #include <tinyspec/iot_typedef/notice/device/device_notice_codec.h>
-#include <tinyspec/iot_typedef/notice/node/node_notice_codec.h>
 
 TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message)
 {
@@ -74,19 +73,6 @@ TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message)
                 if (RET_SUCCEEDED(ret))
                 {
                     ret = DeviceNoticeCodec_Encode(payload, message->type, &message->payload.data.device);
-                }
-                else
-                {
-                    TINY_LOG_ERROR("JsonObject_PutString: %s", TinyRet_GetDescription(ret));
-                }
-                break;
-
-            case MESSAGE_TOPIC_NODE:
-                type = node_notice_type_to_string((NodeNoticeType) (message->type));
-                ret = JsonObject_PutString(object, "type", type);
-                if (RET_SUCCEEDED(ret))
-                {
-                    ret = NodeNoticeCodec_Encode(payload, message->type, &message->payload.data.node);
                 }
                 else
                 {
@@ -174,11 +160,6 @@ TINYCORE_RET MessageCodec_Decode(Message* message, JsonObject *object)
             case MESSAGE_TOPIC_DEVICE:
                 message->type = (int) device_notice_type_from_string(type->value);
                 ret = DeviceNoticeCodec_Decode(&message->payload.data.device, message->type, payload);
-                break;
-
-            case MESSAGE_TOPIC_NODE:
-                message->type = (int) node_notice_type_from_string(type->value);
-                ret = NodeNoticeCodec_Decode(&message->payload.data.node, message->type, payload);
                 break;
 
             default:

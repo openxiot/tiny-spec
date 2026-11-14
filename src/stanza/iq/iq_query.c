@@ -64,10 +64,6 @@ TINYCORE_RET IQQuery_Initialize(IQQuery *thiz)
             ret = QueryVerifyFinish_Construct(&thiz->content.verifyFinish);
             break;
 
-        // node/control
-        case IQ_METHOD_GET_NODES:
-            break;
-
         default:
             TINY_LOG_ERROR("method not supported: %d", thiz->method);
             ret = TINY_RET_E_PARAM_INVALID;
@@ -126,10 +122,6 @@ void IQQuery_Dispose(IQQuery *thiz)
 
         case IQ_METHOD_VERIFY_START:
             QueryVerifyStart_Dispose(&thiz->content.verifyStart);
-            break;
-
-        // node/control
-        case IQ_METHOD_GET_NODES:
             break;
 
         default:

@@ -11,15 +11,11 @@
 
 #define STRING_MESSAGE_TOPIC_UNDEFINED      "undefined"
 #define STRING_MESSAGE_TOPIC_DEVICE         "urn:xiot:device"
-#define STRING_MESSAGE_TOPIC_XAN            "urn:xiot:node"
 
 const char * message_topic_to_string(MessageTopic topic)
 {
     switch (topic)
     {
-        case MESSAGE_TOPIC_NODE:
-            return STRING_MESSAGE_TOPIC_XAN;
-
         case MESSAGE_TOPIC_DEVICE:
             return STRING_MESSAGE_TOPIC_DEVICE;
 
@@ -35,11 +31,6 @@ MessageTopic message_topic_from_string(const char *string)
     if (STR_EQUAL(STRING_MESSAGE_TOPIC_DEVICE, string))
     {
         return MESSAGE_TOPIC_DEVICE;
-    }
-
-    if (STR_EQUAL(STRING_MESSAGE_TOPIC_XAN, string))
-    {
-        return MESSAGE_TOPIC_NODE;
     }
 
     return MESSAGE_TOPIC_UNDEFINED;

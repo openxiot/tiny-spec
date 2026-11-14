@@ -28,21 +28,10 @@ static void test_type_strings(void)
     TINY_TEST_CHECK(device_notice_type_from_string("unknown") == DEVICE_NOTICE_UNDEFINED);
     TINY_TEST_CHECK(device_notice_type_from_string(NULL) == DEVICE_NOTICE_UNDEFINED);
 
-    TINY_TEST_CHECK(strcmp(node_notice_type_to_string(NODE_NOTICE_NODE_FOUND), "node-found") == 0);
-    TINY_TEST_CHECK(strcmp(node_notice_type_to_string(NODE_NOTICE_NODE_LOST), "node-lost") == 0);
-    TINY_TEST_CHECK(strcmp(node_notice_type_to_string(NODE_NOTICE_UNDEFINED), "undefined") == 0);
-
-    TINY_TEST_CHECK(node_notice_type_from_string("node-found") == NODE_NOTICE_NODE_FOUND);
-    TINY_TEST_CHECK(node_notice_type_from_string("node-lost") == NODE_NOTICE_NODE_LOST);
-    TINY_TEST_CHECK(node_notice_type_from_string("unknown") == NODE_NOTICE_UNDEFINED);
-    TINY_TEST_CHECK(node_notice_type_from_string(NULL) == NODE_NOTICE_UNDEFINED);
-
     TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_DEVICE), "urn:xiot:device") == 0);
-    TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_NODE), "urn:xiot:node") == 0);
     TINY_TEST_CHECK(strcmp(message_topic_to_string(MESSAGE_TOPIC_UNDEFINED), "undefined") == 0);
 
     TINY_TEST_CHECK(message_topic_from_string("urn:xiot:device") == MESSAGE_TOPIC_DEVICE);
-    TINY_TEST_CHECK(message_topic_from_string("urn:xiot:node") == MESSAGE_TOPIC_NODE);
     TINY_TEST_CHECK(message_topic_from_string("urn:xiot:unknown") == MESSAGE_TOPIC_UNDEFINED);
     TINY_TEST_CHECK(message_topic_from_string(NULL) == MESSAGE_TOPIC_UNDEFINED);
 }
@@ -304,128 +293,10 @@ static void test_event_occurred(void)
     }
 }
 
-static void test_node_info(void)
-{
-    Node node;
-    JsonObject *payload = NULL;
-
-    TINY_TEST_CHECK(Node_Construct(NULL) == TINY_RET_E_NULL_PTR);
-    TINY_TEST_CHECK(Node_Construct(&node) == TINY_RET_OK);
-    TINY_TEST_CHECK(node.serialNumber[0] == '\0');
-    TINY_TEST_CHECK(node.productId == 0);
-    TINY_TEST_CHECK(node.productVersion == 0);
-
-    strncpy(node.serialNumber, "SN-001", NODE_SERIAL_NUMBER_LENGTH);
-    node.productId = 300;
-    node.productVersion = 2;
-
-    payload = JsonObject_New();
-    TINY_TEST_CHECK(payload != NULL);
-    if (payload != NULL)
-    {
-        TINY_TEST_CHECK(NodeInfoCodec_Encode(payload, &node) == TINY_RET_OK);
-        TINY_TEST_CHECK(strcmp(JsonObject_GetStringValue(payload, "serialNumber"), "SN-001") == 0);
-
-        JsonNumber *productId = JsonObject_GetNumber(payload, "productId");
-        TINY_TEST_CHECK(productId != NULL);
-        if (productId != NULL)
-        {
-            TINY_TEST_CHECK(productId->value.intValue == 300);
-        }
-
-        TINY_TEST_CHECK(NodeInfoCodec_Encode(NULL, &node) == TINY_RET_E_NULL_PTR);
-        TINY_TEST_CHECK(NodeInfoCodec_Encode(payload, NULL) == TINY_RET_E_NULL_PTR);
-        JsonObject_Delete(payload);
-    }
-
-    /* decoding */
-    payload = JsonObject_New();
-    TINY_TEST_CHECK(payload != NULL);
-    if (payload != NULL)
-    {
-        Node decoded;
-
-        TINY_TEST_CHECK(Node_Construct(&decoded) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutString(payload, "serialNumber", "SN-002") == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productId", 301) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productVersion", 3) == TINY_RET_OK);
-
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(&decoded, payload) == TINY_RET_OK);
-        TINY_TEST_CHECK(strcmp(decoded.serialNumber, "SN-002") == 0);
-        TINY_TEST_CHECK(decoded.productId == 301);
-        TINY_TEST_CHECK(decoded.productVersion == 3);
-
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(NULL, payload) == TINY_RET_E_NULL_PTR);
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(&decoded, NULL) == TINY_RET_E_NULL_PTR);
-        JsonObject_Delete(payload);
-    }
-
-    /* missing serialNumber */
-    payload = JsonObject_New();
-    TINY_TEST_CHECK(payload != NULL);
-    if (payload != NULL)
-    {
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productId", 301) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productVersion", 3) == TINY_RET_OK);
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(&node, payload) == TINY_RET_E_PARAM_INVALID);
-        JsonObject_Delete(payload);
-    }
-
-    /* missing productVersion */
-    payload = JsonObject_New();
-    TINY_TEST_CHECK(payload != NULL);
-    if (payload != NULL)
-    {
-        TINY_TEST_CHECK(JsonObject_PutString(payload, "serialNumber", "SN-002") == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productId", 301) == TINY_RET_OK);
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(&node, payload) == TINY_RET_E_PARAM_INVALID);
-        JsonObject_Delete(payload);
-    }
-
-    /* productId must be an integer */
-    payload = JsonObject_New();
-    TINY_TEST_CHECK(payload != NULL);
-    if (payload != NULL)
-    {
-        TINY_TEST_CHECK(JsonObject_PutString(payload, "serialNumber", "SN-002") == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutFloat(payload, "productId", 3.5) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productVersion", 3) == TINY_RET_OK);
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(&node, payload) == TINY_RET_E_PARAM_INVALID);
-        JsonObject_Delete(payload);
-    }
-
-    /* productVersion must be an integer */
-    payload = JsonObject_New();
-    TINY_TEST_CHECK(payload != NULL);
-    if (payload != NULL)
-    {
-        TINY_TEST_CHECK(JsonObject_PutString(payload, "serialNumber", "SN-002") == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutInteger(payload, "productId", 301) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonObject_PutFloat(payload, "productVersion", 1.5) == TINY_RET_OK);
-        TINY_TEST_CHECK(NodeInfoCodec_Decode(&node, payload) == TINY_RET_E_PARAM_INVALID);
-        JsonObject_Delete(payload);
-    }
-
-    Node *copy = Node_New();
-    TINY_TEST_CHECK(copy != NULL);
-    if (copy != NULL)
-    {
-        TINY_TEST_CHECK(Node_Copy(copy, &node) == TINY_RET_OK);
-        TINY_TEST_CHECK(strcmp(copy->serialNumber, node.serialNumber) == 0);
-        TINY_TEST_CHECK(copy->productId == node.productId);
-        TINY_TEST_CHECK(Node_Copy(copy, copy) == TINY_RET_E_PARAM_INVALID);
-        Node_Delete(copy);
-    }
-
-    Node_Dispose(&node);
-}
-
 static void test_notice_codecs(void)
 {
     DeviceNotice device;
-    NodeNotice nodeNotice;
     JsonObject *payload = NULL;
-    Node *node = NULL;
 
     /* unsupported device notice types */
     payload = JsonObject_New();
@@ -492,47 +363,6 @@ static void test_notice_codecs(void)
         JsonObject_Delete(payload);
     }
     DeviceEventOccurred_Dispose(&device.payload.eventOccurred);
-
-    /* node notices */
-    payload = NULL;
-
-    node = Node_New();
-    TINY_TEST_CHECK(node != NULL);
-    if (node != NULL)
-    {
-        strncpy(node->serialNumber, "SN-003", NODE_SERIAL_NUMBER_LENGTH);
-        node->productId = 400;
-        node->productVersion = 1;
-
-        memset(&nodeNotice, 0, sizeof(nodeNotice));
-        nodeNotice.type = NODE_NOTICE_NODE_FOUND;
-        TINY_TEST_CHECK(Node_Copy(&nodeNotice.payload.node, node) == TINY_RET_OK);
-
-        TINY_TEST_CHECK(NodeNoticeCodec_Encode(NULL, NODE_NOTICE_NODE_FOUND, &nodeNotice) == TINY_RET_E_NULL_PTR);
-        TINY_TEST_CHECK(NodeNoticeCodec_Encode(NULL, NODE_NOTICE_UNDEFINED, &nodeNotice) == TINY_RET_E_NULL_PTR);
-        TINY_TEST_CHECK(NodeNoticeCodec_Decode(NULL, NODE_NOTICE_NODE_FOUND, payload) == TINY_RET_E_NULL_PTR);
-        TINY_TEST_CHECK(NodeNoticeCodec_Decode(&nodeNotice, 99, NULL) == TINY_RET_E_NULL_PTR);
-
-        payload = JsonObject_New();
-        TINY_TEST_CHECK(payload != NULL);
-        if (payload != NULL)
-        {
-            TINY_TEST_CHECK(NodeNoticeCodec_Encode(payload, NODE_NOTICE_NODE_LOST, &nodeNotice) == TINY_RET_OK);
-            TINY_TEST_CHECK(strcmp(JsonObject_GetStringValue(payload, "serialNumber"), "SN-003") == 0);
-
-            NodeNotice decoded;
-
-            memset(&decoded, 0, sizeof(decoded));
-            TINY_TEST_CHECK(NodeNoticeCodec_Decode(&decoded, NODE_NOTICE_NODE_FOUND, payload) == TINY_RET_OK);
-            TINY_TEST_CHECK(strcmp(decoded.payload.node.serialNumber, "SN-003") == 0);
-            TINY_TEST_CHECK(decoded.payload.node.productId == 400);
-            TINY_TEST_CHECK(decoded.payload.node.productVersion == 1);
-
-            JsonObject_Delete(payload);
-        }
-
-        Node_Delete(node);
-    }
 }
 
 static void test_message_stanzas(void)
@@ -653,48 +483,6 @@ static void test_message_stanzas(void)
     }
     Stanza_Delete(stanza);
 
-    /* node message, node lost */
-    stanza = Stanza_New(STANZA_MESSAGE);
-    TINY_TEST_CHECK(stanza != NULL);
-    if (stanza == NULL)
-    {
-        return;
-    }
-
-    strncpy(stanza->data.message.id, "m-3", MESSAGE_ID_LENGTH);
-    stanza->data.message.topic = MESSAGE_TOPIC_NODE;
-    stanza->data.message.type = NODE_NOTICE_NODE_LOST;
-    strncpy(stanza->data.message.payload.data.node.payload.node.serialNumber, "SN-006", NODE_SERIAL_NUMBER_LENGTH);
-    stanza->data.message.payload.data.node.payload.node.productId = 500;
-    stanza->data.message.payload.data.node.payload.node.productVersion = 4;
-
-    document = StanzaCodec_Encode(stanza);
-    TINY_TEST_CHECK(document != NULL);
-    if (document != NULL)
-    {
-        JsonObject *object = JsonObject_GetObject(document, "message");
-        TINY_TEST_CHECK(object != NULL);
-        if (object != NULL)
-        {
-            TINY_TEST_CHECK(strcmp(JsonObject_GetStringValue(object, "type"), "node-lost") == 0);
-        }
-
-        decoded = StanzaCodec_Decode(document);
-        TINY_TEST_CHECK(decoded != NULL);
-        if (decoded != NULL)
-        {
-            TINY_TEST_CHECK(decoded->type == STANZA_MESSAGE);
-            TINY_TEST_CHECK(decoded->data.message.topic == MESSAGE_TOPIC_NODE);
-            TINY_TEST_CHECK(decoded->data.message.type == NODE_NOTICE_NODE_LOST);
-            TINY_TEST_CHECK(strcmp(decoded->data.message.payload.data.node.payload.node.serialNumber, "SN-006") == 0);
-            TINY_TEST_CHECK(decoded->data.message.payload.data.node.payload.node.productId == 500);
-            TINY_TEST_CHECK(decoded->data.message.payload.data.node.payload.node.productVersion == 4);
-            Stanza_Delete(decoded);
-        }
-        JsonObject_Delete(document);
-    }
-    Stanza_Delete(stanza);
-
     /* an undefined topic can not be encoded */
     stanza = Stanza_New(STANZA_MESSAGE);
     TINY_TEST_CHECK(stanza != NULL);
@@ -754,7 +542,6 @@ int main(void)
     test_type_strings();
     test_property_changed();
     test_event_occurred();
-    test_node_info();
     test_notice_codecs();
     test_message_stanzas();
 

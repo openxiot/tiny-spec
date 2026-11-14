@@ -39,10 +39,6 @@ static void Message_Dispose(Message *thiz)
             }
             break;
 
-        case MESSAGE_TOPIC_NODE:
-            Node_Dispose(&thiz->payload.data.node.payload.node);
-            break;
-
         default:
             break;
     }

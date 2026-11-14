@@ -33,8 +33,6 @@ static IQMethod_String _method_string_mappings[] =
                 {IQ_METHOD_INITIALIZE, "urn:xiot:initialize"},
                 {IQ_METHOD_VERIFY_START, "urn:xiot:verify-start"},
                 {IQ_METHOD_VERIFY_FINISH, "urn:xiot:verify-finish"},
-
-                {IQ_METHOD_GET_NODES, "urn:xiot:get-nodes"}
         };
 
 const char * IQMethod_ToString(IQMethod method)

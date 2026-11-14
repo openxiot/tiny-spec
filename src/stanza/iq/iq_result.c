@@ -8,7 +8,6 @@
  */
 
 #include <tinycore/tiny_log.h>
-#include <tinyspec/stanza/iq/node/control/get_nodes.h>
 #include <tinyspec/stanza/iq/iq_result.h>
 
 TINYCORE_RET IQResult_Initialize(IQResult *thiz)
@@ -61,11 +60,6 @@ TINYCORE_RET IQResult_Initialize(IQResult *thiz)
             break;
 
         case IQ_METHOD_VERIFY_FINISH:
-            break;
-
-        // node/control
-        case IQ_METHOD_GET_NODES:
-            ret = ResultGetNodes_Construct(&thiz->content.getNodes);
             break;
 
         default:
@@ -125,11 +119,6 @@ void IQResult_Dispose(IQResult *thiz)
             break;
 
         case IQ_METHOD_VERIFY_FINISH:
-            break;
-
-        // node/control
-        case IQ_METHOD_GET_NODES:
-            ResultGetNodes_Dispose(&thiz->content.getNodes);
             break;
 
         default:

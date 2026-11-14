@@ -60,16 +60,12 @@ static const ResourceCase CASES[] = {
     { "iq/device/verify/verify-start/query.json", STANZA_IQ },
     { "iq/device/verify/verify-start/result.json", STANZA_IQ },
 
-    /* IQ: error and node/control */
+    /* IQ: error */
     { "iq/error.json", STANZA_IQ },
-    { "iq/node/get-nodes/query.json", STANZA_IQ },
-    { "iq/node/get-nodes/result.json", STANZA_IQ },
 
     /* Messages */
     { "message/device/device-event-occurred.json", STANZA_MESSAGE },
     { "message/device/device-property-changed.json", STANZA_MESSAGE },
-    { "message/node/node-found.json", STANZA_MESSAGE },
-    { "message/node/node-lost.json", STANZA_MESSAGE },
 };
 
 static size_t read_file(const char *path, char *buffer, size_t capacity)

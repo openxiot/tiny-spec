@@ -12,7 +12,6 @@
 
 #include <tinyspec/tinyspec_base.h>
 #include <tinyspec/iot_typedef/notice/device/device_notice.h>
-#include <tinyspec/iot_typedef/notice/node/node_notice.h>
 
 TINYSPEC_BEGIN_DECLS
 
@@ -21,7 +20,6 @@ typedef union
     union
     {
         DeviceNotice      device;
-        NodeNotice        node;
     } data;
 
 } Notice;
