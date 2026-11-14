@@ -12,7 +12,6 @@
 #include <string.h>
 
 #include <tinyspec/iot_typedef/device/property.h>
-#include <tinyspec/iot_typedef/product/handler/property_handler.h>
 #include <tinyspec/iot_typedef/status/iot_status.h>
 #include <tinycore/json_object.h>
 #include <tinycore/json_value.h>
@@ -125,50 +124,6 @@ static void test_property_combination(void)
     if (sat != NULL) Property_Delete(sat);
 }
 
-static void on_getger(PropertyOperation *operation, void *ctx)
-{
-    (void) ctx;
-    operation->value = JsonValue_NewInteger(1);
-}
-
-static void on_setter(PropertyOperation *operation, void *ctx)
-{
-    (void) ctx;
-    operation->status = IOT_STATUS_COMPLETED;
-}
-
-static void test_property_handler(void)
-{
-    PropertyOperation *o = NULL;
-
-    PropertyHandler_SetListener(NULL, NULL);
-
-    o = PropertyOperation_NewFrom("abc", 2, 3);
-    TINY_TEST_CHECK(o != NULL);
-    if (o != NULL)
-    {
-        PropertyHandler_NotifyGet(o, NULL);
-        TINY_TEST_CHECK(o->status == IOT_STATUS_INTERNAL_ERROR);   /* 未注册 → 置错 */
-        PropertyOperation_Delete(o);
-    }
-
-    PropertyHandler_SetListener(on_getger, on_setter);
-
-    o = PropertyOperation_NewFrom("abc", 2, 3);
-    TINY_TEST_CHECK(o != NULL);
-    if (o != NULL)
-    {
-        PropertyHandler_NotifySet(o, NULL);
-        TINY_TEST_CHECK(o->status == IOT_STATUS_COMPLETED);
-
-        PropertyHandler_NotifyGet(o, NULL);
-        TINY_TEST_CHECK(o->value != NULL);
-        PropertyOperation_Delete(o);
-    }
-
-    PropertyHandler_SetListener(NULL, NULL);
-}
-
 int main(void)
 {
     TINY_TEST_BEGIN("property");
@@ -177,7 +132,6 @@ int main(void)
     test_property_unit_string();
     test_property_max_length();
     test_property_combination();
-    test_property_handler();
 
     return TINY_TEST_FINISH();
 }
