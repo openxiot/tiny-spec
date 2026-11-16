@@ -11,6 +11,7 @@
 #define TINYSPEC_IOT_TYPEDEF_PRODUCT_CONFIG_PRODUCT_CONFIG_H
 
 #include <tinyspec/tinyspec_base.h>
+#include <tinyspec/typedef/constant/typedef_constant.h>
 
 TINYSPEC_BEGIN_DECLS
 
