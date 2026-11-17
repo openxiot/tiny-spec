@@ -64,6 +64,9 @@ void dispatch_iq(Product *thiz, IQ *iq)
         TinyList_AddTail(&ops.properties, op);
         Product_TryReadProperties(thiz, &ops);
         result = ResultGetProperty_New(iq->id, op);
+        /* ops 的列表节点由 AddTail 分配；op 归 query stanza 所有，只释放节点不删 op */
+        TinyList_SetDeleteListener(&ops.properties, NULL, NULL);
+        PropertyOperations_Dispose(&ops);
         break;
     }
 
@@ -75,6 +78,9 @@ void dispatch_iq(Product *thiz, IQ *iq)
         TinyList_AddTail(&ops.properties, op);
         Product_TryWriteProperties(thiz, &ops);
         result = ResultSetProperty_New(iq->id, op);
+        /* 同上：释放临时列表节点，op 归 query stanza 所有 */
+        TinyList_SetDeleteListener(&ops.properties, NULL, NULL);
+        PropertyOperations_Dispose(&ops);
         break;
     }
 
