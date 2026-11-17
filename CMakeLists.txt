@@ -51,6 +51,10 @@ endif()
 # Library
 # ---------------------------------------------------------------------------
 set(TINYSPEC_SOURCES
+        src/stanza/iq/device/control/invoke_actions.c
+        src/stanza/iq/device/manager/get_children.c
+        src/stanza/iq/device/manager/properties_changed.c
+        src/typedef/product/child/child.c
         # IotTypedef: device description model
         src/typedef/device/action.c
         src/typedef/device/argument.c
@@ -88,7 +92,7 @@ set(TINYSPEC_SOURCES
         src/stanza/iq/iq_method.c
         src/stanza/iq/iq_query.c
         src/stanza/iq/iq_result.c
-        src/stanza/iq/basic/factory/byebye_factory.c
+        src/stanza/iq/basic/factory/bye_factory.c
         src/stanza/iq/basic/factory/hello_factory.c
         src/stanza/iq/basic/factory/ping_factory.c
         src/stanza/iq/basic/factory/pong_factory.c
@@ -116,6 +120,9 @@ set(TINYSPEC_SOURCES
 
         # StanzaCodec: JSON codecs
         src/codec/stanza_codec.c
+        src/codec/iq/device/control/invoke_actions_codec.c
+        src/codec/iq/device/manager/get_children_codec.c
+        src/codec/iq/device/manager/properties_changed_codec.c
         src/codec/iq/iq_codec.c
         src/codec/iq/iq_error_codec.c
         src/codec/iq/iq_query_codec.c

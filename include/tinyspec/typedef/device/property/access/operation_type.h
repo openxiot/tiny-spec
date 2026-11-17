@@ -14,7 +14,7 @@
 
 TINYSPEC_BEGIN_DECLS
 
-typedef enum _OperationType
+typedef enum
 {
     OPERATION_GET       = 1,
     OPERATION_SET       = 2,

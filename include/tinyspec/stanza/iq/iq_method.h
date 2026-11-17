@@ -22,7 +22,7 @@ typedef enum
      * basic
      */
     IQ_METHOD_HELLO                 = 0x01,
-    IQ_METHOD_BYEBYE                = 0x02,
+    IQ_METHOD_BYE                   = 0x02,
     IQ_METHOD_PING                  = 0x03,
 
     /*
@@ -33,6 +33,13 @@ typedef enum
     IQ_METHOD_GET_PROPERTY          = 0x13,
     IQ_METHOD_SET_PROPERTY          = 0x14,
     IQ_METHOD_INVOKE_ACTION         = 0x15,
+    IQ_METHOD_INVOKE_ACTIONS        = 0x16,
+    IQ_METHOD_PROPERTIES_CHANGED    = 0x17,
+
+    /*
+     * device/manager
+     */
+    IQ_METHOD_GET_CHILDREN          = 0x18,
 
     /*
      * device/key

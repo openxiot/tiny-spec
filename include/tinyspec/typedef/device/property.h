@@ -12,43 +12,42 @@
 
 #include <tinyspec/tinyspec_base.h>
 #include <tinyspec/typedef/device/urn/urn.h>
-#include <tinyspec/typedef/device/property/unit/unit.h>
 #include <tinyspec/typedef/device/property/access/access.h>
 #include <tinyspec/typedef/device/property/format/format.h>
 #include <tinyspec/typedef/device/property/constraint/value_list.h>
 #include <tinyspec/typedef/device/property/constraint/value_range.h>
 #include <tinyspec/typedef/operation/property_operation.h>
-#include <tinycore/json_value.h>
 #include <tinycore/tiny_list.h>
 
 TINYSPEC_BEGIN_DECLS
 
-typedef struct
-{
-    uint16_t            iid;
-    Urn                 type;
-    Format              format;
-    Access              access;
-    ValueList         * valueList;
-    ValueRange        * valueRange;
-    char              * unit;           /* 单位字符串，可为自定义任意单位；NULL 表示无 */
-    uint16_t            maxLength;      /* FORMAT_STRING 最大长度，0 表示不限制 */
-    JsonValue         * value;
-    TinyList            members;        /* 组合属性(FORMAT_COMBINATION)的成员 Property* 列表（非持有） */
+typedef struct {
+    uint16_t iid;
+    Urn type;
+    Format format;
+    Access access;
+    ValueList *valueList;
+    ValueRange *valueRange;
+    char *unit; /* 单位字符串，可为自定义任意单位；NULL 表示无 */
+    uint16_t maxLength; /* FORMAT_STRING 最大长度，0 表示不限制 */
+    JsonValue *value;
+    TinyList members; /* 组合属性(FORMAT_COMBINATION)的成员 Property* 列表（非持有） */
 } Property;
 
 TINYSPEC_API
-Property* Property_New(uint16_t iid);
+Property *Property_New(uint16_t iid);
 
 TINYSPEC_API
-Property *Property_NewInstance(uint16_t iid,
-                               const char *ns,
-                               const char *name,
-                               uint32_t uuid,
-                               const char *vendor,
-                               Format format,
-                               Access access,
-                               Unit unit);
+Property *Property_NewInstance(
+    uint16_t iid,
+    const char *ns,
+    const char *name,
+    uint32_t uuid,
+    const char *vendor,
+    Format format,
+    Access access,
+    const char * unit
+);
 
 TINYSPEC_API
 void Property_Delete(Property *thiz);
@@ -65,10 +64,10 @@ TINYSPEC_API
 uint32_t Property_GetMemberCount(Property *thiz);
 
 TINYSPEC_API
-Property* Property_GetMemberAt(Property *thiz, uint32_t index);
+Property *Property_GetMemberAt(Property *thiz, uint32_t index);
 
 TINYSPEC_API
-bool Property_CheckValue(Property *thiz, JsonValue* value);
+bool Property_CheckValue(Property *thiz, JsonValue *value);
 
 TINYSPEC_API
 void Property_TryRead(Property *thiz, PropertyOperation *o);

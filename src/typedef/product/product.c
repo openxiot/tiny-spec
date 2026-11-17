@@ -9,8 +9,8 @@
 
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
-#include <tinyspec/typedef/operation/property_operation.h>
 #include <tinyspec/typedef/product/product.h>
+#include <tinyspec/typedef/product/child/child.h>
 
 static TINYCORE_RET Product_Construct(Product *thiz);
 
@@ -20,7 +20,7 @@ static void child_release_handler(void *data, void *ctx)
 {
     (void) ctx;
 
-    Product_Delete((Product *) data);
+    Child_Delete(data);
 }
 
 Product* Product_New(void)
@@ -112,23 +112,3 @@ bool Product_CheckHandler(Product *thiz)
 
     return true;
 }
-
-//void Product_Lock(Product *thiz)
-//{
-//    RETURN_IF_FAIL(thiz);
-//
-//    if (thiz->locker.lock != NULL)
-//    {
-//        thiz->locker.lock();
-//    }
-//}
-//
-//void Product_Unlock(Product *thiz)
-//{
-//    RETURN_IF_FAIL(thiz);
-//
-//    if (thiz->locker.unlock != NULL)
-//    {
-//        thiz->locker.unlock();
-//    }
-//}

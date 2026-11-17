@@ -532,7 +532,7 @@ static void test_value_range(void)
 
 static void test_property_value_types(void)
 {
-    Property *property = Property_NewInstance(2, "homekit-spec", "on", 0x30, NULL, FORMAT_BOOL, ACCESS_RWN, NONE);
+    Property *property = Property_NewInstance(2, "homekit-spec", "on", 0x30, NULL, FORMAT_BOOL, ACCESS_RWN, NULL);
     Property *plain = NULL;
     JsonValue *value = NULL;
 
@@ -718,9 +718,9 @@ static void test_property_value_types(void)
 
 static void test_property_access(void)
 {
-    Property *read_write = Property_NewInstance(2, "homekit-spec", "on", 0x30, NULL, FORMAT_BOOL, ACCESS_RWN, NONE);
-    Property *write_only = Property_NewInstance(3, "homekit-spec", "level", 0x31, NULL, FORMAT_UINT8, ACCESS_WRITE, NONE);
-    Property *read_only = Property_NewInstance(4, "homekit-spec", "name", 0x32, NULL, FORMAT_STRING, ACCESS_READ, NONE);
+    Property *read_write = Property_NewInstance(2, "homekit-spec", "on", 0x30, NULL, FORMAT_BOOL, ACCESS_RWN, NULL);
+    Property *write_only = Property_NewInstance(3, "homekit-spec", "level", 0x31, NULL, FORMAT_UINT8, ACCESS_WRITE, NULL);
+    Property *read_only = Property_NewInstance(4, "homekit-spec", "name", 0x32, NULL, FORMAT_STRING, ACCESS_READ, NULL);
     PropertyOperation *operation = NULL;
     JsonValue *value = NULL;
 
@@ -920,7 +920,7 @@ static void test_argument_and_event(void)
 
     /* successful produce through a service */
     service = Service_New(1);
-    property = Property_NewInstance(2, "homekit-spec", "on", 0x30, NULL, FORMAT_BOOL, ACCESS_RWN, NONE);
+    property = Property_NewInstance(2, "homekit-spec", "on", 0x30, NULL, FORMAT_BOOL, ACCESS_RWN, NULL);
     event = Event_NewInstance(3, "homekit-spec", "event", 0x71, NULL);
     TINY_TEST_CHECK(service != NULL);
     TINY_TEST_CHECK(property != NULL);

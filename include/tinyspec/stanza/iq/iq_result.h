@@ -14,6 +14,9 @@
 #include <tinyspec/stanza/iq/device/control/get_properties.h>
 #include <tinyspec/stanza/iq/device/control/set_properties.h>
 #include <tinyspec/stanza/iq/device/control/invoke_action.h>
+#include <tinyspec/stanza/iq/device/control/invoke_actions.h>
+#include <tinyspec/stanza/iq/device/manager/get_children.h>
+#include <tinyspec/stanza/iq/device/manager/properties_changed.h>
 #include <tinyspec/stanza/iq/device/control/get_property.h>
 #include <tinyspec/stanza/iq/device/control/set_property.h>
 #include <tinyspec/stanza/iq/device/verify/verify_start.h>
@@ -34,6 +37,9 @@ typedef struct
         ResultGetProperty               getProperty;
         ResultSetProperty               setProperty;
         ResultInvokeAction              invokeAction;
+        ResultInvokeActions              invokeActions;
+        ResultGetChildren                getChildren;
+        ResultPropertiesChanged          propertiesChanged;
 
         ResultGetAccessKey              getAccessKey;
 

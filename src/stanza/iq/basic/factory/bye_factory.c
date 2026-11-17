@@ -7,9 +7,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <tinyspec/stanza/iq/basic/factory/byebye_factory.h>
+#include <tinyspec/stanza/iq/basic/factory/bye_factory.h>
 
-Stanza * QueryByebye_New(const char * id)
+Stanza * QueryBye_New(const char * id)
 {
     Stanza *thiz = NULL;
 
@@ -21,7 +21,7 @@ Stanza * QueryByebye_New(const char * id)
             break;
         }
 
-        if (RET_FAILED(IQ_InitializeQuery(&thiz->data.iq, id, IQ_METHOD_BYEBYE)))
+        if (RET_FAILED(IQ_InitializeQuery(&thiz->data.iq, id, IQ_METHOD_BYE)))
         {
             Stanza_Delete(thiz);
             thiz = NULL;
@@ -32,7 +32,7 @@ Stanza * QueryByebye_New(const char * id)
     return thiz;
 }
 
-Stanza * ResultByebye_New(const char * id)
+Stanza * ResultBye_New(const char * id)
 {
     Stanza *thiz = NULL;
 
@@ -44,7 +44,7 @@ Stanza * ResultByebye_New(const char * id)
             break;
         }
 
-        if (RET_FAILED(IQ_InitializeResult(&thiz->data.iq, id, IQ_METHOD_BYEBYE)))
+        if (RET_FAILED(IQ_InitializeResult(&thiz->data.iq, id, IQ_METHOD_BYE)))
         {
             Stanza_Delete(thiz);
             thiz = NULL;

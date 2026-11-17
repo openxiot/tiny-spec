@@ -18,7 +18,7 @@ TINYCORE_RET IQResult_Initialize(IQResult *thiz)
     {
         // basic
         case IQ_METHOD_HELLO:
-        case IQ_METHOD_BYEBYE:
+        case IQ_METHOD_BYE:
         case IQ_METHOD_PING:
             break;
 
@@ -59,6 +59,18 @@ TINYCORE_RET IQResult_Initialize(IQResult *thiz)
             ret = ResultVerifyStart_Construct(&thiz->content.verifyStart);
             break;
 
+        case IQ_METHOD_INVOKE_ACTIONS:
+            ResultInvokeActions_Dispose(&thiz->content.invokeActions);
+            break;
+
+        case IQ_METHOD_GET_CHILDREN:
+            ResultGetChildren_Dispose(&thiz->content.getChildren);
+            break;
+
+        case IQ_METHOD_PROPERTIES_CHANGED:
+            ResultPropertiesChanged_Dispose(&thiz->content.propertiesChanged);
+            break;
+
         case IQ_METHOD_VERIFY_FINISH:
             break;
 
@@ -77,7 +89,7 @@ void IQResult_Dispose(IQResult *thiz)
     {
         // basic
         case IQ_METHOD_HELLO:
-        case IQ_METHOD_BYEBYE:
+        case IQ_METHOD_BYE:
         case IQ_METHOD_PING:
             break;
 

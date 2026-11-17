@@ -47,11 +47,6 @@ void Product_Delete(Product *thiz);
 TINYSPEC_API
 bool Product_CheckHandler(Product *thiz);
 
-//TINYSPEC_API
-//void Product_Lock(Product *thiz);
-//
-//TINYSPEC_API
-//void Product_Unlock(Product *thiz);
 
 TINYSPEC_END_DECLS
 

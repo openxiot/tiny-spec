@@ -22,6 +22,9 @@
 #include <tinyspec/stanza/iq/device/control/get_property.h>
 #include <tinyspec/stanza/iq/device/control/set_property.h>
 #include <tinyspec/stanza/iq/device/control/invoke_action.h>
+#include <tinyspec/stanza/iq/device/control/invoke_actions.h>
+#include <tinyspec/stanza/iq/device/manager/get_children.h>
+#include <tinyspec/stanza/iq/device/manager/properties_changed.h>
 
 #include <tinyspec/stanza/iq/iq_method.h>
 
@@ -38,6 +41,9 @@ typedef struct
         QueryGetProperty                getProperty;
         QuerySetProperty                setProperty;
         QueryInvokeAction               invokeAction;
+        QueryInvokeActions              invokeActions;
+        QueryGetChildren                getChildren;
+        QueryPropertiesChanged          propertiesChanged;
 
         QuerySetAccessKey               setAccessKey;
 

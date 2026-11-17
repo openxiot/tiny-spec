@@ -26,7 +26,6 @@
 #include <tinyspec/typedef/device/property/constraint/value_list.h>
 #include <tinyspec/typedef/device/property/constraint/value_range.h>
 #include <tinyspec/typedef/device/property/format/format.h>
-#include <tinyspec/typedef/device/property/unit/unit.h>
 #include <tinyspec/typedef/device/service.h>
 #include <tinyspec/typedef/device/urn/urn.h>
 #include <tinyspec/typedef/device/urn/urn_type.h>
@@ -63,7 +62,7 @@
 #include <tinyspec/typedef/xid/xid3.h>
 
 /* Stanza - IQ and message model */
-#include <tinyspec/stanza/iq/basic/factory/byebye_factory.h>
+#include <tinyspec/stanza/iq/basic/factory/bye_factory.h>
 #include <tinyspec/stanza/iq/basic/factory/hello_factory.h>
 #include <tinyspec/stanza/iq/basic/factory/ping_factory.h>
 #include <tinyspec/stanza/iq/basic/factory/pong_factory.h>

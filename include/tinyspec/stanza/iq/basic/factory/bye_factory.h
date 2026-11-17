@@ -16,10 +16,10 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-Stanza * QueryByebye_New(const char *id);
+Stanza * QueryBye_New(const char *id);
 
 TINYSPEC_API
-Stanza * ResultByebye_New(const char *id);
+Stanza * ResultBye_New(const char *id);
 
 TINYSPEC_END_DECLS
 

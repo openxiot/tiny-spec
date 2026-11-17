@@ -15,35 +15,38 @@ typedef struct
     const char    * string;
 } IQMethod_String;
 
-static IQMethod_String _method_string_mappings[] =
+static IQMethod_String method_string_mappings[] =
         {
-                {IQ_METHOD_HELLO, "urn:xiot:hello"},
-                {IQ_METHOD_BYEBYE, "urn:xiot:bye-bye"},
-                {IQ_METHOD_PING, "urn:xiot:ping"},
+                {.method = IQ_METHOD_HELLO, .string = "urn:xiot:hello"},
+                {.method = IQ_METHOD_BYE, .string = "urn:xiot:bye-bye"},
+                {.method = IQ_METHOD_PING, .string = "urn:xiot:ping"},
 
-                {IQ_METHOD_GET_PROPERTIES, "urn:xiot:get-properties"},
-                {IQ_METHOD_SET_PROPERTIES, "urn:xiot:set-properties"},
-                {IQ_METHOD_GET_PROPERTY, "urn:xiot:get-property"},
-                {IQ_METHOD_SET_PROPERTY, "urn:xiot:set-property"},
-                {IQ_METHOD_INVOKE_ACTION, "urn:xiot:invoke-action"},
+                {.method = IQ_METHOD_GET_PROPERTIES, .string = "urn:xiot:get-properties"},
+                {.method = IQ_METHOD_SET_PROPERTIES, .string = "urn:xiot:set-properties"},
+                {.method = IQ_METHOD_GET_PROPERTY, .string = "urn:xiot:get-property"},
+                {.method = IQ_METHOD_SET_PROPERTY, .string = "urn:xiot:set-property"},
+                {.method = IQ_METHOD_INVOKE_ACTION, .string = "urn:xiot:invoke-action"},
+                {.method = IQ_METHOD_INVOKE_ACTIONS, .string = "urn:xiot:invoke-actions"},
+                {.method = IQ_METHOD_PROPERTIES_CHANGED, .string = "urn:xiot:properties-changed"},
+                {.method = IQ_METHOD_GET_CHILDREN, .string = "urn:xiot:get-children"},
 
-                {IQ_METHOD_GET_ACCESS_KEY, "urn:xiot:get-access-key"},
-                {IQ_METHOD_SET_ACCESS_KEY, "urn:xiot:set-access-key"},
+                {.method = IQ_METHOD_GET_ACCESS_KEY, .string = "urn:xiot:get-access-key"},
+                {.method = IQ_METHOD_SET_ACCESS_KEY, .string = "urn:xiot:set-access-key"},
 
-                {IQ_METHOD_INITIALIZE, "urn:xiot:initialize"},
-                {IQ_METHOD_VERIFY_START, "urn:xiot:verify-start"},
-                {IQ_METHOD_VERIFY_FINISH, "urn:xiot:verify-finish"},
+                {.method = IQ_METHOD_INITIALIZE, .string = "urn:xiot:initialize"},
+                {.method = IQ_METHOD_VERIFY_START, .string = "urn:xiot:verify-start"},
+                {.method = IQ_METHOD_VERIFY_FINISH, .string = "urn:xiot:verify-finish"},
         };
 
 const char * IQMethod_ToString(IQMethod method)
 {
-    uint32_t size = DIM(_method_string_mappings);
+    const uint32_t size = DIM(method_string_mappings);
 
     for (uint32_t i = 0; i < size; ++i)
     {
-        if (_method_string_mappings[i].method == method)
+        if (method_string_mappings[i].method == method)
         {
-            return _method_string_mappings[i].string;
+            return method_string_mappings[i].string;
         }
     }
 
@@ -52,13 +55,13 @@ const char * IQMethod_ToString(IQMethod method)
 
 IQMethod IQMethod_FromString(const char *string)
 {
-    uint32_t size = DIM(_method_string_mappings);
+    const uint32_t size = DIM(method_string_mappings);
 
     for (uint32_t i = 0; i < size; ++i)
     {
-        if (STR_EQUAL(_method_string_mappings[i].string, string))
+        if (STR_EQUAL(method_string_mappings[i].string, string))
         {
-            return _method_string_mappings[i].method;
+            return method_string_mappings[i].method;
         }
     }
 

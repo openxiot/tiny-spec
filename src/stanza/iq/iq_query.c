@@ -18,7 +18,7 @@ TINYCORE_RET IQQuery_Initialize(IQQuery *thiz)
     {
         // basic
         case IQ_METHOD_HELLO:
-        case IQ_METHOD_BYEBYE:
+        case IQ_METHOD_BYE:
         case IQ_METHOD_PING:
             break;
 
@@ -78,7 +78,7 @@ void IQQuery_Dispose(IQQuery *thiz)
     switch (thiz->method)
     {
         case IQ_METHOD_HELLO:
-        case IQ_METHOD_BYEBYE:
+        case IQ_METHOD_BYE:
         case IQ_METHOD_PING:
             break;
 
@@ -122,6 +122,18 @@ void IQQuery_Dispose(IQQuery *thiz)
 
         case IQ_METHOD_VERIFY_START:
             QueryVerifyStart_Dispose(&thiz->content.verifyStart);
+            break;
+
+        case IQ_METHOD_INVOKE_ACTIONS:
+            QueryInvokeActions_Dispose(&thiz->content.invokeActions);
+            break;
+
+        case IQ_METHOD_GET_CHILDREN:
+            QueryGetChildren_Dispose(&thiz->content.getChildren);
+            break;
+
+        case IQ_METHOD_PROPERTIES_CHANGED:
+            QueryPropertiesChanged_Dispose(&thiz->content.propertiesChanged);
             break;
 
         default:

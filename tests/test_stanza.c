@@ -27,7 +27,7 @@ static void test_method_strings(void)
     } mappings[] =
             {
                     {IQ_METHOD_HELLO, "urn:xiot:hello"},
-                    {IQ_METHOD_BYEBYE, "urn:xiot:bye-bye"},
+                    {IQ_METHOD_BYE, "urn:xiot:bye-bye"},
                     {IQ_METHOD_PING, "urn:xiot:ping"},
                     {IQ_METHOD_GET_PROPERTIES, "urn:xiot:get-properties"},
                     {IQ_METHOD_SET_PROPERTIES, "urn:xiot:set-properties"},
@@ -77,7 +77,7 @@ static void test_iq_lifecycle(void)
     {
         static const IQMethod queries[] =
                 {
-                        IQ_METHOD_HELLO, IQ_METHOD_BYEBYE, IQ_METHOD_PING,
+                        IQ_METHOD_HELLO, IQ_METHOD_BYE, IQ_METHOD_PING,
                         IQ_METHOD_GET_PROPERTIES, IQ_METHOD_SET_PROPERTIES,
                         IQ_METHOD_GET_PROPERTY, IQ_METHOD_SET_PROPERTY,
                         IQ_METHOD_INVOKE_ACTION,
@@ -97,7 +97,7 @@ static void test_iq_lifecycle(void)
     {
         static const IQMethod results[] =
                 {
-                        IQ_METHOD_HELLO, IQ_METHOD_BYEBYE, IQ_METHOD_PING,
+                        IQ_METHOD_HELLO, IQ_METHOD_BYE, IQ_METHOD_PING,
                         IQ_METHOD_GET_PROPERTIES, IQ_METHOD_SET_PROPERTIES,
                         IQ_METHOD_GET_PROPERTY, IQ_METHOD_SET_PROPERTY,
                         IQ_METHOD_INVOKE_ACTION,
@@ -139,8 +139,8 @@ static void test_basic_factories(void)
             {
                     {QueryHello_New, IQ_TYPE_QUERY, IQ_METHOD_HELLO},
                     {ResultHello_New, IQ_TYPE_RESULT, IQ_METHOD_HELLO},
-                    {QueryByebye_New, IQ_TYPE_QUERY, IQ_METHOD_BYEBYE},
-                    {ResultByebye_New, IQ_TYPE_RESULT, IQ_METHOD_BYEBYE},
+                    {QueryBye_New, IQ_TYPE_QUERY, IQ_METHOD_BYE},
+                    {ResultBye_New, IQ_TYPE_RESULT, IQ_METHOD_BYE},
                     {Ping_New, IQ_TYPE_QUERY, IQ_METHOD_PING},
                     {Pong_New, IQ_TYPE_RESULT, IQ_METHOD_PING}
             };

@@ -17,6 +17,9 @@
 #include <tinyspec/codec/iq/device/control/get_property_codec.h>
 #include <tinyspec/codec/iq/device/control/set_property_codec.h>
 #include <tinyspec/codec/iq/device/control/invoke_action_codec.h>
+#include <tinyspec/codec/iq/device/control/invoke_actions_codec.h>
+#include <tinyspec/codec/iq/device/manager/get_children_codec.h>
+#include <tinyspec/codec/iq/device/manager/properties_changed_codec.h>
 #include <tinyspec/codec/iq/device/key/set_access_key_codec.h>
 #include <tinyspec/codec/iq/device/verify/initialize_codec.h>
 #include <tinyspec/codec/iq/device/verify/verify_finish_codec.h>
@@ -32,7 +35,7 @@ static bool addQueryContent(IQQuery *query, JsonObject *content)
     {
         // basic
         case IQ_METHOD_HELLO:
-        case IQ_METHOD_BYEBYE:
+        case IQ_METHOD_BYE:
         case IQ_METHOD_PING:
             break;
 
@@ -55,6 +58,15 @@ static bool addQueryContent(IQQuery *query, JsonObject *content)
 
         case IQ_METHOD_INVOKE_ACTION:
             done = InvokeActionCodec_EncodeQuery(&query->content.invokeAction, content);
+            break;            done = InvokeActionsCodec_EncodeQuery(&query->content.invokeActions, content);
+            break;
+
+        case IQ_METHOD_GET_CHILDREN:
+            done = GetChildrenCodec_EncodeQuery(&query->content.getChildren, content);
+            break;
+
+        case IQ_METHOD_PROPERTIES_CHANGED:
+            done = PropertiesChangedCodec_EncodeQuery(&query->content.propertiesChanged, content);
             break;
 
             // device/key
@@ -95,7 +107,7 @@ static TINYCORE_RET decodeQueryContent(IQQuery *query, JsonObject *content)
     {
         // basic
         case IQ_METHOD_HELLO:
-        case IQ_METHOD_BYEBYE:
+        case IQ_METHOD_BYE:
         case IQ_METHOD_PING:
             break;
 
@@ -118,6 +130,15 @@ static TINYCORE_RET decodeQueryContent(IQQuery *query, JsonObject *content)
 
         case IQ_METHOD_INVOKE_ACTION:
             ret = InvokeActionCodec_DecodeQuery(content, &query->content.invokeAction);
+            break;            ret = InvokeActionsCodec_DecodeQuery(content, &query->content.invokeActions);
+            break;
+
+        case IQ_METHOD_GET_CHILDREN:
+            ret = GetChildrenCodec_DecodeQuery(content, &query->content.getChildren);
+            break;
+
+        case IQ_METHOD_PROPERTIES_CHANGED:
+            ret = PropertiesChangedCodec_DecodeQuery(content, &query->content.propertiesChanged);
             break;
 
             // device/key

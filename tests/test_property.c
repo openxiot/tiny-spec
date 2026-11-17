@@ -24,7 +24,7 @@ static void test_format_combination(void)
 
 static void test_property_unit_string(void)
 {
-    Property *p = Property_NewInstance(1, "xiot-spec", "temperature", 0x02, NULL, FORMAT_FLOAT, ACCESS_READ, NONE);
+    Property *p = Property_NewInstance(1, "xiot-spec", "temperature", 0x02, NULL, FORMAT_FLOAT, ACCESS_READ, NULL);
 
     TINY_TEST_CHECK(p != NULL);
     if (p != NULL)
@@ -42,7 +42,7 @@ static void test_property_unit_string(void)
     }
 
     /* 枚举参数 → 标准字符串（BC） */
-    p = Property_NewInstance(2, "xiot-spec", "on", 0x06, NULL, FORMAT_UINT8, ACCESS_RWN, HOMEKIT_CELSIUS);
+    p = Property_NewInstance(2, "xiot-spec", "on", 0x06, NULL, FORMAT_UINT8, ACCESS_RWN, "celsius");
     TINY_TEST_CHECK(p != NULL);
     if (p != NULL)
     {
@@ -54,7 +54,7 @@ static void test_property_unit_string(void)
 
 static void test_property_max_length(void)
 {
-    Property *p = Property_NewInstance(1, "xiot-spec", "name", 0x01, NULL, FORMAT_STRING, ACCESS_READ, NONE);
+    Property *p = Property_NewInstance(1, "xiot-spec", "name", 0x01, NULL, FORMAT_STRING, ACCESS_READ, NULL);
     JsonValue *v = NULL;
 
     TINY_TEST_CHECK(p != NULL);
@@ -82,9 +82,9 @@ static void test_property_combination(void)
     JsonObject *object = NULL;
     JsonValue *value = NULL;
 
-    hsv = Property_NewInstance(4, "xiot-spec", "hsv", 0x40, NULL, FORMAT_COMBINATION, ACCESS_RWN, NONE);
-    hue = Property_NewInstance(1, "xiot-spec", "hue", 0x41, NULL, FORMAT_UINT8, ACCESS_RWN, NONE);
-    sat = Property_NewInstance(2, "xiot-spec", "saturation", 0x42, NULL, FORMAT_BOOL, ACCESS_READ, NONE);
+    hsv = Property_NewInstance(4, "xiot-spec", "hsv", 0x40, NULL, FORMAT_COMBINATION, ACCESS_RWN, NULL);
+    hue = Property_NewInstance(1, "xiot-spec", "hue", 0x41, NULL, FORMAT_UINT8, ACCESS_RWN, NULL);
+    sat = Property_NewInstance(2, "xiot-spec", "saturation", 0x42, NULL, FORMAT_BOOL, ACCESS_READ, NULL);
 
     TINY_TEST_CHECK(hsv != NULL && hue != NULL && sat != NULL);
     if (hsv != NULL && hue != NULL && sat != NULL)
