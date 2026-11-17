@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/control/invoke_action.h>
 
-TINYCORE_RET QueryInvokeAction_Construct(QueryInvokeAction *thiz)
+TinyRet QueryInvokeAction_Construct(QueryInvokeAction *thiz)
 {
     return ActionOperation_Construct(&thiz->action);
 }
@@ -19,7 +19,7 @@ void QueryInvokeAction_Dispose(QueryInvokeAction *thiz)
     ActionOperation_Dispose(&thiz->action);
 }
 
-TINYCORE_RET ResultInvokeAction_Construct(ResultInvokeAction *thiz)
+TinyRet ResultInvokeAction_Construct(ResultInvokeAction *thiz)
 {
     return ActionOperation_Construct(&thiz->action);
 }

@@ -29,7 +29,7 @@ typedef struct
 } ResultGetAccessKey;
 
 TINYSPEC_API
-TINYCORE_RET ResultGetAccessKey_Construct(ResultGetAccessKey *thiz);
+TinyRet ResultGetAccessKey_Construct(ResultGetAccessKey *thiz);
 TINYSPEC_API
 void ResultGetAccessKey_Dispose(ResultGetAccessKey *thiz);
 

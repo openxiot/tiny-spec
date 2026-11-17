@@ -15,9 +15,9 @@
 #include <tinyspec/codec/iq/iq_query_codec.h>
 #include <tinyspec/codec/iq/iq_result_codec.h>
 
-TINYCORE_RET IQCodec_Encode(JsonObject *root, IQ *iq)
+TinyRet IQCodec_Encode(JsonObject *root, IQ *iq)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     JsonObject *object = NULL;
 
     do
@@ -91,9 +91,9 @@ TINYCORE_RET IQCodec_Encode(JsonObject *root, IQ *iq)
     return ret;
 }
 
-TINYCORE_RET IQCodec_Decode(IQ* iq, JsonObject *object)
+TinyRet IQCodec_Decode(IQ* iq, JsonObject *object)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     do
     {

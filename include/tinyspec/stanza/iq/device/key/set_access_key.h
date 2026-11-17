@@ -24,7 +24,7 @@ typedef struct
 } QuerySetAccessKey;
 
 TINYSPEC_API
-TINYCORE_RET QuerySetAccessKey_Construct(QuerySetAccessKey *thiz);
+TinyRet QuerySetAccessKey_Construct(QuerySetAccessKey *thiz);
 TINYSPEC_API
 void QuerySetAccessKey_Dispose(QuerySetAccessKey *thiz);
 

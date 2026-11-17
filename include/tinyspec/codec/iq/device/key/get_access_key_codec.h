@@ -19,7 +19,7 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool GetAccessKeyCodec_EncodeResult(ResultGetAccessKey *result, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET GetAccessKeyCodec_DecodeResult(JsonObject *content, ResultGetAccessKey *result);
+TinyRet GetAccessKeyCodec_DecodeResult(JsonObject *content, ResultGetAccessKey *result);
 
 TINYSPEC_END_DECLS
 

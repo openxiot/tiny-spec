@@ -58,7 +58,7 @@ void Property_SetUnit(Property *thiz, const char *unit);
 
 /** 组合属性：添加一个成员属性（非持有引用，成员须存活于同服务）。 */
 TINYSPEC_API
-TINYCORE_RET Property_MemberAdd(Property *thiz, Property *member);
+TinyRet Property_MemberAdd(Property *thiz, Property *member);
 
 TINYSPEC_API
 uint32_t Property_GetMemberCount(Property *thiz);
@@ -78,11 +78,11 @@ void Property_TryWrite(Property *thiz, PropertyOperation *o);
 TINYSPEC_API
 void Property_TryChange(Property *thiz, PropertyOperation *o, bool save);
 
-TINYSPEC_API
-void Property_TrySubscribe(Property *thiz, PropertyOperation *o);
+// TINYSPEC_API
+// void Property_TrySubscribe(Property *thiz, PropertyOperation *o);
 
-TINYSPEC_API
-void Property_TryUnsubscribe(Property *thiz, PropertyOperation *o);
+// TINYSPEC_API
+// void Property_TryUnsubscribe(Property *thiz, PropertyOperation *o);
 
 TINYSPEC_END_DECLS
 

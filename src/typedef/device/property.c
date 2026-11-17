@@ -15,7 +15,7 @@
 #include <tinycore/json_object.h>
 #include <tinyspec/typedef/device/property.h>
 
-static TINYCORE_RET Property_Construct(Property *thiz, uint16_t iid);
+static TinyRet Property_Construct(Property *thiz, uint16_t iid);
 
 static void Property_Dispose(Property *thiz);
 
@@ -71,8 +71,8 @@ Property *Property_NewInstance(uint16_t iid,
     return thiz;
 }
 
-static TINYCORE_RET Property_Construct(Property *thiz, uint16_t iid) {
-    TINYCORE_RET ret;
+static TinyRet Property_Construct(Property *thiz, uint16_t iid) {
+    TinyRet ret;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -142,7 +142,7 @@ void Property_SetUnit(Property *thiz, const char *unit) {
     }
 }
 
-TINYCORE_RET Property_MemberAdd(Property *thiz, Property *member) {
+TinyRet Property_MemberAdd(Property *thiz, Property *member) {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(member, TINY_RET_E_NULL_PTR);
 
@@ -404,24 +404,24 @@ void Property_TryChange(Property *thiz, PropertyOperation *o, bool save) {
     } while (false);
 }
 
-void Property_TrySubscribe(Property *thiz, PropertyOperation *o) {
-    RETURN_IF_FAIL(thiz);
-    RETURN_IF_FAIL(o);
+// void Property_TrySubscribe(Property *thiz, PropertyOperation *o) {
+//     RETURN_IF_FAIL(thiz);
+//     RETURN_IF_FAIL(o);
+//
+//     TINY_LOG_DEBUG("Property_TrySubscribe: %d", thiz->iid);
+//
+//     if (!Access_IsNotifiable(thiz->access)) {
+//         o->status = IOT_STATUS_PROPERTY_CANNOT_NOTIFY;
+//     }
+// }
 
-    TINY_LOG_DEBUG("Property_TrySubscribe: %d", thiz->iid);
-
-    if (!Access_IsNotifiable(thiz->access)) {
-        o->status = IOT_STATUS_PROPERTY_CANNOT_NOTIFY;
-    }
-}
-
-void Property_TryUnsubscribe(Property *thiz, PropertyOperation *o) {
-    RETURN_IF_FAIL(thiz);
-    RETURN_IF_FAIL(o);
-
-    TINY_LOG_DEBUG("Property_TryUnsubscribe: %d", thiz->iid);
-
-    if (!Access_IsNotifiable(thiz->access)) {
-        o->status = IOT_STATUS_PROPERTY_CANNOT_NOTIFY;
-    }
-}
+// void Property_TryUnsubscribe(Property *thiz, PropertyOperation *o) {
+//     RETURN_IF_FAIL(thiz);
+//     RETURN_IF_FAIL(o);
+//
+//     TINY_LOG_DEBUG("Property_TryUnsubscribe: %d", thiz->iid);
+//
+//     if (!Access_IsNotifiable(thiz->access)) {
+//         o->status = IOT_STATUS_PROPERTY_CANNOT_NOTIFY;
+//     }
+// }

@@ -14,9 +14,9 @@
 #include <tinycore/json_string.h>
 #include <tinyspec/typedef/device/property/constraint/value_range.h>
 
-static TINYCORE_RET ValueRange_Construct(ValueRange *thiz, JsonValue *min, JsonValue *max, JsonValue *step)
+static TinyRet ValueRange_Construct(ValueRange *thiz, JsonValue *min, JsonValue *max, JsonValue *step)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(min, TINY_RET_E_NULL_PTR);
@@ -58,9 +58,9 @@ static TINYCORE_RET ValueRange_Construct(ValueRange *thiz, JsonValue *min, JsonV
     return ret;
 }
 
-static TINYCORE_RET ValueRange_Construct2(ValueRange *thiz, JsonArray *range)
+static TinyRet ValueRange_Construct2(ValueRange *thiz, JsonArray *range)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(range, TINY_RET_E_NULL_PTR);

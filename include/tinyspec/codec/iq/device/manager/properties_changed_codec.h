@@ -9,11 +9,11 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool PropertiesChangedCodec_EncodeQuery(QueryPropertiesChanged *query, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET PropertiesChangedCodec_DecodeQuery(JsonObject *content, QueryPropertiesChanged *query);
+TinyRet PropertiesChangedCodec_DecodeQuery(JsonObject *content, QueryPropertiesChanged *query);
 TINYSPEC_API
 bool PropertiesChangedCodec_EncodeResult(ResultPropertiesChanged *result, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET PropertiesChangedCodec_DecodeResult(JsonObject *content, ResultPropertiesChanged *result);
+TinyRet PropertiesChangedCodec_DecodeResult(JsonObject *content, ResultPropertiesChanged *result);
 
 TINYSPEC_END_DECLS
 

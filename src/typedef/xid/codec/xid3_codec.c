@@ -11,9 +11,9 @@
 #include <tinycore/tiny_snprintf.h>
 #include <tinyspec/typedef/xid/codec/xid3_codec.h>
 
-TINYCORE_RET XID3_FromString(XID3 *xid, const char *string)
+TinyRet XID3_FromString(XID3 *xid, const char *string)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     uint32_t count = 0;
     char group[3][128];
     char *p = NULL;

@@ -12,9 +12,9 @@
 #include <tinyspec/typedef/notice/device/device_notice_codec.h>
 #include <tinyspec/typedef/notice/device/impl/device_property_changed_codec.h>
 
-TINYCORE_RET DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotice *notice)
+TinyRet DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotice *notice)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(payload, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(notice, TINY_RET_E_NULL_PTR);
@@ -38,9 +38,9 @@ TINYCORE_RET DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotic
     return ret;
 }
 
-TINYCORE_RET DeviceNoticeCodec_Decode(DeviceNotice *notice, int type, JsonObject *payload)
+TinyRet DeviceNoticeCodec_Decode(DeviceNotice *notice, int type, JsonObject *payload)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(notice, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(payload, TINY_RET_E_NULL_PTR);

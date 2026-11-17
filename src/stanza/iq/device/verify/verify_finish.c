@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/verify/verify_finish.h>
 
-TINYCORE_RET QueryVerifyFinish_Construct(QueryVerifyFinish *thiz)
+TinyRet QueryVerifyFinish_Construct(QueryVerifyFinish *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

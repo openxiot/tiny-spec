@@ -19,7 +19,7 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool InitializeCodec_EncodeQuery(QueryInitialize *query, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET InitializeCodec_DecodeQuery(JsonObject *content, QueryInitialize *query);
+TinyRet InitializeCodec_DecodeQuery(JsonObject *content, QueryInitialize *query);
 
 TINYSPEC_END_DECLS
 

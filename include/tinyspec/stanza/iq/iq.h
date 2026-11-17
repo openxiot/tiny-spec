@@ -41,10 +41,10 @@ typedef struct
 } IQ;
 
 TINYSPEC_API
-TINYCORE_RET IQ_InitializeQuery(IQ *thiz, const char *id, IQMethod method);
+TinyRet IQ_InitializeQuery(IQ *thiz, const char *id, IQMethod method);
 
 TINYSPEC_API
-TINYCORE_RET IQ_InitializeResult(IQ *thiz, const char *id, IQMethod method);
+TinyRet IQ_InitializeResult(IQ *thiz, const char *id, IQMethod method);
 
 TINYSPEC_API
 void IQ_Dispose(IQ *thiz);

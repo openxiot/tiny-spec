@@ -43,9 +43,9 @@ void EventOperation_Delete(EventOperation *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET EventOperation_Construct(EventOperation *thiz)
+TinyRet EventOperation_Construct(EventOperation *thiz)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -108,9 +108,9 @@ EventOperation * EventOperation_CopyFrom(EventOperation *other)
     return thiz;
 }
 
-TINYCORE_RET EventOperation_Copy(EventOperation *dst, EventOperation *src)
+TinyRet EventOperation_Copy(EventOperation *dst, EventOperation *src)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);

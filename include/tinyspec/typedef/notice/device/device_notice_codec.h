@@ -17,9 +17,9 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-TINYCORE_RET DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotice *notice);
+TinyRet DeviceNoticeCodec_Encode(JsonObject *payload, int type, DeviceNotice *notice);
 TINYSPEC_API
-TINYCORE_RET DeviceNoticeCodec_Decode(DeviceNotice *notice, int type, JsonObject *payload);
+TinyRet DeviceNoticeCodec_Decode(DeviceNotice *notice, int type, JsonObject *payload);
 
 TINYSPEC_END_DECLS
 

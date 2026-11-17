@@ -11,9 +11,9 @@
 #include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/notice/device/impl/device_property_changed_codec.h>
 
-TINYCORE_RET DevicePropertyChangedCodec_Encode(JsonObject *payload, DevicePropertyChanged *propertyChanged)
+TinyRet DevicePropertyChangedCodec_Encode(JsonObject *payload, DevicePropertyChanged *propertyChanged)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(payload, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(propertyChanged, TINY_RET_E_NULL_PTR);
@@ -43,9 +43,9 @@ TINYCORE_RET DevicePropertyChangedCodec_Encode(JsonObject *payload, DeviceProper
     return ret;
 }
 
-TINYCORE_RET DevicePropertyChangedCodec_Decode(DevicePropertyChanged *propertyChanged, JsonObject *payload)
+TinyRet DevicePropertyChangedCodec_Decode(DevicePropertyChanged *propertyChanged, JsonObject *payload)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(propertyChanged, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(payload, TINY_RET_E_NULL_PTR);

@@ -11,9 +11,9 @@
 #include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/notice/device/device_notice_codec.h>
 
-TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message)
+TinyRet MessageCodec_Encode(JsonObject *root, Message *message)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     JsonObject *object = NULL;
 
     RETURN_VAL_IF_FAIL(root, TINY_RET_E_NULL_PTR);
@@ -110,9 +110,9 @@ TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message)
     return ret;
 }
 
-TINYCORE_RET MessageCodec_Decode(Message* message, JsonObject *object)
+TinyRet MessageCodec_Decode(Message* message, JsonObject *object)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(message, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(object, TINY_RET_E_NULL_PTR);

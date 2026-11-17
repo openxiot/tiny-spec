@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/key/set_access_key.h>
 
-TINYCORE_RET QuerySetAccessKey_Construct(QuerySetAccessKey *thiz)
+TinyRet QuerySetAccessKey_Construct(QuerySetAccessKey *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

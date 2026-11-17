@@ -49,7 +49,7 @@ void PropertyOperations_Delete(PropertyOperations *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET PropertyOperations_Construct(PropertyOperations *thiz)
+TinyRet PropertyOperations_Construct(PropertyOperations *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -66,9 +66,9 @@ void PropertyOperations_Dispose(PropertyOperations *thiz)
     TinyList_Dispose(&thiz->properties);
 }
 
-TINYCORE_RET PropertyOperations_Copy(PropertyOperations *dst, PropertyOperations *src)
+TinyRet PropertyOperations_Copy(PropertyOperations *dst, PropertyOperations *src)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);

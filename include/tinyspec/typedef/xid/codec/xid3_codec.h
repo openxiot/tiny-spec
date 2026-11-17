@@ -16,7 +16,7 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-TINYCORE_RET XID3_FromString(XID3 *xid, const char *string);
+TinyRet XID3_FromString(XID3 *xid, const char *string);
 TINYSPEC_API
 void XID3_ToString(char string[IOT_XID_LENGTH], XID3 *xid);
 

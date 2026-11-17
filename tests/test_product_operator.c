@@ -9,16 +9,37 @@
 
 #include "tiny_test.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include <tinycore/json_array.h>
 #include <tinycore/json_number.h>
+#include <tinycore/json_object.h>
 #include <tinycore/json_value.h>
 #include <tinyspec/tinyspec.h>
 
 static int g_get_calls;
 static int g_set_calls;
 static int g_invoke_calls;
+
+/* 捕获 Product 发出的通知（properties-changed）JSON */
+static char g_sent[4096];
+
+static int on_send(JsonObject *obj, void *product, void *ctx)
+{
+    (void)product;
+    (void)ctx;
+
+    char *s = JsonObject_ToString(obj, 0);
+    if (s != NULL)
+    {
+        strncpy(g_sent, s, sizeof(g_sent) - 1);
+        g_sent[sizeof(g_sent) - 1] = '\0';
+        free(s);
+    }
+
+    return 0;
+}
 
 static void reset_counters(void)
 {
@@ -29,9 +50,9 @@ static void reset_counters(void)
 
 static void on_get(PropertyOperation *operation, void *product)
 {
-    (void) product;
+    (void)product;
 
-    g_get_calls ++;
+    g_get_calls++;
 
     if (operation->value == NULL)
     {
@@ -41,39 +62,39 @@ static void on_get(PropertyOperation *operation, void *product)
 
 static void on_set(PropertyOperation *operation, void *product)
 {
-    (void) operation;
-    (void) product;
+    (void)operation;
+    (void)product;
 
-    g_set_calls ++;
+    g_set_calls++;
 }
 
 static void on_invoke(ActionOperation *operation, void *product)
 {
-    (void) product;
+    (void)product;
 
-    g_invoke_calls ++;
+    g_invoke_calls++;
 
     JsonArray_AddString(&operation->out, "done");
 }
 
 static void on_invoke_empty(ActionOperation *operation, void *product)
 {
-    (void) operation;
-    (void) product;
+    (void)operation;
+    (void)product;
 
-    g_invoke_calls ++;
+    g_invoke_calls++;
 }
 
 static void on_invoke_bad(ActionOperation *operation, void *product)
 {
-    (void) product;
+    (void)product;
 
-    g_invoke_calls ++;
+    g_invoke_calls++;
 
     JsonArray_AddInteger(&operation->out, 1);
 }
 
-static Product * make_product(const char *did)
+static Product *make_product(const char *did)
 {
     Product *product = Product_New();
 
@@ -85,7 +106,7 @@ static Product * make_product(const char *did)
     return product;
 }
 
-static Service * add_service(Product *product, uint16_t siid)
+static Service *add_service(Product *product, uint16_t siid)
 {
     Service *service = Service_New(siid);
 
@@ -101,7 +122,7 @@ static Service * add_service(Product *product, uint16_t siid)
     return service;
 }
 
-static Property * add_property(Service *service, uint16_t iid, Format format, Access access)
+static Property *add_property(Service *service, uint16_t iid, Format format, Access access)
 {
     Property *property = Property_New(iid);
 
@@ -120,10 +141,8 @@ static Property * add_property(Service *service, uint16_t iid, Format format, Ac
     return property;
 }
 
-static PropertyOperation * add_operation(PropertyOperations *operations,
-                                        const char *did,
-                                        uint16_t siid,
-                                        uint16_t iid)
+static PropertyOperation *add_operation(
+    PropertyOperations *operations, const char *did, uint16_t siid, uint16_t iid)
 {
     PropertyOperation *operation = PropertyOperation_NewFrom(did, siid, iid);
 
@@ -139,9 +158,9 @@ static PropertyOperation * add_operation(PropertyOperations *operations,
     return operation;
 }
 
-static PropertyOperation * get_operation(PropertyOperations *operations, uint32_t index)
+static PropertyOperation *get_operation(PropertyOperations *operations, uint32_t index)
 {
-    return (PropertyOperation *) TinyList_GetAt(&operations->properties, index);
+    return (PropertyOperation *)TinyList_GetAt(&operations->properties, index);
 }
 
 /* a product with one service (siid 1) exposing:
@@ -151,7 +170,7 @@ static PropertyOperation * get_operation(PropertyOperations *operations, uint32_
  *   iid 4: uint8, notifiable only
  *   iid 5: uint8, no access at all
  */
-static Product * make_full_product(const char *did)
+static Product *make_full_product(const char *did)
 {
     Product *product = make_product(did);
     Service *service = NULL;
@@ -172,7 +191,7 @@ static Product * make_full_product(const char *did)
     add_property(service, 2, FORMAT_UINT8, ACCESS_WRITE);
     add_property(service, 3, FORMAT_STRING, ACCESS_RW);
     add_property(service, 4, FORMAT_UINT8, ACCESS_NOTIFY);
-    add_property(service, 5, FORMAT_UINT8, (Access) 0);
+    add_property(service, 5, FORMAT_UINT8, (Access)0);
 
     return product;
 }
@@ -293,13 +312,13 @@ static void test_read_properties(void)
     }
 
     TINY_TEST_CHECK(PropertyOperations_Construct(&operations) == TINY_RET_OK);
-    add_operation(&operations, "did-main", 1, 1);    /* 0: ok */
-    add_operation(&operations, "did-main", 1, 2);    /* 1: not readable */
-    add_operation(&operations, "did-main", 1, 5);    /* 2: no access */
-    add_operation(&operations, "did-main", 1, 9);    /* 3: property not found */
-    add_operation(&operations, "did-main", 7, 1);    /* 4: service not found */
-    add_operation(&operations, "did-child", 1, 1);   /* 5: child ok */
-    add_operation(&operations, "did-gone", 1, 1);    /* 6: child not found */
+    add_operation(&operations, "did-main", 1, 1);  /* 0: ok */
+    add_operation(&operations, "did-main", 1, 2);  /* 1: not readable */
+    add_operation(&operations, "did-main", 1, 5);  /* 2: no access */
+    add_operation(&operations, "did-main", 1, 9);  /* 3: property not found */
+    add_operation(&operations, "did-main", 7, 1);  /* 4: service not found */
+    add_operation(&operations, "did-child", 1, 1); /* 5: child ok */
+    add_operation(&operations, "did-gone", 1, 1);  /* 6: child not found */
 
     Product_TryReadProperties(product, &operations);
 
@@ -355,15 +374,18 @@ static void test_write_properties(void)
     }
 
     TINY_TEST_CHECK(PropertyOperations_Construct(&operations) == TINY_RET_OK);
-    add_operation(&operations, "did-main", 1, 1)->value = JsonValue_NewInteger(5);   /* 0: ok */
-    add_operation(&operations, "did-main", 1, 1)->value = JsonValue_NewInteger(300); /* 1: out of range */
-    add_operation(&operations, "did-main", 1, 1)->value = JsonValue_NewString("x");  /* 2: wrong type */
-    add_operation(&operations, "did-main", 1, 1);                                    /* 3: no value */
-    add_operation(&operations, "did-main", 1, 4);                                    /* 4: not writable */
-    add_operation(&operations, "did-main", 1, 9);                                    /* 5: property not found */
-    add_operation(&operations, "did-main", 7, 1);                                    /* 6: service not found */
-    add_operation(&operations, "did-child", 1, 1)->value = JsonValue_NewInteger(6);  /* 7: child ok */
-    add_operation(&operations, "did-gone", 1, 1);                                    /* 8: child not found */
+    add_operation(&operations, "did-main", 1, 1)->value = JsonValue_NewInteger(5); /* 0: ok */
+    add_operation(&operations, "did-main", 1, 1)->value =
+        JsonValue_NewInteger(300); /* 1: out of range */
+    add_operation(&operations, "did-main", 1, 1)->value =
+        JsonValue_NewString("x");                 /* 2: wrong type */
+    add_operation(&operations, "did-main", 1, 1); /* 3: no value */
+    add_operation(&operations, "did-main", 1, 4); /* 4: not writable */
+    add_operation(&operations, "did-main", 1, 9); /* 5: property not found */
+    add_operation(&operations, "did-main", 7, 1); /* 6: service not found */
+    add_operation(&operations, "did-child", 1, 1)->value =
+        JsonValue_NewInteger(6);                  /* 7: child ok */
+    add_operation(&operations, "did-gone", 1, 1); /* 8: child not found */
 
     Product_TryWriteProperties(product, &operations);
 
@@ -394,7 +416,7 @@ static void test_write_properties(void)
     Product_Delete(product);
 }
 
-static ActionOperation * make_action_operation(const char *did, uint16_t siid, uint16_t iid)
+static ActionOperation *make_action_operation(const char *did, uint16_t siid, uint16_t iid)
 {
     ActionOperation *operation = ActionOperation_New();
 
@@ -408,7 +430,7 @@ static ActionOperation * make_action_operation(const char *did, uint16_t siid, u
     return operation;
 }
 
-static Action * add_action(Service *service, uint16_t iid, bool withArguments)
+static Action *add_action(Service *service, uint16_t iid, bool withArguments)
 {
     Action *action = Action_New(iid);
 
@@ -447,7 +469,7 @@ static void test_invoke_action(void)
     }
 
     product->onInvoke = on_invoke;
-    service = (Service *) TinyList_GetAt(&product->device.services, 0);
+    service = (Service *)TinyList_GetAt(&product->device.services, 0);
     TINY_TEST_CHECK(service != NULL);
     if (service == NULL)
     {
@@ -455,14 +477,14 @@ static void test_invoke_action(void)
         return;
     }
 
-    TINY_TEST_CHECK(add_action(service, 1, true) != NULL);   /* with in/out arguments */
-    TINY_TEST_CHECK(add_action(service, 2, false) != NULL);  /* without arguments */
+    TINY_TEST_CHECK(add_action(service, 1, true) != NULL);  /* with in/out arguments */
+    TINY_TEST_CHECK(add_action(service, 2, false) != NULL); /* without arguments */
 
     child = make_full_product("did-child");
     TINY_TEST_CHECK(child != NULL);
     if (child != NULL)
     {
-        Service *childService = (Service *) TinyList_GetAt(&child->device.services, 0);
+        Service *childService = (Service *)TinyList_GetAt(&child->device.services, 0);
 
         child->onInvoke = on_invoke;
         if (childService != NULL)
@@ -728,7 +750,8 @@ static void test_change_property_value(void)
     TINY_TEST_CHECK(operation != NULL);
     if (operation != NULL)
     {
-        TINY_TEST_CHECK(Product_TryChangePropertyValue(product, operation, true) == TINY_RET_E_PARAM_INVALID);
+        TINY_TEST_CHECK(
+            Product_TryChangePropertyValue(product, operation, true) == TINY_RET_E_PARAM_INVALID);
         PropertyOperation_Delete(operation);
     }
 
@@ -757,7 +780,7 @@ static void test_produce_event(void)
         return;
     }
 
-    service = (Service *) TinyList_GetAt(&product->device.services, 0);
+    service = (Service *)TinyList_GetAt(&product->device.services, 0);
     TINY_TEST_CHECK(service != NULL);
     if (service == NULL)
     {
@@ -884,6 +907,34 @@ static void test_produce_event(void)
     Product_Delete(product);
 }
 
+static void test_change_property_value_notify(void)
+{
+    Product *product = make_full_product("did-main");
+
+    TINY_TEST_CHECK(product != NULL);
+    if (product == NULL)
+    {
+        return;
+    }
+
+    g_sent[0] = '\0';
+    product->send = on_send;
+    product->sendCtx = NULL;
+
+    Product_ChangePropertyValue(product, 1, 4, JsonValue_NewInteger(7));
+
+    TINY_TEST_CHECK(g_sent[0] != '\0');
+    if (g_sent[0] != '\0')
+    {
+        /* properties-changed 通知：method + content.properties pid/value */
+        TINY_TEST_CHECK(strstr(g_sent, "urn:xiot:properties-changed") != NULL);
+        TINY_TEST_CHECK(strstr(g_sent, "\"pid\":\"did-main.1.4\"") != NULL);
+        TINY_TEST_CHECK(strstr(g_sent, "\"value\":7") != NULL);
+    }
+
+    Product_Delete(product);
+}
+
 static void test_delete_with_children(void)
 {
     Product *product = make_product("did-parent");
@@ -918,6 +969,7 @@ int main(void)
     test_write_properties();
     test_invoke_action();
     test_change_property_value();
+    test_change_property_value_notify();
     test_produce_event();
     test_delete_with_children();
 

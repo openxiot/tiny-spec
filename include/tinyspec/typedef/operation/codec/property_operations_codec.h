@@ -19,25 +19,25 @@ TINYSPEC_API
 bool PropertyOperationsCodec_Set_Query_Encode(PropertyOperations *operations, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperationsCodec_Set_Query_Decode(JsonObject *content, PropertyOperations *operations);
+TinyRet PropertyOperationsCodec_Set_Query_Decode(JsonObject *content, PropertyOperations *operations);
 
 TINYSPEC_API
 bool PropertyOperationsCodec_Set_Result_Encode(PropertyOperations *operations, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperationsCodec_Set_Result_Decode(JsonObject *content, PropertyOperations *operations);
+TinyRet PropertyOperationsCodec_Set_Result_Decode(JsonObject *content, PropertyOperations *operations);
 
 TINYSPEC_API
 bool PropertyOperationsCodec_Get_Query_Encode(PropertyOperations *operations, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperationsCodec_Get_Query_Decode(JsonObject *content, PropertyOperations *operations);
+TinyRet PropertyOperationsCodec_Get_Query_Decode(JsonObject *content, PropertyOperations *operations);
 
 TINYSPEC_API
 bool PropertyOperationsCodec_Get_Result_Encode(PropertyOperations *operations, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperationsCodec_Get_Result_Decode(JsonObject *content, PropertyOperations *operations);
+TinyRet PropertyOperationsCodec_Get_Result_Decode(JsonObject *content, PropertyOperations *operations);
 
 TINYSPEC_END_DECLS
 

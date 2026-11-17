@@ -10,9 +10,9 @@
 #include <tinycore/json_array.h>
 #include <tinyspec/typedef/notice/device/impl/device_event_occurred.h>
 
-TINYCORE_RET DeviceEventOccurred_Construct(DeviceEventOccurred *thiz)
+TinyRet DeviceEventOccurred_Construct(DeviceEventOccurred *thiz)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

@@ -11,7 +11,7 @@
 #include <tinycore/tiny_alloc.h>
 #include <tinyspec/typedef/device/argument.h>
 
-static TINYCORE_RET Argument_Construct(Argument *thiz, uint16_t iid)
+static TinyRet Argument_Construct(Argument *thiz, uint16_t iid)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

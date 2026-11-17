@@ -27,13 +27,13 @@ TINYSPEC_API
 void ActionOperations_Delete(ActionOperations *thiz);
 
 TINYSPEC_API
-TINYCORE_RET ActionOperations_Construct(ActionOperations *thiz);
+TinyRet ActionOperations_Construct(ActionOperations *thiz);
 
 TINYSPEC_API
 void ActionOperations_Dispose(ActionOperations *thiz);
 
 TINYSPEC_API
-TINYCORE_RET ActionOperations_Copy(ActionOperations *dst, ActionOperations *src);
+TinyRet ActionOperations_Copy(ActionOperations *dst, ActionOperations *src);
 
 TINYSPEC_END_DECLS
 

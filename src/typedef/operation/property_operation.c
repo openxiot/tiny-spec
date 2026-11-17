@@ -11,7 +11,7 @@
 #include <tinycore/tiny_alloc.h>
 #include <tinyspec/typedef/operation/property_operation.h>
 
-TINYCORE_RET PropertyOperation_Construct(PropertyOperation *thiz)
+TinyRet PropertyOperation_Construct(PropertyOperation *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -114,7 +114,7 @@ PropertyOperation * PropertyOperation_CopyFrom(PropertyOperation *other)
             break;
         }
 
-        TINYCORE_RET ret = PropertyOperation_Copy(thiz, other);
+        TinyRet ret = PropertyOperation_Copy(thiz, other);
         if (RET_FAILED(ret))
         {
             PropertyOperation_Delete(thiz);
@@ -126,9 +126,9 @@ PropertyOperation * PropertyOperation_CopyFrom(PropertyOperation *other)
     return thiz;
 }
 
-TINYCORE_RET PropertyOperation_Copy(PropertyOperation *thiz, PropertyOperation *other)
+TinyRet PropertyOperation_Copy(PropertyOperation *thiz, PropertyOperation *other)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(other, TINY_RET_E_NULL_PTR);

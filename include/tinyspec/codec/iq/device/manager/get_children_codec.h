@@ -9,13 +9,13 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool GetChildrenCodec_EncodeQuery(QueryGetChildren *query, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET GetChildrenCodec_DecodeQuery(JsonObject *content, QueryGetChildren *query);
+TinyRet GetChildrenCodec_DecodeQuery(JsonObject *content, QueryGetChildren *query);
 TINYSPEC_API
 bool GetChildrenCodec_EncodeResult(ResultGetChildren *result, JsonObject *content);
 TINYSPEC_API
 bool GetChildrenCodec_EncodeChild(const Child *child, JsonObject *obj);
 TINYSPEC_API
-TINYCORE_RET GetChildrenCodec_DecodeResult(JsonObject *content, ResultGetChildren *result);
+TinyRet GetChildrenCodec_DecodeResult(JsonObject *content, ResultGetChildren *result);
 
 TINYSPEC_END_DECLS
 

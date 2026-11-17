@@ -20,13 +20,13 @@ TINYSPEC_API
 bool GetPropertyCodec_EncodeQuery(QueryGetProperty *query, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET GetPropertyCodec_DecodeQuery(JsonObject *content, QueryGetProperty *query);
+TinyRet GetPropertyCodec_DecodeQuery(JsonObject *content, QueryGetProperty *query);
 
 TINYSPEC_API
 bool GetPropertyCodec_EncodeResult(ResultGetProperty *result, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET GetPropertyCodec_DecodeResult(JsonObject *content, ResultGetProperty *result);
+TinyRet GetPropertyCodec_DecodeResult(JsonObject *content, ResultGetProperty *result);
 
 TINYSPEC_END_DECLS
 

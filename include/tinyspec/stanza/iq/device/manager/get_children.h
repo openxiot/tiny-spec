@@ -15,7 +15,7 @@ typedef struct
 } QueryGetChildren;
 
 TINYSPEC_API
-TINYCORE_RET QueryGetChildren_Construct(QueryGetChildren *thiz);
+TinyRet QueryGetChildren_Construct(QueryGetChildren *thiz);
 TINYSPEC_API
 void QueryGetChildren_Dispose(QueryGetChildren *thiz);
 
@@ -25,7 +25,7 @@ typedef struct
 } ResultGetChildren;
 
 TINYSPEC_API
-TINYCORE_RET ResultGetChildren_Construct(ResultGetChildren *thiz);
+TinyRet ResultGetChildren_Construct(ResultGetChildren *thiz);
 TINYSPEC_API
 void ResultGetChildren_Dispose(ResultGetChildren *thiz);
 

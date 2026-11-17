@@ -37,16 +37,16 @@ typedef struct
 } Urn;
 
 TINYSPEC_API
-TINYCORE_RET Urn_Construct(Urn *thiz);
+TinyRet Urn_Construct(Urn *thiz);
 
 TINYSPEC_API
 void Urn_Dispose(Urn *thiz);
 
 TINYSPEC_API
-TINYCORE_RET Urn_Set(Urn *thiz, const char *ns, UrnType type, const char *name, uint32_t value, const char *vendor);
+TinyRet Urn_Set(Urn *thiz, const char *ns, UrnType type, const char *name, uint32_t value, const char *vendor);
 
 TINYSPEC_API
-TINYCORE_RET Urn_SetString(Urn *thiz, const char *string);
+TinyRet Urn_SetString(Urn *thiz, const char *string);
 
 TINYSPEC_END_DECLS
 

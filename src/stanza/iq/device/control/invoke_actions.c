@@ -1,6 +1,6 @@
 #include <tinyspec/stanza/iq/device/control/invoke_actions.h>
 
-TINYCORE_RET QueryInvokeActions_Construct(QueryInvokeActions *thiz)
+TinyRet QueryInvokeActions_Construct(QueryInvokeActions *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -14,7 +14,7 @@ void QueryInvokeActions_Dispose(QueryInvokeActions *thiz)
     ActionOperations_Dispose(&thiz->actions);
 }
 
-TINYCORE_RET ResultInvokeActions_Construct(ResultInvokeActions *thiz)
+TinyRet ResultInvokeActions_Construct(ResultInvokeActions *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/iq.h>
 
-TINYCORE_RET IQ_InitializeQuery(IQ *thiz, const char *id, const IQMethod method)
+TinyRet IQ_InitializeQuery(IQ *thiz, const char *id, const IQMethod method)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(id, TINY_RET_E_NULL_PTR);
@@ -20,7 +20,7 @@ TINYCORE_RET IQ_InitializeQuery(IQ *thiz, const char *id, const IQMethod method)
     return IQQuery_Initialize(&thiz->content.query);
 }
 
-TINYCORE_RET IQ_InitializeResult(IQ *thiz, const char *id, const IQMethod method)
+TinyRet IQ_InitializeResult(IQ *thiz, const char *id, const IQMethod method)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(id, TINY_RET_E_NULL_PTR);

@@ -21,7 +21,7 @@ typedef struct
 } QueryGetProperty;
 
 TINYSPEC_API
-TINYCORE_RET QueryGetProperty_Construct(QueryGetProperty *thiz);
+TinyRet QueryGetProperty_Construct(QueryGetProperty *thiz);
 TINYSPEC_API
 void QueryGetProperty_Dispose(QueryGetProperty *thiz);
 
@@ -31,7 +31,7 @@ typedef struct
 } ResultGetProperty;
 
 TINYSPEC_API
-TINYCORE_RET ResultGetProperty_Construct(ResultGetProperty *thiz);
+TinyRet ResultGetProperty_Construct(ResultGetProperty *thiz);
 TINYSPEC_API
 void ResultGetProperty_Dispose(ResultGetProperty *thiz);
 

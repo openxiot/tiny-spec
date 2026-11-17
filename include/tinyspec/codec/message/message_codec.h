@@ -17,10 +17,10 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-TINYCORE_RET MessageCodec_Encode(JsonObject *root, Message *message);
+TinyRet MessageCodec_Encode(JsonObject *root, Message *message);
 
 TINYSPEC_API
-TINYCORE_RET MessageCodec_Decode(Message* message, JsonObject *object);
+TinyRet MessageCodec_Decode(Message* message, JsonObject *object);
 
 TINYSPEC_END_DECLS
 

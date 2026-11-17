@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/verify/initialize.h>
 
-TINYCORE_RET QueryInitialize_Construct(QueryInitialize *thiz)
+TinyRet QueryInitialize_Construct(QueryInitialize *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

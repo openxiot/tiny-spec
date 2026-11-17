@@ -24,9 +24,9 @@
  *      ]
  * }
  */
-TINYCORE_RET DeviceEventOccurredCodec_Encode(JsonObject *payload, DeviceEventOccurred *eventOccurred)
+TinyRet DeviceEventOccurredCodec_Encode(JsonObject *payload, DeviceEventOccurred *eventOccurred)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     JsonValue * arguments = NULL;
     JsonArray * argumentCopy = NULL;
 
@@ -92,9 +92,9 @@ TINYCORE_RET DeviceEventOccurredCodec_Encode(JsonObject *payload, DeviceEventOcc
     return ret;
 }
 
-TINYCORE_RET DeviceEventOccurredCodec_Decode(DeviceEventOccurred *eventOccurred, JsonObject *payload)
+TinyRet DeviceEventOccurredCodec_Decode(DeviceEventOccurred *eventOccurred, JsonObject *payload)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(eventOccurred, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(payload, TINY_RET_E_NULL_PTR);

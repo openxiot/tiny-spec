@@ -23,7 +23,7 @@ typedef struct
 } DeviceEventOccurred;
 
 TINYSPEC_API
-TINYCORE_RET DeviceEventOccurred_Construct(DeviceEventOccurred *thiz);
+TinyRet DeviceEventOccurred_Construct(DeviceEventOccurred *thiz);
 
 TINYSPEC_API
 void DeviceEventOccurred_Dispose(DeviceEventOccurred *thiz);

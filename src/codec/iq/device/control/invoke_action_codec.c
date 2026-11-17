@@ -17,7 +17,7 @@ bool InvokeActionCodec_EncodeQuery(QueryInvokeAction *query, JsonObject *content
     return ActionOperationCodec_Invoke_Query_Encode(&query->action, content);
 }
 
-TINYCORE_RET InvokeActionCodec_DecodeQuery(JsonObject *content, QueryInvokeAction *query)
+TinyRet InvokeActionCodec_DecodeQuery(JsonObject *content, QueryInvokeAction *query)
 {
     return ActionOperationCodec_Invoke_Query_Decode(content, &query->action);
 }
@@ -27,7 +27,7 @@ bool InvokeActionCodec_EncodeResult(ResultInvokeAction *result, JsonObject *cont
     return ActionOperationCodec_Invoke_Result_Encode(&result->action, content);
 }
 
-TINYCORE_RET InvokeActionCodec_DecodeResult(JsonObject *content, ResultInvokeAction *result)
+TinyRet InvokeActionCodec_DecodeResult(JsonObject *content, ResultInvokeAction *result)
 {
     return ActionOperationCodec_Invoke_Result_Decode(content, &result->action);
 }

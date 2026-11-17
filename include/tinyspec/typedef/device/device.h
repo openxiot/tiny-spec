@@ -28,7 +28,7 @@ TINYSPEC_API
 void Device_Delete(Device *thiz);
 
 TINYSPEC_API
-TINYCORE_RET Device_Construct(Device *thiz);
+TinyRet Device_Construct(Device *thiz);
 
 TINYSPEC_API
 void Device_Dispose(Device *thiz);

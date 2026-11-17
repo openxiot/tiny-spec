@@ -14,7 +14,7 @@ bool GetChildrenCodec_EncodeQuery(QueryGetChildren *query, JsonObject *content)
     return true;
 }
 
-TINYCORE_RET GetChildrenCodec_DecodeQuery(JsonObject *content, QueryGetChildren *query)
+TinyRet GetChildrenCodec_DecodeQuery(JsonObject *content, QueryGetChildren *query)
 {
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_PARAM_INVALID);
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_PARAM_INVALID);
@@ -70,7 +70,7 @@ bool GetChildrenCodec_EncodeResult(ResultGetChildren *result, JsonObject *conten
     return true;
 }
 
-TINYCORE_RET GetChildrenCodec_DecodeResult(JsonObject *content, ResultGetChildren *result)
+TinyRet GetChildrenCodec_DecodeResult(JsonObject *content, ResultGetChildren *result)
 {
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_PARAM_INVALID);
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_PARAM_INVALID);

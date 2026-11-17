@@ -35,7 +35,7 @@ TINYSPEC_API
 void Event_Delete(Event *thiz);
 
 TINYSPEC_API
-TINYCORE_RET Event_ArgumentAdd(Event *thiz, uint16_t iid);
+TinyRet Event_ArgumentAdd(Event *thiz, uint16_t iid);
 
 TINYSPEC_API
 void Event_TryProduce(Event *thiz, EventOperation *o);

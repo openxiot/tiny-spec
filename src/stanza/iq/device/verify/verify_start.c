@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/verify/verify_start.h>
 
-TINYCORE_RET QueryVerifyStart_Construct(QueryVerifyStart *thiz)
+TinyRet QueryVerifyStart_Construct(QueryVerifyStart *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -23,7 +23,7 @@ void QueryVerifyStart_Dispose(QueryVerifyStart *thiz)
     RETURN_IF_FAIL(thiz);
 }
 
-TINYCORE_RET ResultVerifyStart_Construct(ResultVerifyStart *thiz)
+TinyRet ResultVerifyStart_Construct(ResultVerifyStart *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

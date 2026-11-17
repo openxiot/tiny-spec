@@ -94,9 +94,9 @@ static bool addResultContent(IQResult *result, JsonObject *content)
     return done;
 }
 
-static TINYCORE_RET decodeResultContent(IQResult *result, JsonObject *content)
+static TinyRet decodeResultContent(IQResult *result, JsonObject *content)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     switch (result->method)
     {
@@ -167,9 +167,9 @@ static TINYCORE_RET decodeResultContent(IQResult *result, JsonObject *content)
     return ret;
 }
 
-TINYCORE_RET IQResultCodec_Encode(JsonObject *root, IQResult *result)
+TinyRet IQResultCodec_Encode(JsonObject *root, IQResult *result)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(root, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_NULL_PTR);
@@ -208,9 +208,9 @@ TINYCORE_RET IQResultCodec_Encode(JsonObject *root, IQResult *result)
     return ret;
 }
 
-TINYCORE_RET IQResultCodec_Decode(IQResult* result, JsonObject *object)
+TinyRet IQResultCodec_Decode(IQResult* result, JsonObject *object)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(object, TINY_RET_E_NULL_PTR);

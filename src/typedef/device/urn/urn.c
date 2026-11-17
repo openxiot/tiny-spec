@@ -13,7 +13,7 @@
 #include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/device/urn/urn.h>
 
-TINYCORE_RET Urn_Construct(Urn *thiz)
+TinyRet Urn_Construct(Urn *thiz)
 {
     memset(thiz, 0, sizeof(Urn));
 
@@ -40,9 +40,9 @@ void Urn_Dispose(Urn *thiz)
     memset(thiz, 0, sizeof(Urn));
 }
 
-TINYCORE_RET Urn_Set(Urn *thiz, const char *ns, UrnType type, const char *name, uint32_t value, const char *vendor)
+TinyRet Urn_Set(Urn *thiz, const char *ns, UrnType type, const char *name, uint32_t value, const char *vendor)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     do
     {
@@ -117,9 +117,9 @@ TINYCORE_RET Urn_Set(Urn *thiz, const char *ns, UrnType type, const char *name, 
     return ret;
 }
 
-TINYCORE_RET Urn_SetString(Urn *thiz, const char *string)
+TinyRet Urn_SetString(Urn *thiz, const char *string)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     StringArray *array = NULL;
 
     do

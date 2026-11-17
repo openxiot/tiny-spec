@@ -20,7 +20,7 @@ TINYSPEC_BEGIN_DECLS
  * 对象发给对端（如 WSS 帧）。product/sendCtx 由 dispatch 原样透传。
  * 返回非 0 表示发送失败。
  */
-typedef int (*DataSend)(JsonObject *o, void *product, void *ctx);
+typedef TinyRet (*DataSend)(JsonObject *o, void *product, void *ctx);
 
 TINYSPEC_END_DECLS
 

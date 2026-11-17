@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/control/set_property.h>
 
-TINYCORE_RET QuerySetProperty_Construct(QuerySetProperty *thiz)
+TinyRet QuerySetProperty_Construct(QuerySetProperty *thiz)
 {
     return PropertyOperation_Construct(&thiz->property);
 }
@@ -19,7 +19,7 @@ void QuerySetProperty_Dispose(QuerySetProperty *thiz)
     PropertyOperation_Dispose(&thiz->property);
 }
 
-TINYCORE_RET ResultSetProperty_Construct(ResultSetProperty *thiz)
+TinyRet ResultSetProperty_Construct(ResultSetProperty *thiz)
 {
     return PropertyOperation_Construct(&thiz->property);
 }

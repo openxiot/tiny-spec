@@ -37,13 +37,13 @@ TINYSPEC_API
 PropertyOperation * PropertyOperation_CopyFrom(PropertyOperation *other);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperation_Copy(PropertyOperation *thiz, PropertyOperation *other);
+TinyRet PropertyOperation_Copy(PropertyOperation *thiz, PropertyOperation *other);
 
 TINYSPEC_API
 void PropertyOperation_Delete(PropertyOperation *thiz);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperation_Construct(PropertyOperation *thiz);
+TinyRet PropertyOperation_Construct(PropertyOperation *thiz);
 
 TINYSPEC_API
 void PropertyOperation_Dispose(PropertyOperation *thiz);

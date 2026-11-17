@@ -20,9 +20,9 @@ bool ActionOperationCodec_Invoke_Query_Encode(ActionOperation *operation, JsonOb
     return false;
 }
 
-TINYCORE_RET ActionOperationCodec_Invoke_Query_Decode(JsonObject *content, ActionOperation *operation)
+TinyRet ActionOperationCodec_Invoke_Query_Decode(JsonObject *content, ActionOperation *operation)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(operation, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
@@ -112,7 +112,7 @@ bool ActionOperationCodec_Invoke_Result_Encode(ActionOperation *operation, JsonO
     return done;
 }
 
-TINYCORE_RET ActionOperationCodec_Invoke_Result_Decode(JsonObject *content, ActionOperation *operation)
+TinyRet ActionOperationCodec_Invoke_Result_Decode(JsonObject *content, ActionOperation *operation)
 {
     (void) content;
     (void) operation;

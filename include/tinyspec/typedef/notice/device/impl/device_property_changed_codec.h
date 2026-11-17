@@ -17,9 +17,9 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-TINYCORE_RET DevicePropertyChangedCodec_Encode(JsonObject *payload, DevicePropertyChanged *propertyChanged);
+TinyRet DevicePropertyChangedCodec_Encode(JsonObject *payload, DevicePropertyChanged *propertyChanged);
 TINYSPEC_API
-TINYCORE_RET DevicePropertyChangedCodec_Decode(DevicePropertyChanged *propertyChanged, JsonObject *payload);
+TinyRet DevicePropertyChangedCodec_Decode(DevicePropertyChanged *propertyChanged, JsonObject *payload);
 
 TINYSPEC_END_DECLS
 

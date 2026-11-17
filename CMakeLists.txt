@@ -144,6 +144,7 @@ set(TINYSPEC_SOURCES
 
         # Dispatch
         src/dispatch/dispatch.c
+        src/dispatch/send.c
 )
 
 add_library(tinyspec ${TINYSPEC_SOURCES})

@@ -36,9 +36,9 @@ bool GetPropertyCodec_EncodeQuery(QueryGetProperty *query, JsonObject *content)
     return done;
 }
 
-TINYCORE_RET GetPropertyCodec_DecodeQuery(JsonObject *content, QueryGetProperty *query)
+TinyRet GetPropertyCodec_DecodeQuery(JsonObject *content, QueryGetProperty *query)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
@@ -82,7 +82,7 @@ bool GetPropertyCodec_EncodeResult(ResultGetProperty *result, JsonObject *conten
 
         PropertyId_ToString(pid, &result->property.pid);
 
-        TINYCORE_RET ret = JsonObject_PutString(object, "pid", pid);
+        TinyRet ret = JsonObject_PutString(object, "pid", pid);
         if (RET_FAILED(ret))
         {
             JsonObject_Delete(object);
@@ -121,9 +121,9 @@ bool GetPropertyCodec_EncodeResult(ResultGetProperty *result, JsonObject *conten
     return done;
 }
 
-TINYCORE_RET GetPropertyCodec_DecodeResult(JsonObject *content, ResultGetProperty *result)
+TinyRet GetPropertyCodec_DecodeResult(JsonObject *content, ResultGetProperty *result)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_NULL_PTR);

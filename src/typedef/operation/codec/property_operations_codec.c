@@ -23,7 +23,7 @@ bool PropertyOperationsCodec_Set_Query_Encode(PropertyOperations *operations, Js
 
     do
     {
-        TINYCORE_RET ret = TINY_RET_OK;
+        TinyRet ret = TINY_RET_OK;
 
         JsonArray *array = JsonArray_New();
         if (array == NULL)
@@ -86,9 +86,9 @@ bool PropertyOperationsCodec_Set_Query_Encode(PropertyOperations *operations, Js
     return done;
 }
 
-TINYCORE_RET PropertyOperationsCodec_Set_Query_Decode(JsonObject *content, PropertyOperations *operations)
+TinyRet PropertyOperationsCodec_Set_Query_Decode(JsonObject *content, PropertyOperations *operations)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(operations, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
@@ -190,7 +190,7 @@ bool PropertyOperationsCodec_Set_Result_Encode(PropertyOperations *operations, J
 
     do
     {
-        TINYCORE_RET ret = TINY_RET_OK;
+        TinyRet ret = TINY_RET_OK;
 
         JsonArray *array = JsonArray_New();
         if (array == NULL)
@@ -263,9 +263,9 @@ bool PropertyOperationsCodec_Set_Result_Encode(PropertyOperations *operations, J
     return done;
 }
 
-TINYCORE_RET PropertyOperationsCodec_Set_Result_Decode(JsonObject *content, PropertyOperations *operations)
+TinyRet PropertyOperationsCodec_Set_Result_Decode(JsonObject *content, PropertyOperations *operations)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(operations, TINY_RET_E_NULL_PTR);
@@ -375,7 +375,7 @@ bool PropertyOperationsCodec_Get_Query_Encode(PropertyOperations *operations, Js
 
     do
     {
-        TINYCORE_RET ret = TINY_RET_OK;
+        TinyRet ret = TINY_RET_OK;
 
         JsonArray *array = JsonArray_New();
         if (array == NULL)
@@ -415,9 +415,9 @@ bool PropertyOperationsCodec_Get_Query_Encode(PropertyOperations *operations, Js
     return done;
 }
 
-TINYCORE_RET PropertyOperationsCodec_Get_Query_Decode(JsonObject *content, PropertyOperations *operations)
+TinyRet PropertyOperationsCodec_Get_Query_Decode(JsonObject *content, PropertyOperations *operations)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(operations, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
@@ -485,7 +485,7 @@ bool PropertyOperationsCodec_Get_Result_Encode(PropertyOperations *operations, J
 
     do
     {
-        TINYCORE_RET ret = TINY_RET_OK;
+        TinyRet ret = TINY_RET_OK;
 
         JsonArray *array = JsonArray_New();
         if (array == NULL)
@@ -573,9 +573,9 @@ bool PropertyOperationsCodec_Get_Result_Encode(PropertyOperations *operations, J
     return done;
 }
 
-TINYCORE_RET PropertyOperationsCodec_Get_Result_Decode(JsonObject *content, PropertyOperations *operations)
+TinyRet PropertyOperationsCodec_Get_Result_Decode(JsonObject *content, PropertyOperations *operations)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(operations, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);

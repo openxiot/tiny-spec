@@ -10,9 +10,9 @@
 #include <tinycore/tiny_log.h>
 #include <tinyspec/stanza/iq/iq_result.h>
 
-TINYCORE_RET IQResult_Initialize(IQResult *thiz)
+TinyRet IQResult_Initialize(IQResult *thiz)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     switch (thiz->method)
     {

@@ -19,11 +19,11 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool VerifyStartCodec_EncodeQuery(QueryVerifyStart *query, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET VerifyStartCodec_DecodeQuery(JsonObject *content, QueryVerifyStart *query);
+TinyRet VerifyStartCodec_DecodeQuery(JsonObject *content, QueryVerifyStart *query);
 TINYSPEC_API
 bool VerifyStartCodec_EncodeResult(ResultVerifyStart *result, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET VerifyStartCodec_DecodeResult(JsonObject *content, ResultVerifyStart *result);
+TinyRet VerifyStartCodec_DecodeResult(JsonObject *content, ResultVerifyStart *result);
 
 TINYSPEC_END_DECLS
 

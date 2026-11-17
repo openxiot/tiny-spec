@@ -44,9 +44,9 @@ void ActionOperation_Delete(ActionOperation *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET ActionOperation_Construct(ActionOperation *thiz)
+TinyRet ActionOperation_Construct(ActionOperation *thiz)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -63,9 +63,9 @@ void ActionOperation_Dispose(ActionOperation *thiz)
     JsonArray_Dispose(&thiz->out);
 }
 
-TINYCORE_RET ActionOperation_Copy(ActionOperation *dst, ActionOperation *src)
+TinyRet ActionOperation_Copy(ActionOperation *dst, ActionOperation *src)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);

@@ -30,7 +30,7 @@ TINYSPEC_API
 void EventOperation_Delete(EventOperation *thiz);
 
 TINYSPEC_API
-TINYCORE_RET EventOperation_Construct(EventOperation *thiz);
+TinyRet EventOperation_Construct(EventOperation *thiz);
 
 TINYSPEC_API
 void EventOperation_Dispose(EventOperation *thiz);
@@ -39,7 +39,7 @@ TINYSPEC_API
 EventOperation * EventOperation_CopyFrom(EventOperation *other);
 
 TINYSPEC_API
-TINYCORE_RET EventOperation_Copy(EventOperation *dst, EventOperation *src);
+TinyRet EventOperation_Copy(EventOperation *dst, EventOperation *src);
 
 TINYSPEC_END_DECLS
 

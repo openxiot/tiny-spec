@@ -16,7 +16,7 @@
 #include <tinyspec/typedef/device/argument.h>
 #include <tinyspec/typedef/device/service.h>
 
-static TINYCORE_RET Event_Construct(Event *thiz, uint16_t iid);
+static TinyRet Event_Construct(Event *thiz, uint16_t iid);
 
 static void Event_Dispose(Event *thiz);
 
@@ -75,9 +75,9 @@ Event* Event_NewInstance(uint16_t iid, const char *ns, const char *name, uint32_
     return thiz;
 }
 
-static TINYCORE_RET Event_Construct(Event *thiz, uint16_t iid)
+static TinyRet Event_Construct(Event *thiz, uint16_t iid)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -118,9 +118,9 @@ void Event_Delete(Event *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET Event_ArgumentAdd(Event *thiz, uint16_t iid)
+TinyRet Event_ArgumentAdd(Event *thiz, uint16_t iid)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

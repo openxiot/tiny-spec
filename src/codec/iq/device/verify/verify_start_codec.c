@@ -10,9 +10,9 @@
 #include <tinycore/json_string.h>
 #include <tinyspec/codec/iq/device/verify/verify_start_codec.h>
 
-TINYCORE_RET VerifyStartCodec_DecodeQuery(JsonObject *content, QueryVerifyStart *query)
+TinyRet VerifyStartCodec_DecodeQuery(JsonObject *content, QueryVerifyStart *query)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_NULL_PTR);
@@ -47,9 +47,9 @@ bool VerifyStartCodec_EncodeQuery(QueryVerifyStart *query, JsonObject *content)
     return done;
 }
 
-TINYCORE_RET VerifyStartCodec_DecodeResult(JsonObject *content, ResultVerifyStart *result)
+TinyRet VerifyStartCodec_DecodeResult(JsonObject *content, ResultVerifyStart *result)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);

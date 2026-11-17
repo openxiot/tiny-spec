@@ -9,14 +9,20 @@
 
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
+#include <tinyspec/stanza/iq/device/manager/properties_changed.h>
+#include <tinyspec/typedef/operation/property_operation.h>
 #include <tinyspec/typedef/product/child/child.h>
+#include <tinyspec/typedef/product/operator/product_operator.h>
 #include <tinyspec/typedef/product/product.h>
+#include <tinyspec/typedef/status/iot_status.h>
 
 #include "tinyspec/codec/stanza_codec.h"
 #include "tinyspec/dispatch/dispatch.h"
+#include "tinyspec/dispatch/send.h"
+#include "tinyspec/stanza/iq/basic/factory/ping_factory.h"
 #include "tinyspec/stanza/stanza.h"
 
-static TINYCORE_RET Product_Construct(Product *thiz);
+static TinyRet Product_Construct(Product *thiz);
 
 static void Product_Dispose(Product *thiz);
 
@@ -51,9 +57,9 @@ Product *Product_New(void)
     return thiz;
 }
 
-static TINYCORE_RET Product_Construct(Product *thiz)
+static TinyRet Product_Construct(Product *thiz)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -138,6 +144,106 @@ void Product_OnReceive(Product *thiz, JsonObject *data)
         }
     } while (false);
 
+    if (stanza != NULL)
+    {
+        Stanza_Delete(stanza);
+    }
+}
+
+void Product_GetNextStanzaId(Product *thiz, char *buf, size_t size)
+{
+    RETURN_IF_FAIL(thiz);
+    snprintf(buf, size, "%u", ++thiz->stanzaId);
+}
+
+void Product_SendPing(Product *thiz)
+{
+    Stanza *stanza;
+
+    RETURN_IF_FAIL(thiz);
+
+    do
+    {
+        char id[32];
+
+        Product_GetNextStanzaId(thiz, id, sizeof(id));
+
+        stanza = Ping_New(id);
+        if (stanza == NULL)
+        {
+            break;
+        }
+
+        const TinyRet ret = send_stanza(thiz, stanza);
+        if (RET_FAILED(ret))
+        {
+            TINY_LOG_WARN("send_stanza: %s", TinyRet_GetDescription(ret));
+            break;
+        }
+
+    } while (false);
+
+    if (stanza != NULL)
+    {
+        Stanza_Delete(stanza);
+    }
+}
+
+void Product_ChangePropertyValue(Product *thiz, int siid, int piid, JsonValue *value)
+{
+    Stanza *stanza = NULL;
+    PropertyOperation *op = NULL;
+    char id[32];
+
+    RETURN_IF_FAIL(thiz);
+    RETURN_IF_FAIL(value);
+
+    do
+    {
+        /* 构造属性操作：pid = {did.siid.piid}，value 深拷一份 */
+        op = PropertyOperation_NewValue(thiz->config.did, (uint16_t)siid, (uint16_t)piid, value);
+        if (op == NULL)
+        {
+            break;
+        }
+
+        /* 校验属性可通知、取值合法（save=false 不持久化，值由应用自持） */
+        TinyRet ret = Product_TryChangePropertyValue(thiz, op, false);
+        if (RET_FAILED(ret) || op->status != IOT_STATUS_COMPLETED)
+        {
+            TINY_LOG_WARN("skip properties-changed (ret=%d, status=%d)", ret, op->status);
+            break;
+        }
+
+        /* 构造 properties-changed 通知并发送 */
+        Product_GetNextStanzaId(thiz, id, sizeof(id));
+
+        stanza = Stanza_New(STANZA_IQ);
+        if (stanza == NULL)
+        {
+            break;
+        }
+
+        ret = IQ_InitializeQuery(&stanza->data.iq, id, IQ_METHOD_PROPERTIES_CHANGED);
+        if (RET_FAILED(ret))
+        {
+            break;
+        }
+
+        QueryPropertiesChanged *changed = &stanza->data.iq.content.query.content.propertiesChanged;
+        if (TinyList_AddTail(&changed->properties.properties, op) == NULL)
+        {
+            break;
+        }
+        op = NULL; /* 所有权移交 stanza，由 Stanza_Delete 统一释放 */
+
+        send_stanza(thiz, stanza);
+    } while (false);
+
+    if (op != NULL)
+    {
+        PropertyOperation_Delete(op);
+    }
     if (stanza != NULL)
     {
         Stanza_Delete(stanza);

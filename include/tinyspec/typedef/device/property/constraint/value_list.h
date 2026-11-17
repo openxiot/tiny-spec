@@ -31,7 +31,7 @@ TINYSPEC_API
 void ValueList_Delete(ValueList *thiz);
 
 TINYSPEC_API
-TINYCORE_RET ValueList_Put(ValueList *thiz, JsonValue *value);
+TinyRet ValueList_Put(ValueList *thiz, JsonValue *value);
 
 TINYSPEC_API
 bool ValueList_CheckValue(ValueList *thiz, JsonValue *value);

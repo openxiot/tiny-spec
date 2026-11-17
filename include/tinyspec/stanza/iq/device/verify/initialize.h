@@ -22,7 +22,7 @@ typedef struct
 } QueryInitialize;
 
 TINYSPEC_API
-TINYCORE_RET QueryInitialize_Construct(QueryInitialize *thiz);
+TinyRet QueryInitialize_Construct(QueryInitialize *thiz);
 TINYSPEC_API
 void QueryInitialize_Dispose(QueryInitialize *thiz);
 

@@ -12,9 +12,9 @@
 #include <tinycore/json_string.h>
 #include <tinyspec/codec/iq/iq_error_codec.h>
 
-TINYCORE_RET IQErrorCodec_Encode(JsonObject *root, IQError *error)
+TinyRet IQErrorCodec_Encode(JsonObject *root, IQError *error)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(root, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(error, TINY_RET_E_NULL_PTR);
@@ -56,9 +56,9 @@ TINYCORE_RET IQErrorCodec_Encode(JsonObject *root, IQError *error)
     return ret;
 }
 
-TINYCORE_RET IQErrorCodec_Decode(IQError* error, JsonObject *object)
+TinyRet IQErrorCodec_Decode(IQError* error, JsonObject *object)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(error, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(object, TINY_RET_E_NULL_PTR);

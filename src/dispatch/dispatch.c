@@ -8,8 +8,8 @@
  */
 
 #include <tinyspec/dispatch/dispatch.h>
+#include <tinyspec/dispatch/send.h>
 
-#include "tinyspec/codec/stanza_codec.h"
 #include "tinyspec/stanza/iq/basic/factory/hello_factory.h"
 #include "tinyspec/stanza/iq/basic/factory/ping_factory.h"
 #include "tinyspec/stanza/iq/device/control/factory/get_properties_factory.h"
@@ -20,29 +20,6 @@
 #include "tinyspec/stanza/iq/device/control/factory/set_property_factory.h"
 #include "tinyspec/stanza/iq/device/manager/factory/get_children_factory.h"
 #include "tinyspec/typedef/product/operator/product_operator.h"
-
-/* 把一个 stanza 编码成 JSON，经应用注入的 DataSend 发往传输层 */
-static int send_stanza(Product *thiz, Stanza *stanza)
-{
-    if (thiz->send == NULL)
-    {
-        Stanza_Delete(stanza);
-        return -1;
-    }
-
-    JsonObject *obj = StanzaCodec_Encode(stanza);
-    if (obj == NULL)
-    {
-        Stanza_Delete(stanza);
-        return -1;
-    }
-
-    const int rc = thiz->send(obj, thiz, thiz->sendCtx);
-
-    JsonObject_Delete(obj);
-
-    return rc;
-}
 
 void dispatch_iq(Product *thiz, IQ *iq)
 {

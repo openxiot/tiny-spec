@@ -56,9 +56,9 @@ bool SetPropertyCodec_EncodeQuery(QuerySetProperty *query, JsonObject *content)
     return done;
 }
 
-TINYCORE_RET SetPropertyCodec_DecodeQuery(JsonObject *content, QuerySetProperty *query)
+TinyRet SetPropertyCodec_DecodeQuery(JsonObject *content, QuerySetProperty *query)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
@@ -161,9 +161,9 @@ bool SetPropertyCodec_EncodeResult(ResultSetProperty *result, JsonObject *conten
     return done;
 }
 
-TINYCORE_RET SetPropertyCodec_DecodeResult(JsonObject *content, ResultSetProperty *result)
+TinyRet SetPropertyCodec_DecodeResult(JsonObject *content, ResultSetProperty *result)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_NULL_PTR);

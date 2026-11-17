@@ -21,7 +21,7 @@ typedef struct
 } QuerySetProperties;
 
 TINYSPEC_API
-TINYCORE_RET QuerySetProperties_Construct(QuerySetProperties *thiz);
+TinyRet QuerySetProperties_Construct(QuerySetProperties *thiz);
 TINYSPEC_API
 void QuerySetProperties_Dispose(QuerySetProperties *thiz);
 
@@ -31,7 +31,7 @@ typedef struct
 } ResultSetProperties;
 
 TINYSPEC_API
-TINYCORE_RET ResultSetProperties_Construct(ResultSetProperties *thiz);
+TinyRet ResultSetProperties_Construct(ResultSetProperties *thiz);
 TINYSPEC_API
 void ResultSetProperties_Dispose(ResultSetProperties *thiz);
 

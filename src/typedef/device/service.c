@@ -15,7 +15,7 @@
 #include <tinyspec/typedef/device/action.h>
 #include <tinyspec/typedef/device/event.h>
 
-static TINYCORE_RET Service_Construct(Service *thiz, uint16_t iid);
+static TinyRet Service_Construct(Service *thiz, uint16_t iid);
 
 static void Service_Dispose(Service *thiz);
 
@@ -88,9 +88,9 @@ Service* Service_NewInstance(uint16_t iid, const char *ns, const char *name, uin
     return thiz;
 }
 
-static TINYCORE_RET Service_Construct(Service *thiz, uint16_t iid)
+static TinyRet Service_Construct(Service *thiz, uint16_t iid)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

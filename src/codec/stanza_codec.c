@@ -15,7 +15,7 @@
 
 JsonObject* StanzaCodec_Encode(Stanza *stanza)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     JsonObject *root = NULL;
 
     RETURN_VAL_IF_FAIL(stanza, NULL);
@@ -60,7 +60,7 @@ JsonObject* StanzaCodec_Encode(Stanza *stanza)
 
 Stanza* StanzaCodec_Decode(JsonObject *object)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
     Stanza * stanza = NULL;
 
     RETURN_VAL_IF_FAIL(object, NULL);

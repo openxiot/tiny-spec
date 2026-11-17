@@ -20,7 +20,7 @@ void Child_Delete(Child *thiz)
  * get-children 应答只需 did/type/online 元数据，
  * 不深拷贝 Child.device（含 services 树）。
  */
-TINYCORE_RET Child_Copy(Child *dst, const Child *src)
+TinyRet Child_Copy(Child *dst, const Child *src)
 {
     RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);

@@ -9,7 +9,7 @@
 
 #include <tinyspec/typedef/notice/device/impl/device_property_changed.h>
 
-TINYCORE_RET DevicePropertyChanged_Construct(DevicePropertyChanged *thiz)
+TinyRet DevicePropertyChanged_Construct(DevicePropertyChanged *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

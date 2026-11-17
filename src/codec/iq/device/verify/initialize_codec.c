@@ -9,9 +9,9 @@
 
 #include <tinyspec/codec/iq/device/verify/initialize_codec.h>
 
-TINYCORE_RET InitializeCodec_DecodeQuery(JsonObject *content, QueryInitialize *query)
+TinyRet InitializeCodec_DecodeQuery(JsonObject *content, QueryInitialize *query)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_NULL_PTR);

@@ -49,7 +49,7 @@ void ActionOperations_Delete(ActionOperations *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET ActionOperations_Construct(ActionOperations *thiz)
+TinyRet ActionOperations_Construct(ActionOperations *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -66,9 +66,9 @@ void ActionOperations_Dispose(ActionOperations *thiz)
     TinyList_Dispose(&thiz->actions);
 }
 
-TINYCORE_RET ActionOperations_Copy(ActionOperations *dst, ActionOperations *src)
+TinyRet ActionOperations_Copy(ActionOperations *dst, ActionOperations *src)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);

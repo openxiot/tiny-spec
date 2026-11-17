@@ -811,22 +811,6 @@ static void test_property_access(void)
         TINY_TEST_CHECK(read_write->value->data.boolean->value == false);
     }
 
-    /* subscribe / unsubscribe */
-    operation->status = IOT_STATUS_COMPLETED;
-    Property_TrySubscribe(read_write, operation);
-    TINY_TEST_CHECK(operation->status == IOT_STATUS_COMPLETED);
-
-    Property_TryUnsubscribe(read_write, operation);
-    TINY_TEST_CHECK(operation->status == IOT_STATUS_COMPLETED);
-
-    operation->status = IOT_STATUS_COMPLETED;
-    Property_TrySubscribe(read_only, operation);
-    TINY_TEST_CHECK(operation->status == IOT_STATUS_PROPERTY_CANNOT_NOTIFY);
-
-    operation->status = IOT_STATUS_COMPLETED;
-    Property_TryUnsubscribe(read_only, operation);
-    TINY_TEST_CHECK(operation->status == IOT_STATUS_PROPERTY_CANNOT_NOTIFY);
-
     PropertyOperation_Delete(operation);
     Property_Delete(read_write);
     Property_Delete(write_only);

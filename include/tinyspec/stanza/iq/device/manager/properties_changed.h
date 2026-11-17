@@ -12,7 +12,7 @@ typedef struct
 } QueryPropertiesChanged;
 
 TINYSPEC_API
-TINYCORE_RET QueryPropertiesChanged_Construct(QueryPropertiesChanged *thiz);
+TinyRet QueryPropertiesChanged_Construct(QueryPropertiesChanged *thiz);
 TINYSPEC_API
 void QueryPropertiesChanged_Dispose(QueryPropertiesChanged *thiz);
 
@@ -22,7 +22,7 @@ typedef struct
 } ResultPropertiesChanged;
 
 TINYSPEC_API
-TINYCORE_RET ResultPropertiesChanged_Construct(ResultPropertiesChanged *thiz);
+TinyRet ResultPropertiesChanged_Construct(ResultPropertiesChanged *thiz);
 TINYSPEC_API
 void ResultPropertiesChanged_Dispose(ResultPropertiesChanged *thiz);
 

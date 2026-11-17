@@ -21,7 +21,7 @@ typedef struct
 } QueryVerifyStart;
 
 TINYSPEC_API
-TINYCORE_RET QueryVerifyStart_Construct(QueryVerifyStart *thiz);
+TinyRet QueryVerifyStart_Construct(QueryVerifyStart *thiz);
 TINYSPEC_API
 void QueryVerifyStart_Dispose(QueryVerifyStart *thiz);
 
@@ -32,7 +32,7 @@ typedef struct
 } ResultVerifyStart;
 
 TINYSPEC_API
-TINYCORE_RET ResultVerifyStart_Construct(ResultVerifyStart *thiz);
+TinyRet ResultVerifyStart_Construct(ResultVerifyStart *thiz);
 TINYSPEC_API
 void ResultVerifyStart_Dispose(ResultVerifyStart *thiz);
 

@@ -12,7 +12,7 @@ typedef struct
 } QueryInvokeActions;
 
 TINYSPEC_API
-TINYCORE_RET QueryInvokeActions_Construct(QueryInvokeActions *thiz);
+TinyRet QueryInvokeActions_Construct(QueryInvokeActions *thiz);
 TINYSPEC_API
 void QueryInvokeActions_Dispose(QueryInvokeActions *thiz);
 
@@ -22,7 +22,7 @@ typedef struct
 } ResultInvokeActions;
 
 TINYSPEC_API
-TINYCORE_RET ResultInvokeActions_Construct(ResultInvokeActions *thiz);
+TinyRet ResultInvokeActions_Construct(ResultInvokeActions *thiz);
 TINYSPEC_API
 void ResultInvokeActions_Dispose(ResultInvokeActions *thiz);
 

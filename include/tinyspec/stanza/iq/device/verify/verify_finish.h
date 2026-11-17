@@ -25,7 +25,7 @@ typedef struct
 } QueryVerifyFinish;
 
 TINYSPEC_API
-TINYCORE_RET QueryVerifyFinish_Construct(QueryVerifyFinish *thiz);
+TinyRet QueryVerifyFinish_Construct(QueryVerifyFinish *thiz);
 TINYSPEC_API
 void QueryVerifyFinish_Dispose(QueryVerifyFinish *thiz);
 

@@ -9,7 +9,7 @@
 
 #include <tinyspec/stanza/iq/device/key/get_access_key.h>
 
-TINYCORE_RET ResultGetAccessKey_Construct(ResultGetAccessKey *thiz)
+TinyRet ResultGetAccessKey_Construct(ResultGetAccessKey *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

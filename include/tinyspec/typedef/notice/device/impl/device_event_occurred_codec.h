@@ -17,9 +17,9 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-TINYCORE_RET DeviceEventOccurredCodec_Encode(JsonObject *payload, DeviceEventOccurred *eventOccurred);
+TinyRet DeviceEventOccurredCodec_Encode(JsonObject *payload, DeviceEventOccurred *eventOccurred);
 TINYSPEC_API
-TINYCORE_RET DeviceEventOccurredCodec_Decode(DeviceEventOccurred *eventOccurred, JsonObject *payload);
+TinyRet DeviceEventOccurredCodec_Decode(DeviceEventOccurred *eventOccurred, JsonObject *payload);
 
 TINYSPEC_END_DECLS
 

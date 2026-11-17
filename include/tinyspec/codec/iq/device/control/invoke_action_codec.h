@@ -20,13 +20,13 @@ TINYSPEC_API
 bool InvokeActionCodec_EncodeQuery(QueryInvokeAction *query, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET InvokeActionCodec_DecodeQuery(JsonObject *content, QueryInvokeAction *query);
+TinyRet InvokeActionCodec_DecodeQuery(JsonObject *content, QueryInvokeAction *query);
 
 TINYSPEC_API
 bool InvokeActionCodec_EncodeResult(ResultInvokeAction *result, JsonObject *content);
 
 TINYSPEC_API
-TINYCORE_RET InvokeActionCodec_DecodeResult(JsonObject *content, ResultInvokeAction *result);
+TinyRet InvokeActionCodec_DecodeResult(JsonObject *content, ResultInvokeAction *result);
 
 TINYSPEC_END_DECLS
 

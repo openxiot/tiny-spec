@@ -16,7 +16,7 @@
 #include <tinyspec/typedef/device/argument.h>
 #include <tinyspec/typedef/device/service.h>
 
-static TINYCORE_RET Action_Construct(Action *thiz, uint16_t iid);
+static TinyRet Action_Construct(Action *thiz, uint16_t iid);
 
 static void Action_Dispose(Action *thiz);
 
@@ -82,9 +82,9 @@ Action* Action_NewInstance(uint16_t iid, const char *ns, const char *name, uint3
     return thiz;
 }
 
-static TINYCORE_RET Action_Construct(Action *thiz, uint16_t iid)
+static TinyRet Action_Construct(Action *thiz, uint16_t iid)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -129,9 +129,9 @@ void Action_Delete(Action *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET Action_InAdd(Action *thiz, uint16_t iid)
+TinyRet Action_InAdd(Action *thiz, uint16_t iid)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -155,9 +155,9 @@ TINYCORE_RET Action_InAdd(Action *thiz, uint16_t iid)
     return ret;
 }
 
-TINYCORE_RET Action_OutAdd(Action *thiz, uint16_t iid)
+TinyRet Action_OutAdd(Action *thiz, uint16_t iid)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

@@ -27,14 +27,6 @@ void Product_TryReadProperties(Product *thiz, PropertyOperations *operations);
 TINYSPEC_API
 void Product_TryWriteProperties(Product *thiz, PropertyOperations *operations);
 
-#if 0
-TINYSPEC_API
-void Device_TrySubscribeProperties(Product *thiz, PropertyOperations *operations);
-
-TINYSPEC_API
-void Device_TryUnsubscribeProperties(Product *thiz, PropertyOperations *operations);
-#endif
-
 TINYSPEC_API
 void Product_TryInvokeAction(Product *thiz, ActionOperation *operation);
 
@@ -45,13 +37,13 @@ TINYSPEC_API
 void Product_TryGetChildren(Product *thiz, ResultGetChildren *children);
 
 TINYSPEC_API
-TINYCORE_RET Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o, bool save);
+TinyRet Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o, bool save);
 
 TINYSPEC_API
-TINYCORE_RET Product_TryProduceEvent(Product *thiz, EventOperation *o);
+TinyRet Product_TryProduceEvent(Product *thiz, EventOperation *o);
 
 TINYSPEC_API
-TINYCORE_RET Product_DoChangePropertyValue(Product *thiz, PropertyOperation *o);
+TinyRet Product_DoChangePropertyValue(Product *thiz, PropertyOperation *o);
 
 TINYSPEC_API
 PropertyOperations * Product_GetChangedProperties(Product *thiz);

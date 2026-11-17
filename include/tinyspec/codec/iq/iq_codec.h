@@ -17,10 +17,10 @@
 TINYSPEC_BEGIN_DECLS
 
 TINYSPEC_API
-TINYCORE_RET IQCodec_Encode(JsonObject *root, IQ *iq);
+TinyRet IQCodec_Encode(JsonObject *root, IQ *iq);
 
 TINYSPEC_API
-TINYCORE_RET IQCodec_Decode(IQ* iq, JsonObject *object);
+TinyRet IQCodec_Decode(IQ* iq, JsonObject *object);
 
 TINYSPEC_END_DECLS
 

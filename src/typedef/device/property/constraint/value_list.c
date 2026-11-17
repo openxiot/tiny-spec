@@ -23,9 +23,9 @@ static void _OnValueDelete(void *data, void *ctx)
     JsonValue_Delete((JsonValue *)data);
 }
 
-static TINYCORE_RET ValueList_Construct(ValueList *thiz, JsonArray *array)
+static TinyRet ValueList_Construct(ValueList *thiz, JsonArray *array)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
@@ -144,9 +144,9 @@ void ValueList_Delete(ValueList *thiz)
     tiny_free(thiz);
 }
 
-TINYCORE_RET ValueList_Put(ValueList *thiz, JsonValue *value)
+TinyRet ValueList_Put(ValueList *thiz, JsonValue *value)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(value, TINY_RET_E_NULL_PTR);

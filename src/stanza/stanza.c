@@ -10,7 +10,7 @@
 #include <tinycore/tiny_alloc.h>
 #include <tinyspec/stanza/stanza.h>
 
-static TINYCORE_RET Stanza_Construct(Stanza *thiz, StanzaType type)
+static TinyRet Stanza_Construct(Stanza *thiz, StanzaType type)
 {
     memset(thiz, 0, sizeof(Stanza));
 

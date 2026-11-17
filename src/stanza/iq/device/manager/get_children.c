@@ -11,7 +11,7 @@ static void OnChildDelete(void *data, void *context)
     }
 }
 
-TINYCORE_RET QueryGetChildren_Construct(QueryGetChildren *thiz)
+TinyRet QueryGetChildren_Construct(QueryGetChildren *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     thiz->did = NULL;
@@ -28,7 +28,7 @@ void QueryGetChildren_Dispose(QueryGetChildren *thiz)
     }
 }
 
-TINYCORE_RET ResultGetChildren_Construct(ResultGetChildren *thiz)
+TinyRet ResultGetChildren_Construct(ResultGetChildren *thiz)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     TinyList_Construct(&thiz->children);

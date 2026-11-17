@@ -16,7 +16,7 @@ bool SetPropertiesCodec_EncodeQuery(QuerySetProperties *query, JsonObject *conte
     return PropertyOperationsCodec_Set_Query_Encode(&query->properties, content);
 }
 
-TINYCORE_RET SetPropertiesCodec_DecodeQuery(JsonObject *content, QuerySetProperties *query)
+TinyRet SetPropertiesCodec_DecodeQuery(JsonObject *content, QuerySetProperties *query)
 {
     return PropertyOperationsCodec_Set_Query_Decode(content, &query->properties);
 }
@@ -26,7 +26,7 @@ bool SetPropertiesCodec_EncodeResult(ResultSetProperties *result, JsonObject *co
     return PropertyOperationsCodec_Set_Result_Encode(&result->properties, content);
 }
 
-TINYCORE_RET SetPropertiesCodec_DecodeResult(JsonObject *content, ResultSetProperties *result)
+TinyRet SetPropertiesCodec_DecodeResult(JsonObject *content, ResultSetProperties *result)
 {
     return PropertyOperationsCodec_Set_Result_Decode(content, &result->properties);
 }

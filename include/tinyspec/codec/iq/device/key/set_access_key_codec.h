@@ -19,7 +19,7 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool SetAccessKeyCodec_EncodeQuery(QuerySetAccessKey *query, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET SetAccessKeyCodec_DecodeQuery(JsonObject *content, QuerySetAccessKey *query);
+TinyRet SetAccessKeyCodec_DecodeQuery(JsonObject *content, QuerySetAccessKey *query);
 
 TINYSPEC_END_DECLS
 

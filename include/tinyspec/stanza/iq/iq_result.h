@@ -48,7 +48,7 @@ typedef struct
 } IQResult;
 
 TINYSPEC_API
-TINYCORE_RET IQResult_Initialize(IQResult *thiz);
+TinyRet IQResult_Initialize(IQResult *thiz);
 
 TINYSPEC_API
 void IQResult_Dispose(IQResult *thiz);

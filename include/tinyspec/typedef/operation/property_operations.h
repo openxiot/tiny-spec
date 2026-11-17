@@ -27,13 +27,13 @@ TINYSPEC_API
 void PropertyOperations_Delete(PropertyOperations *thiz);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperations_Construct(PropertyOperations *thiz);
+TinyRet PropertyOperations_Construct(PropertyOperations *thiz);
 
 TINYSPEC_API
 void PropertyOperations_Dispose(PropertyOperations *thiz);
 
 TINYSPEC_API
-TINYCORE_RET PropertyOperations_Copy(PropertyOperations *dst, PropertyOperations *src);
+TinyRet PropertyOperations_Copy(PropertyOperations *dst, PropertyOperations *src);
 
 TINYSPEC_END_DECLS
 

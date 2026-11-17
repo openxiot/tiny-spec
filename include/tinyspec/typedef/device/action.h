@@ -36,10 +36,10 @@ TINYSPEC_API
 void Action_Delete(Action *thiz);
 
 TINYSPEC_API
-TINYCORE_RET Action_InAdd(Action *thiz, uint16_t iid);
+TinyRet Action_InAdd(Action *thiz, uint16_t iid);
 
 TINYSPEC_API
-TINYCORE_RET Action_OutAdd(Action *thiz, uint16_t iid);
+TinyRet Action_OutAdd(Action *thiz, uint16_t iid);
 
 TINYSPEC_API
 void Action_TryInvoke(Action *thiz, ActionOperation *o);

@@ -27,7 +27,7 @@ bool InvokeActionsCodec_EncodeQuery(QueryInvokeActions *query, JsonObject *conte
     return true;
 }
 
-TINYCORE_RET InvokeActionsCodec_DecodeQuery(JsonObject *content, QueryInvokeActions *query)
+TinyRet InvokeActionsCodec_DecodeQuery(JsonObject *content, QueryInvokeActions *query)
 {
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_PARAM_INVALID);
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_PARAM_INVALID);
@@ -84,7 +84,7 @@ bool InvokeActionsCodec_EncodeResult(ResultInvokeActions *result, JsonObject *co
     return true;
 }
 
-TINYCORE_RET InvokeActionsCodec_DecodeResult(JsonObject *content, ResultInvokeActions *result)
+TinyRet InvokeActionsCodec_DecodeResult(JsonObject *content, ResultInvokeActions *result)
 {
     RETURN_VAL_IF_FAIL(content, TINY_RET_E_PARAM_INVALID);
     RETURN_VAL_IF_FAIL(result, TINY_RET_E_PARAM_INVALID);

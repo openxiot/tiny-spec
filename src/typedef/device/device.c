@@ -43,9 +43,9 @@ Device* Device_New(void)
     return thiz;
 }
 
-TINYCORE_RET Device_Construct(Device *thiz)
+TinyRet Device_Construct(Device *thiz)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 

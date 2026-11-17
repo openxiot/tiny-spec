@@ -9,11 +9,11 @@ TINYSPEC_BEGIN_DECLS
 TINYSPEC_API
 bool InvokeActionsCodec_EncodeQuery(QueryInvokeActions *query, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET InvokeActionsCodec_DecodeQuery(JsonObject *content, QueryInvokeActions *query);
+TinyRet InvokeActionsCodec_DecodeQuery(JsonObject *content, QueryInvokeActions *query);
 TINYSPEC_API
 bool InvokeActionsCodec_EncodeResult(ResultInvokeActions *result, JsonObject *content);
 TINYSPEC_API
-TINYCORE_RET InvokeActionsCodec_DecodeResult(JsonObject *content, ResultInvokeActions *result);
+TinyRet InvokeActionsCodec_DecodeResult(JsonObject *content, ResultInvokeActions *result);
 
 TINYSPEC_END_DECLS
 

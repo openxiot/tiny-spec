@@ -54,7 +54,7 @@ typedef struct
 } IQQuery;
 
 TINYSPEC_API
-TINYCORE_RET IQQuery_Initialize(IQQuery *thiz);
+TinyRet IQQuery_Initialize(IQQuery *thiz);
 
 TINYSPEC_API
 void IQQuery_Dispose(IQQuery *thiz);

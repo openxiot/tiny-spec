@@ -169,44 +169,6 @@ static void Product_TryWriteChild(Product *thiz, PropertyOperation *o)
     }
 }
 
-#if 0
-static void Product_TrySubscribeChild(Product *thiz, PropertyOperation *o)
-{
-    Product *child = NULL;
-
-    RETURN_IF_FAIL(thiz);
-    RETURN_IF_FAIL(o);
-
-    child = Product_GetChild(thiz, o->pid.did);
-    if (child != NULL)
-    {
-        Product_TrySubscribe(child, o);
-    }
-    else
-    {
-        o->status = IOT_STATUS_NOT_EXIST;
-    }
-}
-
-static void Product_TryUnsubscribeChild(Product *thiz, PropertyOperation *o)
-{
-    Product *child = NULL;
-
-    RETURN_IF_FAIL(thiz);
-    RETURN_IF_FAIL(o);
-
-    child = Product_GetChild(thiz, o->pid.did);
-    if (child != NULL)
-    {
-        Product_TryUnsubscribe(child, o);
-    }
-    else
-    {
-        o->status = IOT_STATUS_NOT_EXIST;
-    }
-}
-#endif
-
 static void Product_TryInvoke(Product *thiz, ActionOperation *o)
 {
     Service * service = NULL;
@@ -435,9 +397,9 @@ void Product_TryGetChildren(Product *thiz, ResultGetChildren *children)
     }
 }
 
-TINYCORE_RET Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o, bool save)
+TinyRet Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o, bool save)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(o, TINY_RET_E_NULL_PTR);
@@ -456,9 +418,9 @@ TINYCORE_RET Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o,
     return ret;
 }
 
-TINYCORE_RET Product_TryProduceEvent(Product *thiz, EventOperation *o)
+TinyRet Product_TryProduceEvent(Product *thiz, EventOperation *o)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(o, TINY_RET_E_NULL_PTR);
@@ -477,7 +439,7 @@ TINYCORE_RET Product_TryProduceEvent(Product *thiz, EventOperation *o)
     return ret;
 }
 
-TINYCORE_RET Product_DoChangePropertyValue(Product *thiz, PropertyOperation *o)
+TinyRet Product_DoChangePropertyValue(Product *thiz, PropertyOperation *o)
 {
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(o, TINY_RET_E_NULL_PTR);

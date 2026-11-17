@@ -99,9 +99,9 @@ static bool addQueryContent(IQQuery *query, JsonObject *content)
     return done;
 }
 
-static TINYCORE_RET decodeQueryContent(IQQuery *query, JsonObject *content)
+static TinyRet decodeQueryContent(IQQuery *query, JsonObject *content)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     switch (query->method)
     {
@@ -171,9 +171,9 @@ static TINYCORE_RET decodeQueryContent(IQQuery *query, JsonObject *content)
     return ret;
 }
 
-TINYCORE_RET IQQueryCodec_Encode(JsonObject *root, IQQuery *query)
+TinyRet IQQueryCodec_Encode(JsonObject *root, IQQuery *query)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(root, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_NULL_PTR);
@@ -212,9 +212,9 @@ TINYCORE_RET IQQueryCodec_Encode(JsonObject *root, IQQuery *query)
     return ret;
 }
 
-TINYCORE_RET IQQueryCodec_Decode(IQQuery* query, JsonObject *object)
+TinyRet IQQueryCodec_Decode(IQQuery* query, JsonObject *object)
 {
-    TINYCORE_RET ret = TINY_RET_OK;
+    TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(query, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(object, TINY_RET_E_NULL_PTR);
