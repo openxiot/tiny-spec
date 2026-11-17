@@ -13,6 +13,8 @@
 #include <tinyspec/tinyspec_base.h>
 #include <tinyspec/typedef/product/product.h>
 #include <tinyspec/typedef/operation/property_operations.h>
+#include <tinyspec/typedef/operation/action_operations.h>
+#include <tinyspec/stanza/iq/device/manager/get_children.h>
 
 TINYSPEC_BEGIN_DECLS
 
@@ -35,6 +37,12 @@ void Device_TryUnsubscribeProperties(Product *thiz, PropertyOperations *operatio
 
 TINYSPEC_API
 void Product_TryInvokeAction(Product *thiz, ActionOperation *operation);
+
+TINYSPEC_API
+void Product_TryInvokeActions(Product *thiz, ActionOperations *operations);
+
+TINYSPEC_API
+void Product_TryGetChildren(Product *thiz, ResultGetChildren *children);
 
 TINYSPEC_API
 TINYCORE_RET Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o, bool save);

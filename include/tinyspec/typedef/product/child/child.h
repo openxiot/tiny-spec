@@ -44,6 +44,9 @@ Child* Child_New(void);
 TINYSPEC_API
 void Child_Delete(Child *thiz);
 
+TINYSPEC_API
+TINYCORE_RET Child_Copy(Child *dst, const Child *src);
+
 
 TINYSPEC_END_DECLS
 

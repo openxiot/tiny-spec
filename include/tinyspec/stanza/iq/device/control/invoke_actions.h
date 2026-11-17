@@ -2,14 +2,13 @@
 #define TINYSPEC_STANZA_IQ_DEVICE_CONTROL_INVOKE_ACTIONS_H
 
 #include <tinyspec/tinyspec_base.h>
-#include <tinycore/tiny_list.h>
-#include <tinyspec/typedef/operation/action_operation.h>
+#include <tinyspec/typedef/operation/action_operations.h>
 
 TINYSPEC_BEGIN_DECLS
 
 typedef struct
 {
-    TinyList        actions;   /* ActionOperation* */
+    ActionOperations        actions;   /* ActionOperation* */
 } QueryInvokeActions;
 
 TINYSPEC_API
@@ -19,7 +18,7 @@ void QueryInvokeActions_Dispose(QueryInvokeActions *thiz);
 
 typedef struct
 {
-    TinyList        actions;   /* ActionOperation* */
+    ActionOperations        actions;   /* ActionOperation* */
 } ResultInvokeActions;
 
 TINYSPEC_API

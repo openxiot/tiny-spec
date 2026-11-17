@@ -46,7 +46,6 @@
 #include <tinyspec/typedef/product/handler/action_handler.h>
 #include <tinyspec/typedef/product/handler/identify_listener.h>
 #include <tinyspec/typedef/product/handler/property_handler.h>
-#include <tinyspec/typedef/product/lock/product_locker.h>
 #include <tinyspec/typedef/product/observer/event_observer.h>
 #include <tinyspec/typedef/product/observer/property_observer.h>
 #include <tinyspec/typedef/product/operator/product_operator.h>
@@ -69,6 +68,7 @@
 #include <tinyspec/stanza/iq/device/control/factory/get_properties_factory.h>
 #include <tinyspec/stanza/iq/device/control/factory/get_property_factory.h>
 #include <tinyspec/stanza/iq/device/control/factory/invoke_action_factory.h>
+#include <tinyspec/stanza/iq/device/control/factory/invoke_actions_factory.h>
 #include <tinyspec/stanza/iq/device/control/factory/set_properties_factory.h>
 #include <tinyspec/stanza/iq/device/control/factory/set_property_factory.h>
 #include <tinyspec/stanza/iq/device/control/get_properties.h>
@@ -80,6 +80,8 @@
 #include <tinyspec/stanza/iq/device/key/factory/set_access_key_factory.h>
 #include <tinyspec/stanza/iq/device/key/get_access_key.h>
 #include <tinyspec/stanza/iq/device/key/set_access_key.h>
+#include <tinyspec/stanza/iq/device/manager/get_children.h>
+#include <tinyspec/stanza/iq/device/manager/factory/get_children_factory.h>
 #include <tinyspec/stanza/iq/device/verify/factory/initialize_factory.h>
 #include <tinyspec/stanza/iq/device/verify/factory/verify_finish_factory.h>
 #include <tinyspec/stanza/iq/device/verify/factory/verify_start_factory.h>
@@ -113,8 +115,5 @@
 #include <tinyspec/codec/iq/iq_result_codec.h>
 #include <tinyspec/codec/message/message_codec.h>
 #include <tinyspec/codec/stanza_codec.h>
-
-/* Shared helpers */
-#include <tinyspec/json_util.h>
 
 #endif /* TINYSPEC_TINYSPEC_H */

@@ -75,6 +75,7 @@ set(TINYSPEC_SOURCES
         src/typedef/notice/device/impl/device_property_changed.c
         src/typedef/notice/device/impl/device_property_changed_codec.c
         src/typedef/operation/action_operation.c
+        src/typedef/operation/action_operations.c
         src/typedef/operation/event_operation.c
         src/typedef/operation/property_operation.c
         src/typedef/operation/property_operations.c
@@ -104,6 +105,7 @@ set(TINYSPEC_SOURCES
         src/stanza/iq/device/control/factory/get_properties_factory.c
         src/stanza/iq/device/control/factory/get_property_factory.c
         src/stanza/iq/device/control/factory/invoke_action_factory.c
+        src/stanza/iq/device/control/factory/invoke_actions_factory.c
         src/stanza/iq/device/control/factory/set_properties_factory.c
         src/stanza/iq/device/control/factory/set_property_factory.c
         src/stanza/iq/device/key/get_access_key.c
@@ -116,6 +118,7 @@ set(TINYSPEC_SOURCES
         src/stanza/iq/device/verify/factory/initialize_factory.c
         src/stanza/iq/device/verify/factory/verify_finish_factory.c
         src/stanza/iq/device/verify/factory/verify_start_factory.c
+        src/stanza/iq/device/manager/factory/get_children_factory.c
         src/stanza/message/message.c
 
         # StanzaCodec: JSON codecs
@@ -137,10 +140,7 @@ set(TINYSPEC_SOURCES
         src/codec/iq/device/verify/initialize_codec.c
         src/codec/iq/device/verify/verify_finish_codec.c
         src/codec/iq/device/verify/verify_start_codec.c
-        src/codec/message/message_codec.c
-
-        # Shared helpers
-        src/util/json_util.c)
+        src/codec/message/message_codec.c)
 
 add_library(tinyspec ${TINYSPEC_SOURCES})
 add_library(tinyspec::tinyspec ALIAS tinyspec)

@@ -10,7 +10,7 @@
 #include <tinyspec/typedef/operation/codec/action_operation_codec.h>
 
 #include <tinyspec/typedef/xid/codec/action_id_codec.h>
-#include <tinyspec/json_util.h>
+#include <tinycore/json_array.h>
 
 bool ActionOperationCodec_Invoke_Query_Encode(ActionOperation *operation, JsonObject *content)
 {

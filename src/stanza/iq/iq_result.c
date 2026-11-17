@@ -60,11 +60,11 @@ TINYCORE_RET IQResult_Initialize(IQResult *thiz)
             break;
 
         case IQ_METHOD_INVOKE_ACTIONS:
-            ResultInvokeActions_Dispose(&thiz->content.invokeActions);
+            ret = ResultInvokeActions_Construct(&thiz->content.invokeActions);
             break;
 
         case IQ_METHOD_GET_CHILDREN:
-            ResultGetChildren_Dispose(&thiz->content.getChildren);
+            ret = ResultGetChildren_Construct(&thiz->content.getChildren);
             break;
 
         case IQ_METHOD_PROPERTIES_CHANGED:

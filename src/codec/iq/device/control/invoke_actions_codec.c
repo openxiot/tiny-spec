@@ -12,9 +12,9 @@ bool InvokeActionsCodec_EncodeQuery(QueryInvokeActions *query, JsonObject *conte
     JsonArray *actions = JsonArray_New();
     RETURN_VAL_IF_FAIL(actions, false);
 
-    for (uint32_t i = 0; i < TinyList_GetSize(&query->actions); ++i)
+    for (uint32_t i = 0; i < TinyList_GetSize(&query->actions.actions); ++i)
     {
-        ActionOperation *op = (ActionOperation *)TinyList_GetAt(&query->actions, i);
+        ActionOperation *op = (ActionOperation *)TinyList_GetAt(&query->actions.actions, i);
         JsonObject *ao = JsonObject_New();
         if (ao == NULL)
         {
@@ -50,7 +50,7 @@ TINYCORE_RET InvokeActionsCodec_DecodeQuery(JsonObject *content, QueryInvokeActi
             }
             if (RET_SUCCEEDED(ActionOperationCodec_Invoke_Query_Decode(ao, op)))
             {
-                TinyList_AddTail(&query->actions, op);
+                TinyList_AddTail(&query->actions.actions, op);
             }
             else
             {
@@ -69,9 +69,9 @@ bool InvokeActionsCodec_EncodeResult(ResultInvokeActions *result, JsonObject *co
     JsonArray *actions = JsonArray_New();
     RETURN_VAL_IF_FAIL(actions, false);
 
-    for (uint32_t i = 0; i < TinyList_GetSize(&result->actions); ++i)
+    for (uint32_t i = 0; i < TinyList_GetSize(&result->actions.actions); ++i)
     {
-        ActionOperation *op = (ActionOperation *)TinyList_GetAt(&result->actions, i);
+        ActionOperation *op = (ActionOperation *)TinyList_GetAt(&result->actions.actions, i);
         JsonObject *ao = JsonObject_New();
         if (ao == NULL)
         {
@@ -107,7 +107,7 @@ TINYCORE_RET InvokeActionsCodec_DecodeResult(JsonObject *content, ResultInvokeAc
             }
             if (RET_SUCCEEDED(ActionOperationCodec_Invoke_Result_Decode(ao, op)))
             {
-                TinyList_AddTail(&result->actions, op);
+                TinyList_AddTail(&result->actions.actions, op);
             }
             else
             {

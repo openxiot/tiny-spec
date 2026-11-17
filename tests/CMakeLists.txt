@@ -34,7 +34,6 @@ function(tinyspec_add_test name)
     set_tests_properties(${name} PROPERTIES TIMEOUT 120)
 endfunction()
 
-tinyspec_add_test(test_json_util test_json_util.c)
 tinyspec_add_test(test_model test_model.c)
 tinyspec_add_test(test_property test_property.c)
 tinyspec_add_test(test_typedef test_typedef.c)

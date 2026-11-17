@@ -388,6 +388,53 @@ void Product_TryInvokeAction(Product *thiz, ActionOperation *o)
     }
 }
 
+void Product_TryInvokeActions(Product *thiz, ActionOperations *operations)
+{
+    RETURN_IF_FAIL(thiz);
+    RETURN_IF_FAIL(operations);
+    for (uint32_t i = 0; i < operations->actions.size; ++i)
+    {
+        ActionOperation *o = (ActionOperation *)TinyList_GetAt(&operations->actions, i);
+        if (STR_EQUAL(thiz->config.did, o->aid.did))
+        {
+            Product_TryInvoke(thiz, o);
+        }
+        else
+        {
+            Product_TryInvokeChild(thiz, o);
+        }
+    }
+}
+
+void Product_TryGetChildren(Product *thiz, ResultGetChildren *children)
+{
+    RETURN_IF_FAIL(thiz);
+    RETURN_IF_FAIL(children);
+    for (uint32_t i = 0; i < thiz->children.size; ++i)
+    {
+        Child *child = (Child *)TinyList_GetAt(&thiz->children, i);
+        Child *copy = Child_New();
+        if (copy == NULL)
+        {
+            TINY_LOG_ERROR("Child_New failed");
+            continue;
+        }
+
+        if (RET_FAILED(Child_Copy(copy, child)))
+        {
+            TINY_LOG_ERROR("Child_Copy failed");
+            Child_Delete(copy);
+            continue;
+        }
+
+        if (TinyList_AddTail(&children->children, copy) == NULL)
+        {
+            TINY_LOG_ERROR("TinyList_AddTail failed");
+            Child_Delete(copy);
+        }
+    }
+}
+
 TINYCORE_RET Product_TryChangePropertyValue(Product *thiz, PropertyOperation *o, bool save)
 {
     TINYCORE_RET ret = TINY_RET_OK;

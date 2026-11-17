@@ -10,7 +10,7 @@
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/operation/action_operation.h>
-#include <tinyspec/json_util.h>
+#include <tinycore/json_array.h>
 
 ActionOperation * ActionOperation_New(void)
 {

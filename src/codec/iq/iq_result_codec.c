@@ -52,7 +52,10 @@ static bool addResultContent(IQResult *result, JsonObject *content)
 
         case IQ_METHOD_INVOKE_ACTION:
             done = InvokeActionCodec_EncodeResult(&result->content.invokeAction, content);
-            break;            done = InvokeActionsCodec_EncodeResult(&result->content.invokeActions, content);
+            break;
+
+        case IQ_METHOD_INVOKE_ACTIONS:
+            done = InvokeActionsCodec_EncodeResult(&result->content.invokeActions, content);
             break;
 
         case IQ_METHOD_GET_CHILDREN:
@@ -122,7 +125,10 @@ static TINYCORE_RET decodeResultContent(IQResult *result, JsonObject *content)
 
         case IQ_METHOD_INVOKE_ACTION:
             ret = InvokeActionCodec_DecodeResult(content, &result->content.invokeAction);
-            break;            ret = InvokeActionsCodec_DecodeResult(content, &result->content.invokeActions);
+            break;
+
+        case IQ_METHOD_INVOKE_ACTIONS:
+            ret = InvokeActionsCodec_DecodeResult(content, &result->content.invokeActions);
             break;
 
         case IQ_METHOD_GET_CHILDREN:
