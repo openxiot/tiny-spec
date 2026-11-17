@@ -1,0 +1,45 @@
+---
+# C 语言规范：全量 Allman（所有复合语句与函数/结构体开括号另起一行）
+# CLion 会自动识别本文件。
+
+BasedOnStyle: LLVM
+Language: Cpp
+
+# 缩进 4 空格
+UseTab: Never
+IndentWidth: 4
+TabWidth: 4
+ContinuationIndentWidth: 4
+
+# 全量 Allman：函数、struct/class、if/while/for/switch 的开括号都另起一行
+BreakBeforeBraces: Allman
+
+# 字段对齐（结构体成员最大长度对齐）
+AlignAfterOpenBracket: DontAlign
+AlignConsecutiveAssignments: None
+AlignOperands: Align
+
+# 指针靠右（int *p）
+PointerAlignment: Right
+DerivePointerAlignment: false
+
+# 注释保留 /* */ 块注释风格
+CommentPragmas: '^ IWYU pragma:'
+
+# 允许 100 列内不折行
+ColumnLimit: 100
+
+# 运算符与 = 两侧加空格
+SpaceBeforeAssignmentOperators: true
+
+# 小括号内不加空格（int f(int a, int b)）
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false
+
+# 函数名与左括号之间不加空格
+SpaceBeforeParens: ControlStatements
+
+# 硬性规范：if/else/while/for 无论体里几条语句，一律加 {}（单语句也加，杜绝缺花括号隐患）。
+# InsertBraces: true 会对所有缺花括号的控制语句补块；唯一例外是条件编译(如 #if X; #endif 内单语句)，
+# 那种情况 clang-format 不补，因为补了会改变语义——符合 C 惯例，属预期。
+InsertBraces: true

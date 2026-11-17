@@ -9,8 +9,12 @@
 
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
-#include <tinyspec/typedef/product/product.h>
 #include <tinyspec/typedef/product/child/child.h>
+#include <tinyspec/typedef/product/product.h>
+
+#include "tinyspec/codec/stanza_codec.h"
+#include "tinyspec/dispatch/dispatch.h"
+#include "tinyspec/stanza/stanza.h"
 
 static TINYCORE_RET Product_Construct(Product *thiz);
 
@@ -18,12 +22,12 @@ static void Product_Dispose(Product *thiz);
 
 static void child_release_handler(void *data, void *ctx)
 {
-    (void) ctx;
+    (void)ctx;
 
     Child_Delete(data);
 }
 
-Product* Product_New(void)
+Product *Product_New(void)
 {
     Product *thiz = NULL;
 
@@ -111,4 +115,31 @@ bool Product_CheckHandler(Product *thiz)
     }
 
     return true;
+}
+
+void Product_OnReceive(Product *thiz, JsonObject *data)
+{
+    Stanza *stanza = NULL;
+
+    RETURN_IF_FAIL(thiz);
+    RETURN_IF_FAIL(data);
+
+    do
+    {
+        stanza = StanzaCodec_Decode(data);
+        if (stanza == NULL)
+        {
+            break;
+        }
+
+        if (stanza->type == STANZA_IQ)
+        {
+            dispatch_iq(thiz, &stanza->data.iq);
+        }
+    } while (false);
+
+    if (stanza != NULL)
+    {
+        Stanza_Delete(stanza);
+    }
 }

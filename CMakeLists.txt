@@ -140,7 +140,11 @@ set(TINYSPEC_SOURCES
         src/codec/iq/device/verify/initialize_codec.c
         src/codec/iq/device/verify/verify_finish_codec.c
         src/codec/iq/device/verify/verify_start_codec.c
-        src/codec/message/message_codec.c)
+        src/codec/message/message_codec.c
+
+        # Dispatch
+        src/dispatch/dispatch.c
+)
 
 add_library(tinyspec ${TINYSPEC_SOURCES})
 add_library(tinyspec::tinyspec ALIAS tinyspec)

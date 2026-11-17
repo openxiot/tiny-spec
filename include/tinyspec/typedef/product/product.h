@@ -21,6 +21,7 @@
 #include <tinyspec/typedef/operation/action_operation.h>
 #include <tinyspec/typedef/operation/event_operation.h>
 #include <tinyspec/typedef/device/device.h>
+#include <tinyspec/typedef/product/send/send.h>
 
 TINYSPEC_BEGIN_DECLS
 
@@ -36,6 +37,8 @@ typedef struct
     PropertyObserver            onPropertyChanged;
     EventObserver               onEventOccurred;
     void                      * context;
+    DataSend                    send;
+    void                      * sendCtx;
 } Product;
 
 TINYSPEC_API
@@ -46,6 +49,9 @@ void Product_Delete(Product *thiz);
 
 TINYSPEC_API
 bool Product_CheckHandler(Product *thiz);
+
+TINYSPEC_API
+void Product_OnReceive(Product *thiz, JsonObject *data);
 
 
 TINYSPEC_END_DECLS
