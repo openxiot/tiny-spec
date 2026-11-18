@@ -9,8 +9,11 @@
 
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
+#include <tinycore/json_array.h>
 #include <tinyspec/stanza/iq/device/manager/properties_changed.h>
+#include <tinyspec/stanza/message/message.h>
 #include <tinyspec/typedef/operation/property_operation.h>
+#include <tinyspec/typedef/notice/device/impl/device_event_occurred.h>
 #include <tinyspec/typedef/product/child/child.h>
 #include <tinyspec/typedef/product/operator/product_operator.h>
 #include <tinyspec/typedef/product/product.h>
@@ -244,6 +247,76 @@ void Product_ChangePropertyValue(Product *thiz, int siid, int piid, JsonValue *v
     {
         PropertyOperation_Delete(op);
     }
+    if (stanza != NULL)
+    {
+        Stanza_Delete(stanza);
+    }
+}
+
+/**
+ * 发送事件通知（message / event-occurred）。
+ *
+ * 构造一条 STANZA_MESSAGE：
+ *   topic  = MESSAGE_TOPIC_DEVICE（urn:xiot:device）
+ *   type   = DEVICE_NOTICE_EVENT_OCCURRED（event-occurred）
+ *   payload = { eid: "<did>.<siid>.<eiid>", arguments: <深拷贝> }
+ *
+ * arguments 按引用接收后会深拷贝一份，调用方可继续持有/释放原数组。
+ */
+void Product_NotifyEventOccurred(Product *thiz, int siid, int eiid, JsonArray *arguments)
+{
+    Stanza *stanza = NULL;
+    char id[32];
+
+    RETURN_IF_FAIL(thiz);
+
+    do
+    {
+        DeviceEventOccurred *ev = NULL;
+
+        stanza = Stanza_New(STANZA_MESSAGE);
+        if (stanza == NULL)
+        {
+            break;
+        }
+
+        Message *msg = &stanza->data.message;
+        msg->topic = MESSAGE_TOPIC_DEVICE;
+        msg->type = DEVICE_NOTICE_EVENT_OCCURRED;
+
+        Product_GetNextStanzaId(thiz, id, sizeof(id));
+        snprintf(msg->id, sizeof(msg->id), "%s", id);
+
+        ev = &msg->payload.data.device.payload.eventOccurred;
+        if (RET_FAILED(DeviceEventOccurred_Construct(ev)))
+        {
+            break;
+        }
+
+        /* 填充事件 ID：did.siid.eiid */
+        snprintf(ev->eid.did, sizeof(ev->eid.did), "%s", thiz->config.did);
+        ev->eid.siid = (uint16_t)siid;
+        ev->eid.iid = (uint16_t)eiid;
+
+        /* 深拷贝参数数组；arguments 可为 NULL（无参数事件） */
+        if (arguments != NULL)
+        {
+            ev->argument = JsonArray_NewFrom(arguments);
+            if (ev->argument == NULL)
+            {
+                TINY_LOG_WARN("Product_NotifyEventOccurred: 参数数组拷贝失败");
+                break;
+            }
+        }
+
+        const TinyRet ret = send_stanza(thiz, stanza);
+        if (RET_FAILED(ret))
+        {
+            TINY_LOG_WARN("send_stanza: %s", TinyRet_GetDescription(ret));
+            break;
+        }
+    } while (false);
+
     if (stanza != NULL)
     {
         Stanza_Delete(stanza);

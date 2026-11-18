@@ -69,6 +69,9 @@ void Product_SendPing(Product *thiz);
 TINYSPEC_API
 void Product_ChangePropertyValue(Product *thiz, int siid, int piid, JsonValue *value);
 
+TINYSPEC_API
+void Product_NotifyEventOccurred(Product *thiz, int siid, int eiid, JsonArray * arguments);
+
 
 TINYSPEC_END_DECLS
 
