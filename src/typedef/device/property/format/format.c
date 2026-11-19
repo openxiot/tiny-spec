@@ -158,8 +158,13 @@ Format Format_FromString(const char *value)
 
 bool Format_CheckInteger(Format format, long value)
 {
-    long min = 0;
-    long max = 0;
+    /*
+     * 范围常量一律用 64 位：目标板是 ILP32（long 只有 32 位），
+     * 0xFFFFFFFF 赋给 long 会回绕成 -1，导致 uint32 属性任何非负数
+     * 都被判非法（宿主机 LP64 上测不出来）。
+     */
+    int64_t min = 0;
+    int64_t max = 0;
 
     switch (format)
     {
@@ -175,7 +180,7 @@ bool Format_CheckInteger(Format format, long value)
 
         case FORMAT_UINT32:
             min = 0;
-            max = 0xFFFFFFFF;
+            max = 4294967295LL;   /* UINT32_MAX */
             break;
 
         case FORMAT_INT8:
@@ -189,8 +194,8 @@ bool Format_CheckInteger(Format format, long value)
             break;
 
         case FORMAT_INT32:
-            min = 0 - 0x7FFFFFFF;
-            max = 0x7FFFFFFF;
+            min = -2147483648LL;  /* INT32_MIN */
+            max = 2147483647LL;   /* INT32_MAX */
             break;
 
         case FORMAT_INT64:
@@ -203,5 +208,5 @@ bool Format_CheckInteger(Format format, long value)
             return false;
     }
 
-    return (value >= min && value <= max);
+    return ((int64_t)value >= min && (int64_t)value <= max);
 }
