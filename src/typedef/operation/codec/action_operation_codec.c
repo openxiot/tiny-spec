@@ -11,6 +11,88 @@
 
 #include <tinyspec/typedef/xid/codec/action_id_codec.h>
 #include <tinycore/json_array.h>
+#include <tinycore/json_object.h>
+#include <tinycore/json_value.h>
+
+/*
+ * 平台下发的 action 入参是属性式数组（按动作声明的输入顺序）：
+ *   "in": [ {"piid":2,"values":[134144]}, {"piid":3,"values":["..."]}, ... ]
+ * 而生成的 action handler 按位置读取 in[0..n]（JsonNumber/JsonString）。
+ * 这里把每个条目的 values 按顺序展开成位置参数；老式纯值数组保持原样。
+ */
+static TinyRet copyInvocationInput(JsonArray *dst, const JsonArray *src)
+{
+    TinyRet ret = TINY_RET_OK;
+    uint32_t i, j;
+
+    JsonArray_Clean(dst);
+
+    for (i = 0; i < JsonArray_GetSize(src); i++)
+    {
+        JsonValue *value = JsonArray_GetValue(src, i);
+        JsonObject *input = JsonArray_GetObject(src, i);
+        JsonArray *values = NULL;
+
+        if (value == NULL)
+        {
+            continue;
+        }
+
+        if (input != NULL)
+        {
+            values = JsonObject_GetArray(input, "values");
+            if (values != NULL)
+            {
+                /* values 为空也占一个位置，避免后续参数错位 */
+                if (JsonArray_GetSize(values) == 0)
+                {
+                    if (RET_FAILED(JsonArray_AddNull(dst)))
+                    {
+                        ret = TINY_RET_E_NO_MEMORY;
+                        break;
+                    }
+                }
+
+                for (j = 0; j < JsonArray_GetSize(values); j++)
+                {
+                    JsonValue *v = JsonArray_GetValue(values, j);
+                    JsonValue *copy = (v != NULL) ? JsonValue_NewFrom(v) : NULL;
+
+                    if (copy == NULL || RET_FAILED(JsonArray_AddValue(dst, copy)))
+                    {
+                        if (copy != NULL)
+                        {
+                            JsonValue_Delete(copy);
+                        }
+                        ret = TINY_RET_E_NO_MEMORY;
+                        break;
+                    }
+                }
+                if (RET_FAILED(ret))
+                {
+                    break;
+                }
+                continue;
+            }
+        }
+
+        {
+            JsonValue *copy = JsonValue_NewFrom(value);
+
+            if (copy == NULL || RET_FAILED(JsonArray_AddValue(dst, copy)))
+            {
+                if (copy != NULL)
+                {
+                    JsonValue_Delete(copy);
+                }
+                ret = TINY_RET_E_NO_MEMORY;
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
 
 bool ActionOperationCodec_Invoke_Query_Encode(ActionOperation *operation, JsonObject *content)
 {
@@ -48,9 +130,9 @@ TinyRet ActionOperationCodec_Invoke_Query_Decode(JsonObject *content, ActionOper
 
         if (in != NULL)
         {
-            if (RET_FAILED(JsonArray_CopyInto(&operation->in, in)))
+            if (RET_FAILED(copyInvocationInput(&operation->in, in)))
             {
-                TINY_LOG_ERROR("JsonArray_Copy FAILED");
+                TINY_LOG_ERROR("action input decode FAILED");
                 operation->status = -1000;
                 break;
             }

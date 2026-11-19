@@ -58,7 +58,10 @@ static bool addQueryContent(IQQuery *query, JsonObject *content)
 
         case IQ_METHOD_INVOKE_ACTION:
             done = InvokeActionCodec_EncodeQuery(&query->content.invokeAction, content);
-            break;            done = InvokeActionsCodec_EncodeQuery(&query->content.invokeActions, content);
+            break;
+
+        case IQ_METHOD_INVOKE_ACTIONS:
+            done = InvokeActionsCodec_EncodeQuery(&query->content.invokeActions, content);
             break;
 
         case IQ_METHOD_GET_CHILDREN:
@@ -130,7 +133,10 @@ static TinyRet decodeQueryContent(IQQuery *query, JsonObject *content)
 
         case IQ_METHOD_INVOKE_ACTION:
             ret = InvokeActionCodec_DecodeQuery(content, &query->content.invokeAction);
-            break;            ret = InvokeActionsCodec_DecodeQuery(content, &query->content.invokeActions);
+            break;
+
+        case IQ_METHOD_INVOKE_ACTIONS:
+            ret = InvokeActionsCodec_DecodeQuery(content, &query->content.invokeActions);
             break;
 
         case IQ_METHOD_GET_CHILDREN:
