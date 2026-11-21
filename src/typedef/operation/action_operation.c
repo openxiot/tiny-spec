@@ -7,10 +7,48 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <string.h>
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/operation/action_operation.h>
-#include <tinycore/json_array.h>
+
+static TinyRet ActionOperation_CopyArguments(TinyList *dst, const TinyList *src)
+{
+    uint32_t size = 0;
+    uint32_t i = 0;
+    TinyRet ret = TINY_RET_OK;
+
+    RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);
+
+    size = TinyList_GetSize(src);
+    for (i = 0; i < size; ++i)
+    {
+        const ArgumentOperation *srcOperation = (const ArgumentOperation *) TinyList_GetAt(src, i);
+        ArgumentOperation *dstOperation = NULL;
+
+        if (srcOperation == NULL)
+        {
+            continue;
+        }
+
+        dstOperation = ArgumentOperation_CopyFrom(srcOperation);
+        if (dstOperation == NULL)
+        {
+            ret = TINY_RET_E_NO_MEMORY;
+            break;
+        }
+
+        if (TinyList_AddTail(dst, dstOperation) == NULL)
+        {
+            ArgumentOperation_Delete(dstOperation);
+            ret = TINY_RET_E_NO_MEMORY;
+            break;
+        }
+    }
+
+    return ret;
+}
 
 ActionOperation * ActionOperation_New(void)
 {
@@ -52,6 +90,23 @@ TinyRet ActionOperation_Construct(ActionOperation *thiz)
 
     memset(thiz, 0, sizeof(ActionOperation));
 
+    do
+    {
+        TinyList_Construct(&thiz->in);
+        ret = ArgumentOperations_SetDeleteListener(&thiz->in);
+        if (RET_FAILED(ret))
+        {
+            break;
+        }
+
+        TinyList_Construct(&thiz->out);
+        ret = ArgumentOperations_SetDeleteListener(&thiz->out);
+        if (RET_FAILED(ret))
+        {
+            break;
+        }
+    } while (false);
+
     return ret;
 }
 
@@ -59,8 +114,8 @@ void ActionOperation_Dispose(ActionOperation *thiz)
 {
     RETURN_IF_FAIL(thiz);
 
-    JsonArray_Dispose(&thiz->in);
-    JsonArray_Dispose(&thiz->out);
+    TinyList_Dispose(&thiz->in);
+    TinyList_Dispose(&thiz->out);
 }
 
 TinyRet ActionOperation_Copy(ActionOperation *dst, ActionOperation *src)
@@ -82,24 +137,18 @@ TinyRet ActionOperation_Copy(ActionOperation *dst, ActionOperation *src)
         dst->aid.siid = src->aid.siid;
         dst->aid.iid = src->aid.iid;
         dst->status = src->status;
+        dst->argumentsCompact = src->argumentsCompact;
 
-        if (dst->in.values.size != 0)
-        {
-            JsonArray_Dispose(&dst->in);
-        }
+        TinyList_RemoveAll(&dst->in);
+        TinyList_RemoveAll(&dst->out);
 
-        if (dst->out.values.size != 0)
-        {
-            JsonArray_Dispose(&dst->out);
-        }
-
-        ret = JsonArray_CopyInto(&dst->in, &src->in);
+        ret = ActionOperation_CopyArguments(&dst->in, &src->in);
         if (RET_FAILED(ret))
         {
             break;
         }
 
-        ret = JsonArray_CopyInto(&dst->out, &src->out);
+        ret = ActionOperation_CopyArguments(&dst->out, &src->out);
         if (RET_FAILED(ret))
         {
             break;
@@ -107,4 +156,93 @@ TinyRet ActionOperation_Copy(ActionOperation *dst, ActionOperation *src)
     } while (false);
 
     return ret;
+}
+
+ArgumentOperation * ActionOperation_GetIn(ActionOperation *thiz, uint16_t piid)
+{
+    uint32_t size = 0;
+    uint32_t i = 0;
+
+    RETURN_VAL_IF_FAIL(thiz, NULL);
+
+    size = TinyList_GetSize(&thiz->in);
+    for (i = 0; i < size; ++i)
+    {
+        ArgumentOperation *operation = (ArgumentOperation *) TinyList_GetAt(&thiz->in, i);
+
+        if (operation != NULL && operation->piid == piid)
+        {
+            return operation;
+        }
+    }
+
+    return NULL;
+}
+
+ArgumentOperation * ActionOperation_GetOut(ActionOperation *thiz, uint16_t piid)
+{
+    uint32_t size = 0;
+    uint32_t i = 0;
+
+    RETURN_VAL_IF_FAIL(thiz, NULL);
+
+    size = TinyList_GetSize(&thiz->out);
+    for (i = 0; i < size; ++i)
+    {
+        ArgumentOperation *operation = (ArgumentOperation *) TinyList_GetAt(&thiz->out, i);
+
+        if (operation != NULL && operation->piid == piid)
+        {
+            return operation;
+        }
+    }
+
+    return NULL;
+}
+
+static ArgumentOperation * ActionOperation_Ensure(TinyList *operations, uint16_t piid)
+{
+    ArgumentOperation *operation = NULL;
+    uint32_t size = 0;
+    uint32_t i = 0;
+
+    RETURN_VAL_IF_FAIL(operations, NULL);
+
+    size = TinyList_GetSize(operations);
+    for (i = 0; i < size; ++i)
+    {
+        operation = (ArgumentOperation *) TinyList_GetAt(operations, i);
+        if (operation != NULL && operation->piid == piid)
+        {
+            return operation;
+        }
+    }
+
+    operation = ArgumentOperation_New(piid);
+    if (operation == NULL)
+    {
+        return NULL;
+    }
+
+    if (TinyList_AddTail(operations, operation) == NULL)
+    {
+        ArgumentOperation_Delete(operation);
+        return NULL;
+    }
+
+    return operation;
+}
+
+ArgumentOperation * ActionOperation_EnsureIn(ActionOperation *thiz, uint16_t piid)
+{
+    RETURN_VAL_IF_FAIL(thiz, NULL);
+
+    return ActionOperation_Ensure(&thiz->in, piid);
+}
+
+ArgumentOperation * ActionOperation_EnsureOut(ActionOperation *thiz, uint16_t piid)
+{
+    RETURN_VAL_IF_FAIL(thiz, NULL);
+
+    return ActionOperation_Ensure(&thiz->out, piid);
 }

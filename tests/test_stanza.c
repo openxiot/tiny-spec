@@ -840,8 +840,25 @@ static void test_control_results(void)
         strncpy(action.aid.did, "did-5", IOT_DEVICE_ID_LENGTH);
         action.aid.siid = 6;
         action.aid.iid = 1;
-        TINY_TEST_CHECK(JsonArray_AddInteger(&action.out, 3) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonArray_AddString(&action.out, "done") == TINY_RET_OK);
+        {
+            ArgumentOperation *out = ActionOperation_EnsureOut(&action, 1);
+
+            TINY_TEST_CHECK(out != NULL);
+            if (out != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddInteger(&out->values, 3) == TINY_RET_OK);
+            }
+        }
+
+        {
+            ArgumentOperation *out = ActionOperation_EnsureOut(&action, 2);
+
+            TINY_TEST_CHECK(out != NULL);
+            if (out != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddString(&out->values, "done") == TINY_RET_OK);
+            }
+        }
 
         stanza = ResultInvokeAction_New("id-ia", &action);
         TINY_TEST_CHECK(stanza != NULL);

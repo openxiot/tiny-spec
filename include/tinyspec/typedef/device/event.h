@@ -37,6 +37,10 @@ void Event_Delete(Event *thiz);
 TINYSPEC_API
 TinyRet Event_ArgumentAdd(Event *thiz, uint16_t iid);
 
+/** 带 repeat 范围的参数（等价于 spec 的 repeat: [min, max]）。 */
+TINYSPEC_API
+TinyRet Event_ArgumentAddEx(Event *thiz, uint16_t iid, uint16_t min, uint16_t max);
+
 TINYSPEC_API
 void Event_TryProduce(Event *thiz, EventOperation *o);
 

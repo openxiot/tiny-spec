@@ -74,7 +74,14 @@ static void on_invoke(ActionOperation *operation, void *product)
 
     g_invoke_calls++;
 
-    JsonArray_AddString(&operation->out, "done");
+    {
+        ArgumentOperation *out = ActionOperation_EnsureOut(operation, 3);
+
+        if (out != NULL)
+        {
+            JsonArray_AddString(&out->values, "done");
+        }
+    }
 }
 
 static void on_invoke_empty(ActionOperation *operation, void *product)
@@ -91,7 +98,14 @@ static void on_invoke_bad(ActionOperation *operation, void *product)
 
     g_invoke_calls++;
 
-    JsonArray_AddInteger(&operation->out, 1);
+    {
+        ArgumentOperation *out = ActionOperation_EnsureOut(operation, 3);
+
+        if (out != NULL)
+        {
+            JsonArray_AddInteger(&out->values, 1);
+        }
+    }
 }
 
 static Product *make_product(const char *did)
@@ -499,13 +513,29 @@ static void test_invoke_action(void)
     TINY_TEST_CHECK(operation != NULL);
     if (operation != NULL)
     {
-        TINY_TEST_CHECK(JsonArray_AddInteger(&operation->in, 5) == TINY_RET_OK);
+        {
+            ArgumentOperation *in = ActionOperation_EnsureIn(operation, 1);
+
+            TINY_TEST_CHECK(in != NULL);
+            if (in != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddInteger(&in->values, 5) == TINY_RET_OK);
+            }
+        }
 
         Product_TryInvokeAction(product, operation);
 
         TINY_TEST_CHECK(operation->status == IOT_STATUS_COMPLETED);
         TINY_TEST_CHECK(g_invoke_calls == 1);
-        TINY_TEST_CHECK(operation->out.values.size == 1);
+        {
+            ArgumentOperation *out = ActionOperation_GetOut(operation, 3);
+
+            TINY_TEST_CHECK(out != NULL);
+            if (out != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_GetSize(&out->values) == 1);
+            }
+        }
 
         ActionOperation_Delete(operation);
     }
@@ -525,7 +555,15 @@ static void test_invoke_action(void)
     TINY_TEST_CHECK(operation != NULL);
     if (operation != NULL)
     {
-        TINY_TEST_CHECK(JsonArray_AddString(&operation->in, "x") == TINY_RET_OK);
+        {
+            ArgumentOperation *in = ActionOperation_EnsureIn(operation, 1);
+
+            TINY_TEST_CHECK(in != NULL);
+            if (in != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddString(&in->values, "x") == TINY_RET_OK);
+            }
+        }
         Product_TryInvokeAction(product, operation);
         TINY_TEST_CHECK(operation->status == IOT_STATUS_ACTION_IN_VALUE_INVALID);
         ActionOperation_Delete(operation);
@@ -591,7 +629,15 @@ static void test_invoke_action(void)
     TINY_TEST_CHECK(operation != NULL);
     if (operation != NULL)
     {
-        TINY_TEST_CHECK(JsonArray_AddInteger(&operation->in, 5) == TINY_RET_OK);
+        {
+            ArgumentOperation *in = ActionOperation_EnsureIn(operation, 1);
+
+            TINY_TEST_CHECK(in != NULL);
+            if (in != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddInteger(&in->values, 5) == TINY_RET_OK);
+            }
+        }
         Product_TryInvokeAction(product, operation);
         TINY_TEST_CHECK(operation->status == IOT_STATUS_ACTION_OUT_ERROR);
         ActionOperation_Delete(operation);
@@ -603,7 +649,15 @@ static void test_invoke_action(void)
     TINY_TEST_CHECK(operation != NULL);
     if (operation != NULL)
     {
-        TINY_TEST_CHECK(JsonArray_AddInteger(&operation->in, 5) == TINY_RET_OK);
+        {
+            ArgumentOperation *in = ActionOperation_EnsureIn(operation, 1);
+
+            TINY_TEST_CHECK(in != NULL);
+            if (in != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddInteger(&in->values, 5) == TINY_RET_OK);
+            }
+        }
         Product_TryInvokeAction(product, operation);
         TINY_TEST_CHECK(operation->status == IOT_STATUS_ACTION_OUT_VALUE_INVALID);
         ActionOperation_Delete(operation);
@@ -770,7 +824,6 @@ static void test_produce_event(void)
     Service *service = NULL;
     Event *event = NULL;
     EventOperation *operation = NULL;
-    JsonArray *arguments = NULL;
 
     reset_counters();
     product = make_full_product("did-main");
@@ -805,12 +858,14 @@ static void test_produce_event(void)
         operation->eid.siid = 1;
         operation->eid.iid = 2;
 
-        arguments = JsonArray_New();
-        TINY_TEST_CHECK(arguments != NULL);
-        if (arguments != NULL)
         {
-            TINY_TEST_CHECK(JsonArray_AddInteger(arguments, 5) == TINY_RET_OK);
-            operation->arguments = arguments;
+            ArgumentOperation *argument = EventOperation_EnsureArgument(operation, 1);
+
+            TINY_TEST_CHECK(argument != NULL);
+            if (argument != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddInteger(&argument->values, 5) == TINY_RET_OK);
+            }
         }
 
         TINY_TEST_CHECK(Product_TryProduceEvent(product, operation) == TINY_RET_OK);
@@ -827,15 +882,14 @@ static void test_produce_event(void)
         strncpy(operation->eid.did, "did-main", IOT_DEVICE_ID_LENGTH);
         operation->eid.siid = 1;
         operation->eid.iid = 2;
-        operation->arguments = JsonArray_New();
 
         TINY_TEST_CHECK(Product_TryProduceEvent(product, operation) == TINY_RET_OK);
-        TINY_TEST_CHECK(operation->status == IOT_STATUS_ACTION_IN_ERROR);
+        TINY_TEST_CHECK(operation->status == IOT_STATUS_EVENT_ARGUMENTS_ERROR);
 
         EventOperation_Delete(operation);
     }
 
-    /* a NULL argument list is treated as no arguments */
+    /* an empty argument list is treated as no arguments */
     operation = EventOperation_New();
     TINY_TEST_CHECK(operation != NULL);
     if (operation != NULL)
@@ -845,7 +899,7 @@ static void test_produce_event(void)
         operation->eid.iid = 2;
 
         TINY_TEST_CHECK(Product_TryProduceEvent(product, operation) == TINY_RET_OK);
-        TINY_TEST_CHECK(operation->status == IOT_STATUS_ACTION_IN_ERROR);
+        TINY_TEST_CHECK(operation->status == IOT_STATUS_EVENT_ARGUMENTS_ERROR);
 
         EventOperation_Delete(operation);
     }
@@ -859,12 +913,14 @@ static void test_produce_event(void)
         operation->eid.siid = 1;
         operation->eid.iid = 2;
 
-        arguments = JsonArray_New();
-        TINY_TEST_CHECK(arguments != NULL);
-        if (arguments != NULL)
         {
-            JsonArray_AddString(arguments, "x");
-            operation->arguments = arguments;
+            ArgumentOperation *argument = EventOperation_EnsureArgument(operation, 1);
+
+            TINY_TEST_CHECK(argument != NULL);
+            if (argument != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddString(&argument->values, "x") == TINY_RET_OK);
+            }
         }
 
         TINY_TEST_CHECK(Product_TryProduceEvent(product, operation) == TINY_RET_OK);

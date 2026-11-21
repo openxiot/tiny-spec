@@ -38,8 +38,15 @@ void Action_Delete(Action *thiz);
 TINYSPEC_API
 TinyRet Action_InAdd(Action *thiz, uint16_t iid);
 
+/** 带 repeat 范围的入参（等价于 spec 的 repeat: [min, max]）。 */
+TINYSPEC_API
+TinyRet Action_InAddEx(Action *thiz, uint16_t iid, uint16_t min, uint16_t max);
+
 TINYSPEC_API
 TinyRet Action_OutAdd(Action *thiz, uint16_t iid);
+
+TINYSPEC_API
+TinyRet Action_OutAddEx(Action *thiz, uint16_t iid, uint16_t min, uint16_t max);
 
 TINYSPEC_API
 void Action_TryInvoke(Action *thiz, ActionOperation *o);

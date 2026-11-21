@@ -825,7 +825,6 @@ static void test_argument_and_event(void)
     Service *service = NULL;
     Property *property = NULL;
     EventOperation *operation = NULL;
-    JsonArray *arguments = NULL;
 
     argument = Argument_New();
     TINY_TEST_CHECK(argument != NULL);
@@ -875,23 +874,27 @@ static void test_argument_and_event(void)
     TINY_TEST_CHECK(operation != NULL);
     if (event != NULL && operation != NULL)
     {
-        arguments = JsonArray_New();
-        TINY_TEST_CHECK(arguments != NULL);
-        operation->arguments = arguments;
-
         TINY_TEST_CHECK(Event_ArgumentAdd(event, 2) == TINY_RET_OK);
         TINY_TEST_CHECK(event->arguments.size == 1);
 
-        /* size mismatch */
+        /* required argument missing */
         operation->status = IOT_STATUS_COMPLETED;
         Event_TryProduce(event, operation);
-        TINY_TEST_CHECK(operation->status == IOT_STATUS_ACTION_IN_ERROR);
+        TINY_TEST_CHECK(operation->status == IOT_STATUS_EVENT_ARGUMENTS_ERROR);
 
         /* no service attached */
-        JsonArray_AddBoolean(operation->arguments, true);
+        {
+            ArgumentOperation *eventArgument = EventOperation_EnsureArgument(operation, 2);
+            TINY_TEST_CHECK(eventArgument != NULL);
+            if (eventArgument != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddBoolean(&eventArgument->values, true) == TINY_RET_OK);
+            }
+        }
+
         operation->status = IOT_STATUS_COMPLETED;
         Event_TryProduce(event, operation);
-        TINY_TEST_CHECK(operation->status == IOT_STATUS_INTERNAL_ERROR);
+        TINY_TEST_CHECK(operation->status == IOT_STATUS_EVENT_ARGUMENTS_ERROR);
     }
     if (operation != NULL)
     {
@@ -923,17 +926,25 @@ static void test_argument_and_event(void)
         TINY_TEST_CHECK(operation != NULL);
         if (operation != NULL)
         {
-            operation->arguments = JsonArray_New();
-            TINY_TEST_CHECK(operation->arguments != NULL);
-            TINY_TEST_CHECK(JsonArray_AddBoolean(operation->arguments, true) == TINY_RET_OK);
+            ArgumentOperation *eventArgument = EventOperation_EnsureArgument(operation, 2);
+
+            TINY_TEST_CHECK(eventArgument != NULL);
+            if (eventArgument != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_AddBoolean(&eventArgument->values, true) == TINY_RET_OK);
+            }
 
             operation->status = IOT_STATUS_COMPLETED;
             Event_TryProduce(event, operation);
             TINY_TEST_CHECK(operation->status == IOT_STATUS_COMPLETED);
 
             /* invalid argument value */
-            JsonArray_Clean(operation->arguments);
-            TINY_TEST_CHECK(JsonArray_AddInteger(operation->arguments, 5) == TINY_RET_OK);
+            if (eventArgument != NULL)
+            {
+                JsonArray_Clean(&eventArgument->values);
+                TINY_TEST_CHECK(JsonArray_AddInteger(&eventArgument->values, 5) == TINY_RET_OK);
+            }
+
             operation->status = IOT_STATUS_COMPLETED;
             Event_TryProduce(event, operation);
             TINY_TEST_CHECK(operation->status == IOT_STATUS_EVENT_ARGUMENTS_VALUE_ERROR);

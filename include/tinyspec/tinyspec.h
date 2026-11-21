@@ -37,8 +37,10 @@
 #include <tinyspec/typedef/notice/device/impl/device_property_changed_codec.h>
 #include <tinyspec/typedef/notice/notice.h>
 #include <tinyspec/typedef/operation/action_operation.h>
+#include <tinyspec/typedef/operation/argument_operation.h>
 #include <tinyspec/typedef/operation/codec/action_operation_codec.h>
 #include <tinyspec/typedef/operation/codec/property_operations_codec.h>
+#include <tinyspec/typedef/operation/combination_value.h>
 #include <tinyspec/typedef/operation/event_operation.h>
 #include <tinyspec/typedef/operation/property_operation.h>
 #include <tinyspec/typedef/operation/property_operations.h>

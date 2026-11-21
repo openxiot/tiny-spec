@@ -91,7 +91,15 @@ bool GetPropertyCodec_EncodeResult(ResultGetProperty *result, JsonObject *conten
 
         if (result->property.status == 0)
         {
-            ret = JsonObject_AddValue(object, "value", result->property.value);
+            JsonValue *wire = PropertyOperation_NewWireValue(&result->property);
+            if (wire == NULL)
+            {
+                JsonObject_Delete(object);
+                break;
+            }
+
+            ret = JsonObject_AddValue(object, "value", wire);
+            JsonValue_Delete(wire);
             if (RET_FAILED(ret))
             {
                 JsonObject_Delete(object);
@@ -192,11 +200,10 @@ TinyRet GetPropertyCodec_DecodeResult(JsonObject *content, ResultGetProperty *re
                 break;
             }
 
-            result->property.value = JsonValue_NewFrom(value);
-            if (result->property.value == NULL)
+            ret = PropertyOperation_SetWireValue(&result->property, value);
+            if (RET_FAILED(ret))
             {
-                TINY_LOG_ERROR("JsonValue_NewFrom failed");
-                ret = TINY_RET_E_NO_MEMORY;
+                TINY_LOG_ERROR("PropertyOperation_SetWireValue failed");
                 break;
             }
         }

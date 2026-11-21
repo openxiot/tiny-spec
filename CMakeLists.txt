@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(tinyspec
-        VERSION 1.0.1
+        VERSION 1.1.0
         DESCRIPTION "TinySpec - a device framework for xiot"
         HOMEPAGE_URL "https://github.com/openxiot/tiny-spec"
         LANGUAGES C)
@@ -76,6 +76,8 @@ set(TINYSPEC_SOURCES
         src/typedef/notice/device/impl/device_property_changed_codec.c
         src/typedef/operation/action_operation.c
         src/typedef/operation/action_operations.c
+        src/typedef/operation/argument_operation.c
+        src/typedef/operation/combination_value.c
         src/typedef/operation/event_operation.c
         src/typedef/operation/property_operation.c
         src/typedef/operation/property_operations.c

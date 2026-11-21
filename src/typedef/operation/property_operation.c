@@ -9,7 +9,55 @@
 
 #include <tinycore/tiny_log.h>
 #include <tinycore/tiny_alloc.h>
+#include <tinyspec/typedef/operation/combination_value.h>
 #include <tinyspec/typedef/operation/property_operation.h>
+
+TinyRet PropertyOperation_SetWireValue(PropertyOperation *thiz, const JsonValue *wire)
+{
+    JsonValue *decoded = NULL;
+    JsonValue *newValue = NULL;
+    bool compact = false;
+
+    RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(wire, TINY_RET_E_NULL_PTR);
+
+    decoded = CombinationValue_Decode(wire, &compact);
+    if (decoded != NULL)
+    {
+        newValue = decoded;
+    }
+    else
+    {
+        newValue = JsonValue_NewFrom(wire);
+        if (newValue == NULL)
+        {
+            return TINY_RET_E_NO_MEMORY;
+        }
+        compact = false;
+    }
+
+    if (thiz->value != NULL)
+    {
+        JsonValue_Delete(thiz->value);
+    }
+
+    thiz->value = newValue;
+    thiz->argumentsCompact = compact;
+
+    return TINY_RET_OK;
+}
+
+JsonValue * PropertyOperation_NewWireValue(const PropertyOperation *thiz)
+{
+    RETURN_VAL_IF_FAIL(thiz, NULL);
+
+    if (thiz->value == NULL)
+    {
+        return NULL;
+    }
+
+    return CombinationValue_Encode(thiz->value, thiz->argumentsCompact);
+}
 
 TinyRet PropertyOperation_Construct(PropertyOperation *thiz)
 {
@@ -87,8 +135,7 @@ PropertyOperation * PropertyOperation_NewValue(const char *did, uint16_t siid, u
         thiz->pid.siid = siid;
         thiz->pid.iid = piid;
 
-        thiz->value = JsonValue_NewFrom(value);
-        if (thiz->value == NULL)
+        if (RET_FAILED(PropertyOperation_SetWireValue(thiz, value)))
         {
             PropertyOperation_Delete(thiz);
             thiz = NULL;
@@ -144,6 +191,7 @@ TinyRet PropertyOperation_Copy(PropertyOperation *thiz, PropertyOperation *other
         thiz->pid.siid = other->pid.siid;
         thiz->pid.iid = other->pid.iid;
         thiz->status = other->status;
+        thiz->argumentsCompact = other->argumentsCompact;
         strncpy(thiz->description, other->description, IOT_DESCRIPTION_LENGTH);
 
         if (thiz->value != NULL)

@@ -7,9 +7,11 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <string.h>
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
 #include <tinycore/json_array.h>
+#include <tinycore/json_value.h>
 #include <tinyspec/stanza/iq/device/manager/properties_changed.h>
 #include <tinyspec/stanza/message/message.h>
 #include <tinyspec/typedef/operation/property_operation.h>
@@ -253,6 +255,68 @@ void Product_ChangePropertyValue(Product *thiz, int siid, int piid, JsonValue *v
     }
 }
 
+/*
+ * 按事件定义校验 wire 参数数组：piid 对应、repeat 范围、取值合法性。
+ * arguments 为 [{"piid": N, "values": [...]}, ...]，可为 NULL（无参数事件）。
+ */
+static bool Product_CheckEventArguments(Product *thiz, uint16_t siid, uint16_t eiid, const JsonArray *arguments)
+{
+    EventOperation operation;
+    JsonValue *wire = NULL;
+    bool valid = false;
+
+    if (RET_FAILED(EventOperation_Construct(&operation)))
+    {
+        return false;
+    }
+
+    do
+    {
+        JsonArray *copy = NULL;
+
+        snprintf(operation.eid.did, sizeof(operation.eid.did), "%s", thiz->config.did);
+        operation.eid.siid = siid;
+        operation.eid.iid = eiid;
+
+        if (arguments != NULL && JsonArray_GetSize(arguments) > 0)
+        {
+            copy = JsonArray_NewFrom(arguments);
+            if (copy == NULL)
+            {
+                break;
+            }
+
+            wire = JsonValue_NewArray(copy);
+            if (wire == NULL)
+            {
+                JsonArray_Delete(copy);
+                break;
+            }
+
+            if (RET_FAILED(ArgumentOperations_Decode(wire, &operation.arguments, &operation.argumentsCompact)))
+            {
+                break;
+            }
+        }
+
+        if (RET_FAILED(Product_TryProduceEvent(thiz, &operation)))
+        {
+            break;
+        }
+
+        valid = (operation.status == 0);
+    } while (false);
+
+    if (wire != NULL)
+    {
+        JsonValue_Delete(wire);
+    }
+
+    EventOperation_Dispose(&operation);
+
+    return valid;
+}
+
 /**
  * 发送事件通知（message / event-occurred）。
  *
@@ -269,6 +333,12 @@ void Product_NotifyEventOccurred(Product *thiz, int siid, int eiid, JsonArray *a
     char id[32];
 
     RETURN_IF_FAIL(thiz);
+
+    if (!Product_CheckEventArguments(thiz, (uint16_t) siid, (uint16_t) eiid, arguments))
+    {
+        TINY_LOG_WARN("Product_NotifyEventOccurred: 参数校验失败 (siid: %d, eiid: %d)", siid, eiid);
+        return;
+    }
 
     do
     {

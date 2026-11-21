@@ -38,10 +38,22 @@ bool SetPropertyCodec_EncodeQuery(QuerySetProperty *query, JsonObject *content)
             break;
         }
 
-        if (RET_FAILED(JsonObject_AddValue(object, "value", query->property.value)))
         {
-            JsonObject_Delete(object);
-            break;
+            JsonValue *wire = PropertyOperation_NewWireValue(&query->property);
+            if (wire == NULL)
+            {
+                JsonObject_Delete(object);
+                break;
+            }
+
+            if (RET_FAILED(JsonObject_AddValue(object, "value", wire)))
+            {
+                JsonValue_Delete(wire);
+                JsonObject_Delete(object);
+                break;
+            }
+
+            JsonValue_Delete(wire);
         }
 
         if (RET_FAILED(JsonObject_PutObject(content, "property", object)))
@@ -105,11 +117,10 @@ TinyRet SetPropertyCodec_DecodeQuery(JsonObject *content, QuerySetProperty *quer
         }
         else
         {
-            query->property.value = JsonValue_NewFrom(value);
-            if (query->property.value == NULL)
+            ret = PropertyOperation_SetWireValue(&query->property, value);
+            if (RET_FAILED(ret))
             {
-                TINY_LOG_ERROR("JsonValue_NewFrom failed");
-                ret = TINY_RET_E_NO_MEMORY;
+                TINY_LOG_ERROR("PropertyOperation_SetWireValue failed");
                 break;
             }
         }

@@ -16,6 +16,8 @@ static TinyRet Argument_Construct(Argument *thiz, uint16_t iid)
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
     thiz->iid = iid;
+    thiz->minRepeat = 1;
+    thiz->maxRepeat = 1;
 
     return TINY_RET_OK;
 }

@@ -20,6 +20,7 @@ typedef struct
 {
     PropertyId             pid;
     JsonValue            * value;
+    bool                   argumentsCompact;
 } DevicePropertyChanged;
 
 TINYSPEC_API

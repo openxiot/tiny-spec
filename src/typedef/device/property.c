@@ -71,7 +71,8 @@ Property *Property_NewInstance(uint16_t iid,
     return thiz;
 }
 
-static TinyRet Property_Construct(Property *thiz, uint16_t iid) {
+static TinyRet Property_Construct(Property *thiz, uint16_t iid)
+{
     TinyRet ret;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
@@ -142,7 +143,8 @@ void Property_SetUnit(Property *thiz, const char *unit) {
     }
 }
 
-TinyRet Property_MemberAdd(Property *thiz, Property *member) {
+TinyRet Property_MemberAdd(Property *thiz, Property *member)
+{
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
     RETURN_VAL_IF_FAIL(member, TINY_RET_E_NULL_PTR);
 

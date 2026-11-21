@@ -10,6 +10,7 @@
 #include <tinyspec/typedef/xid/codec/property_id_codec.h>
 #include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/notice/device/impl/device_property_changed_codec.h>
+#include <tinyspec/typedef/operation/combination_value.h>
 
 TinyRet DevicePropertyChangedCodec_Encode(JsonObject *payload, DevicePropertyChanged *propertyChanged)
 {
@@ -31,12 +32,22 @@ TinyRet DevicePropertyChangedCodec_Encode(JsonObject *payload, DevicePropertyCha
             break;
         }
 
-        ret = JsonObject_AddValue(payload, "value", propertyChanged->value);
-        if (RET_FAILED(ret))
         {
-            TINY_LOG_ERROR("out of memory");
-            ret = TINY_RET_E_OUT_OF_MEMORY;
-            break;
+            JsonValue *wire = CombinationValue_Encode(propertyChanged->value, propertyChanged->argumentsCompact);
+            if (wire == NULL)
+            {
+                ret = TINY_RET_E_NO_MEMORY;
+                break;
+            }
+
+            ret = JsonObject_AddValue(payload, "value", wire);
+            JsonValue_Delete(wire);
+            if (RET_FAILED(ret))
+            {
+                TINY_LOG_ERROR("out of memory");
+                ret = TINY_RET_E_OUT_OF_MEMORY;
+                break;
+            }
         }
     } while (false);
 
@@ -76,12 +87,27 @@ TinyRet DevicePropertyChangedCodec_Decode(DevicePropertyChanged *propertyChanged
             break;
         }
 
-        propertyChanged->value = JsonValue_NewFrom(value);
-        if (propertyChanged->value == NULL)
         {
-            TINY_LOG_ERROR("JsonValue_NewFrom failed");
-            ret = TINY_RET_E_PARAM_INVALID;
-            break;
+            bool compact = false;
+            JsonValue *decoded = CombinationValue_Decode(value, &compact);
+
+            if (decoded != NULL)
+            {
+                propertyChanged->value = decoded;
+                propertyChanged->argumentsCompact = compact;
+            }
+            else
+            {
+                propertyChanged->value = JsonValue_NewFrom(value);
+                propertyChanged->argumentsCompact = false;
+            }
+
+            if (propertyChanged->value == NULL)
+            {
+                TINY_LOG_ERROR("JsonValue_NewFrom failed");
+                ret = TINY_RET_E_PARAM_INVALID;
+                break;
+            }
         }
     } while (false);
 

@@ -7,9 +7,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <string.h>
+#include <tinycore/json_array.h>
+#include <tinycore/json_value.h>
+#include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/device/service.h>
 #include <tinyspec/typedef/status/iot_status.h>
-#include <tinycore/tiny_log.h>
 #include <tinyspec/typedef/product/operator/product_operator.h>
 
 static Product * Product_GetChild(Product *thiz, const char * did)

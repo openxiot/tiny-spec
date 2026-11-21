@@ -71,7 +71,7 @@ Action* Action_NewInstance(uint16_t iid, const char *ns, const char *name, uint3
             break;
         }
 
-        if (RET_FAILED(Urn_Set(&thiz->type, ns, PROPERTY, name, uuid, vendor)))
+        if (RET_FAILED(Urn_Set(&thiz->type, ns, ACTION, name, uuid, vendor)))
         {
             Action_Delete(thiz);
             thiz = NULL;
@@ -129,22 +129,34 @@ void Action_Delete(Action *thiz)
     tiny_free(thiz);
 }
 
-TinyRet Action_InAdd(Action *thiz, uint16_t iid)
+static TinyRet Action_AddArgument(Action *thiz, TinyList *arguments, uint16_t iid, uint16_t min, uint16_t max)
 {
     TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(arguments, TINY_RET_E_NULL_PTR);
 
     do
     {
-        Argument * argument = Argument_NewValue(iid);
+        Argument * argument = NULL;
+
+        if (min > max)
+        {
+            ret = TINY_RET_E_PARAM_INVALID;
+            break;
+        }
+
+        argument = Argument_NewValue(iid);
         if (argument == NULL)
         {
             ret = TINY_RET_E_NO_MEMORY;
             break;
         }
 
-        if (TinyList_AddTail(&thiz->in, argument) == NULL)
+        argument->minRepeat = min;
+        argument->maxRepeat = max;
+
+        if (TinyList_AddTail(arguments, argument) == NULL)
         {
             ret = TINY_RET_E_NO_MEMORY;
             Argument_Delete(argument);
@@ -153,49 +165,119 @@ TinyRet Action_InAdd(Action *thiz, uint16_t iid)
     } while(false);
 
     return ret;
+}
+
+TinyRet Action_InAdd(Action *thiz, uint16_t iid)
+{
+    return Action_InAddEx(thiz, iid, 1, 1);
+}
+
+TinyRet Action_InAddEx(Action *thiz, uint16_t iid, uint16_t min, uint16_t max)
+{
+    RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
+
+    return Action_AddArgument(thiz, &thiz->in, iid, min, max);
 }
 
 TinyRet Action_OutAdd(Action *thiz, uint16_t iid)
 {
+    return Action_OutAddEx(thiz, iid, 1, 1);
+}
+
+TinyRet Action_OutAddEx(Action *thiz, uint16_t iid, uint16_t min, uint16_t max)
+{
+    RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
+
+    return Action_AddArgument(thiz, &thiz->out, iid, min, max);
+}
+
+static TinyRet Action_CheckArguments(Action *thiz,
+                                          TinyList *definitions,
+                                          ActionOperation *o,
+                                          bool in,
+                                          int missingStatus,
+                                          int invalidStatus)
+{
+    uint32_t size = 0;
+    uint32_t i = 0;
     TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(definitions, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(o, TINY_RET_E_NULL_PTR);
 
-    do
+    size = TinyList_GetSize(definitions);
+    for (i = 0; i < size; ++i)
     {
-        Argument * argument = Argument_NewValue(iid);
+        Argument *argument = (Argument *) TinyList_GetAt(definitions, i);
+        ArgumentOperation *operation = NULL;
+        Property *property = NULL;
+        uint32_t count = 0;
+        uint32_t j = 0;
+
         if (argument == NULL)
         {
-            ret = TINY_RET_E_NO_MEMORY;
+            ret = TINY_RET_E_PARAM_INVALID;
             break;
         }
 
-        if (TinyList_AddTail(&thiz->out, argument) == NULL)
+        operation = in ? ActionOperation_GetIn(o, argument->iid) : ActionOperation_GetOut(o, argument->iid);
+        property = Service_GetProperty(thiz->service, argument->iid);
+
+        if (property == NULL)
         {
-            ret = TINY_RET_E_NO_MEMORY;
-            Argument_Delete(argument);
+            TINY_LOG_ERROR("property not found: %u", (unsigned int) argument->iid);
+            o->status = missingStatus;
+            ret = TINY_RET_E_PARAM_INVALID;
             break;
         }
-    } while(false);
 
-    return ret;
-}
+        if (operation == NULL)
+        {
+            if (argument->minRepeat > 0)
+            {
+                TINY_LOG_ERROR("argument missing: %u", (unsigned int) argument->iid);
+                o->status = missingStatus;
+                ret = TINY_RET_E_PARAM_INVALID;
+                break;
+            }
 
-static Property* Action_GetProperty(Action *thiz, TinyList *arguments, uint32_t index)
-{
-    Argument * argument = NULL;
+            continue;
+        }
 
-    RETURN_VAL_IF_FAIL(thiz, NULL);
-    RETURN_VAL_IF_FAIL(arguments, NULL);
+        count = JsonArray_GetSize(&operation->values);
+        if (count < (uint32_t) argument->minRepeat || count > (uint32_t) argument->maxRepeat)
+        {
+            TINY_LOG_ERROR("argument count invalid: %u, count: %u, expected: [%u, %u]",
+                           (unsigned int) argument->iid,
+                           (unsigned int) count,
+                           (unsigned int) argument->minRepeat,
+                           (unsigned int) argument->maxRepeat);
+            o->status = missingStatus;
+            ret = TINY_RET_E_PARAM_INVALID;
+            break;
+        }
 
-    argument = (Argument *) TinyList_GetAt(arguments, index);
-    if (argument == NULL)
-    {
-        TINY_LOG_ERROR("argument not found: %u", index);
-        return NULL;
+        for (j = 0; j < count; ++j)
+        {
+            JsonValue *value = JsonArray_GetValue(&operation->values, j);
+
+            if (! Property_CheckValue(property, value))
+            {
+                TINY_LOG_ERROR("argument value invalid: %u", (unsigned int) argument->iid);
+                o->status = invalidStatus;
+                ret = TINY_RET_E_PARAM_INVALID;
+                break;
+            }
+        }
+
+        if (RET_FAILED(ret))
+        {
+            break;
+        }
     }
 
-    return Service_GetProperty(thiz->service, argument->iid);
+    return ret;
 }
 
 void Action_TryInvoke(Action *thiz, ActionOperation *o)
@@ -203,34 +285,15 @@ void Action_TryInvoke(Action *thiz, ActionOperation *o)
     RETURN_IF_FAIL(thiz);
     RETURN_IF_FAIL(o);
 
-    do
+    if (RET_FAILED(Action_CheckArguments(thiz,
+                                         &thiz->in,
+                                         o,
+                                         true,
+                                         IOT_STATUS_ACTION_IN_ERROR,
+                                         IOT_STATUS_ACTION_IN_VALUE_INVALID)))
     {
-        if (thiz->in.size != o->in.values.size)
-        {
-            TINY_LOG_ERROR("action in size invalid: %d, expected: %d", (int) (o->in.values.size), (int) (thiz->in.size));
-            o->status = IOT_STATUS_ACTION_IN_ERROR;
-            break;
-        }
-
-        for (uint32_t i = 0; i < thiz->in.size; ++i)
-        {
-            JsonValue * value = (JsonValue *)TinyList_GetAt(&o->in.values, i);
-            Property *property = Action_GetProperty(thiz, &thiz->in, i);
-            if (property == NULL)
-            {
-                TINY_LOG_ERROR("property not found");
-                o->status = IOT_STATUS_INTERNAL_ERROR;
-                break;
-            }
-
-            if (! Property_CheckValue(property, value))
-            {
-                TINY_LOG_ERROR("property value invalid, value type: %d", value->type);
-                o->status = IOT_STATUS_ACTION_IN_VALUE_INVALID;
-                break;
-            }
-        }
-    } while (false);
+        TINY_LOG_ERROR("action in invalid");
+    }
 }
 
 void Action_CheckResult(Action *thiz, ActionOperation *o)
@@ -238,36 +301,13 @@ void Action_CheckResult(Action *thiz, ActionOperation *o)
     RETURN_IF_FAIL(thiz);
     RETURN_IF_FAIL(o);
 
-    do
+    if (RET_FAILED(Action_CheckArguments(thiz,
+                                         &thiz->out,
+                                         o,
+                                         false,
+                                         IOT_STATUS_ACTION_OUT_ERROR,
+                                         IOT_STATUS_ACTION_OUT_VALUE_INVALID)))
     {
-        if (thiz->out.size != o->out.values.size)
-        {
-            o->status = IOT_STATUS_ACTION_OUT_ERROR;
-            break;
-        }
-
-        if (thiz->out.size == 0)
-        {
-            break;
-        }
-
-        for (uint32_t i = 0; i < thiz->out.size; ++i)
-        {
-            JsonValue * value = (JsonValue *)TinyList_GetAt(&o->out.values, i);
-            Property *property = Action_GetProperty(thiz, &thiz->out, i);
-            if (property == NULL)
-            {
-                TINY_LOG_ERROR("property not found");
-                o->status = IOT_STATUS_INTERNAL_ERROR;
-                break;
-            }
-
-            if (! Property_CheckValue(property, value))
-            {
-                TINY_LOG_ERROR("property value invalid");
-                o->status = IOT_STATUS_ACTION_OUT_VALUE_INVALID;
-                break;
-            }
-        }
-    } while (false);
+        TINY_LOG_ERROR("action out invalid");
+    }
 }

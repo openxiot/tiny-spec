@@ -17,6 +17,8 @@ TINYSPEC_BEGIN_DECLS
 typedef struct
 {
     uint16_t            iid;
+    uint16_t            minRepeat;
+    uint16_t            maxRepeat;
 } Argument;
 
 TINYSPEC_API

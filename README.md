@@ -123,7 +123,7 @@ The JSON document shape is unchanged from the original tiny-spec project:
 * List based models (`Device`, `Service`, `Product`, ...) take ownership of
   the objects added to them; `X_Get*()` returns borrowed pointers. Delete
   listeners free the elements when the list is disposed.
-* Errors are reported with `TINYCORE_RET` (an `int32_t` from TinyCore).
+* Errors are reported with `TinyRet` (an `int32_t` from TinyCore).
   Test for success with `RET_SUCCEEDED(ret)`; `RET_FAILED(ret)` is the
   inverse, and `TinyRet_GetDescription(ret)` renders a readable message.
 * JSON builders follow the TinyCore ownership rules: `JsonObject_PutObject`

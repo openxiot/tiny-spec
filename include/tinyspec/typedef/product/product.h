@@ -72,7 +72,6 @@ void Product_ChangePropertyValue(Product *thiz, int siid, int piid, JsonValue *v
 TINYSPEC_API
 void Product_NotifyEventOccurred(Product *thiz, int siid, int eiid, JsonArray * arguments);
 
-
 TINYSPEC_END_DECLS
 
 #endif /* TINYSPEC_IOT_TYPEDEF_PRODUCT_PRODUCT_H */

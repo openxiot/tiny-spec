@@ -88,8 +88,8 @@ static void test_operations(void)
         TINY_TEST_CHECK(action->aid.siid == 0);
         TINY_TEST_CHECK(action->aid.iid == 0);
         TINY_TEST_CHECK(action->status == 0);
-        TINY_TEST_CHECK(TinyList_IsEmpty(&action->in.values));
-        TINY_TEST_CHECK(TinyList_IsEmpty(&action->out.values));
+        TINY_TEST_CHECK(TinyList_IsEmpty(&action->in));
+        TINY_TEST_CHECK(TinyList_IsEmpty(&action->out));
         ActionOperation_Delete(action);
     }
 }

@@ -53,7 +53,16 @@ bool PropertyOperationsCodec_Set_Query_Encode(PropertyOperations *operations, Js
                 break;
             }
 
-            ret = JsonObject_AddValue(object, "value", o->value);
+            JsonValue *wire = PropertyOperation_NewWireValue(o);
+            if (wire == NULL)
+            {
+                ret = TINY_RET_E_NO_MEMORY;
+                JsonObject_Delete(object);
+                break;
+            }
+
+            ret = JsonObject_AddValue(object, "value", wire);
+            JsonValue_Delete(wire);
             if (RET_FAILED(ret))
             {
                 JsonObject_Delete(object);
@@ -158,11 +167,10 @@ TinyRet PropertyOperationsCodec_Set_Query_Decode(JsonObject *content, PropertyOp
             }
             else
             {
-                operation->value = JsonValue_NewFrom(value);
-                if (operation->value == NULL)
+                ret = PropertyOperation_SetWireValue(operation, value);
+                if (RET_FAILED(ret))
                 {
-                    TINY_LOG_ERROR("JsonValue_Copy failed");
-                    ret = TINY_RET_E_NO_MEMORY;
+                    TINY_LOG_ERROR("PropertyOperation_SetWireValue failed");
                     PropertyOperation_Delete(operation);
                     break;
                 }
@@ -523,7 +531,15 @@ bool PropertyOperationsCodec_Get_Result_Encode(PropertyOperations *operations, J
                     continue;
                 }
 
-                ret = JsonObject_AddValue(object, "value", o->value);
+                JsonValue *wire = PropertyOperation_NewWireValue(o);
+                if (wire == NULL)
+                {
+                    JsonObject_Delete(object);
+                    break;
+                }
+
+                ret = JsonObject_AddValue(object, "value", wire);
+                JsonValue_Delete(wire);
                 if (RET_FAILED(ret))
                 {
                     JsonObject_Delete(object);
@@ -661,14 +677,15 @@ TinyRet PropertyOperationsCodec_Get_Result_Decode(JsonObject *content, PropertyO
                 {
                     TINY_LOG_ERROR("value not found");
                     ret = TINY_RET_E_PARAM_INVALID;
+                    PropertyOperation_Delete(property);
                     break;
                 }
 
-                property->value = JsonValue_NewFrom(value);
-                if (property->value == NULL)
+                ret = PropertyOperation_SetWireValue(property, value);
+                if (RET_FAILED(ret))
                 {
-                    TINY_LOG_ERROR("JsonValue_NewFrom failed");
-                    ret = TINY_RET_E_NO_MEMORY;
+                    TINY_LOG_ERROR("PropertyOperation_SetWireValue failed");
+                    PropertyOperation_Delete(property);
                     break;
                 }
             }

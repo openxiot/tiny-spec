@@ -203,8 +203,8 @@ static void test_action_operation(void)
     TINY_TEST_CHECK(ActionOperation_Construct(&operation) == TINY_RET_OK);
     TINY_TEST_CHECK(operation.aid.did[0] == '\0');
     TINY_TEST_CHECK(operation.status == 0);
-    TINY_TEST_CHECK(TinyList_IsEmpty(&operation.in.values));
-    TINY_TEST_CHECK(TinyList_IsEmpty(&operation.out.values));
+    TINY_TEST_CHECK(TinyList_IsEmpty(&operation.in));
+    TINY_TEST_CHECK(TinyList_IsEmpty(&operation.out));
     ActionOperation_Dispose(&operation);
     ActionOperation_Delete(NULL);
 
@@ -224,9 +224,37 @@ static void test_action_operation(void)
     src->aid.iid = 3;
     src->status = IOT_STATUS_ACTION_IN_ERROR;
 
-    TINY_TEST_CHECK(JsonArray_AddInteger(&src->in, 1) == TINY_RET_OK);
-    TINY_TEST_CHECK(JsonArray_AddInteger(&src->in, 2) == TINY_RET_OK);
-    TINY_TEST_CHECK(JsonArray_AddBoolean(&src->out, true) == TINY_RET_OK);
+    {
+        ArgumentOperation *argument = ActionOperation_EnsureIn(src, 1);
+
+        TINY_TEST_CHECK(argument != NULL);
+        if (argument != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(&argument->values, 1) == TINY_RET_OK);
+        }
+    }
+
+    {
+        ArgumentOperation *argument = ActionOperation_EnsureIn(src, 2);
+
+        TINY_TEST_CHECK(argument != NULL);
+        if (argument != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(&argument->values, 2) == TINY_RET_OK);
+        }
+    }
+
+    {
+        ArgumentOperation *argument = ActionOperation_EnsureOut(src, 3);
+
+        TINY_TEST_CHECK(argument != NULL);
+        if (argument != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddBoolean(&argument->values, true) == TINY_RET_OK);
+        }
+    }
+
+    src->argumentsCompact = true;
 
     TINY_TEST_CHECK(ActionOperation_Copy(src, src) == TINY_RET_E_PARAM_INVALID);
     TINY_TEST_CHECK(ActionOperation_Copy(NULL, src) == TINY_RET_E_NULL_PTR);
@@ -237,13 +265,16 @@ static void test_action_operation(void)
     TINY_TEST_CHECK(dst->aid.siid == 2);
     TINY_TEST_CHECK(dst->aid.iid == 3);
     TINY_TEST_CHECK(dst->status == IOT_STATUS_ACTION_IN_ERROR);
-    TINY_TEST_CHECK(dst->in.values.size == 2);
-    TINY_TEST_CHECK(dst->out.values.size == 1);
+    TINY_TEST_CHECK(dst->argumentsCompact == true);
+    TINY_TEST_CHECK(dst->in.size == 2);
+    TINY_TEST_CHECK(dst->out.size == 1);
+    TINY_TEST_CHECK(ActionOperation_GetIn(dst, 1) != NULL);
+    TINY_TEST_CHECK(ActionOperation_GetOut(dst, 3) != NULL);
 
-    /* copying again replaces the existing arrays */
+    /* copying again replaces the existing argument lists */
     TINY_TEST_CHECK(ActionOperation_Copy(dst, src) == TINY_RET_OK);
-    TINY_TEST_CHECK(dst->in.values.size == 2);
-    TINY_TEST_CHECK(dst->out.values.size == 1);
+    TINY_TEST_CHECK(dst->in.size == 2);
+    TINY_TEST_CHECK(dst->out.size == 1);
 
     ActionOperation_Delete(dst);
     ActionOperation_Delete(src);
@@ -261,7 +292,7 @@ static void test_event_operation(void)
     TINY_TEST_CHECK(EventOperation_Construct(&operation) == TINY_RET_OK);
     TINY_TEST_CHECK(operation.eid.did[0] == '\0');
     TINY_TEST_CHECK(operation.status == 0);
-    TINY_TEST_CHECK(operation.arguments == NULL);
+    TINY_TEST_CHECK(TinyList_IsEmpty(&operation.arguments));
     EventOperation_Dispose(&operation);
     EventOperation_Delete(NULL);
 
@@ -282,13 +313,27 @@ static void test_event_operation(void)
     strncpy(src->eid.did, "did-1", IOT_DEVICE_ID_LENGTH);
     src->eid.siid = 2;
     src->eid.iid = 5;
-    src->arguments = JsonArray_New();
-    TINY_TEST_CHECK(src->arguments != NULL);
-    if (src->arguments != NULL)
     {
-        TINY_TEST_CHECK(JsonArray_AddInteger(src->arguments, 7) == TINY_RET_OK);
-        TINY_TEST_CHECK(JsonArray_AddString(src->arguments, "on") == TINY_RET_OK);
+        ArgumentOperation *argument = EventOperation_EnsureArgument(src, 1);
+
+        TINY_TEST_CHECK(argument != NULL);
+        if (argument != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(&argument->values, 7) == TINY_RET_OK);
+        }
     }
+
+    {
+        ArgumentOperation *argument = EventOperation_EnsureArgument(src, 2);
+
+        TINY_TEST_CHECK(argument != NULL);
+        if (argument != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddString(&argument->values, "on") == TINY_RET_OK);
+        }
+    }
+
+    src->argumentsCompact = true;
 
     copy = EventOperation_CopyFrom(src);
     TINY_TEST_CHECK(copy != NULL);
@@ -297,12 +342,10 @@ static void test_event_operation(void)
         TINY_TEST_CHECK(strcmp(copy->eid.did, "did-1") == 0);
         TINY_TEST_CHECK(copy->eid.siid == 2);
         TINY_TEST_CHECK(copy->eid.iid == 5);
-        TINY_TEST_CHECK(copy->arguments != NULL);
-        TINY_TEST_CHECK(copy->arguments != src->arguments);
-        if (copy->arguments != NULL)
-        {
-            TINY_TEST_CHECK(copy->arguments->values.size == 2);
-        }
+        TINY_TEST_CHECK(copy->argumentsCompact == true);
+        TINY_TEST_CHECK(copy->arguments.size == 2);
+        TINY_TEST_CHECK(EventOperation_GetArgument(copy, 1) != NULL);
+        TINY_TEST_CHECK(EventOperation_GetArgument(copy, 2) != NULL);
         EventOperation_Delete(copy);
     }
 
@@ -310,7 +353,7 @@ static void test_event_operation(void)
     TINY_TEST_CHECK(copy != NULL);
     if (copy != NULL)
     {
-        TINY_TEST_CHECK(copy->arguments == NULL);
+        TINY_TEST_CHECK(TinyList_IsEmpty(&copy->arguments));
         EventOperation_Delete(copy);
     }
 
@@ -322,11 +365,7 @@ static void test_event_operation(void)
     TINY_TEST_CHECK(strcmp(dst->eid.did, "did-1") == 0);
     TINY_TEST_CHECK(dst->eid.siid == 2);
     TINY_TEST_CHECK(dst->eid.iid == 5);
-    TINY_TEST_CHECK(dst->arguments != NULL);
-    if (dst->arguments != NULL)
-    {
-        TINY_TEST_CHECK(dst->arguments->values.size == 2);
-    }
+    TINY_TEST_CHECK(dst->arguments.size == 2);
 
     EventOperation_Delete(dst);
     EventOperation_Delete(empty);
@@ -794,15 +833,40 @@ static void test_action_codec(void)
     action->aid.siid = 3;
     action->aid.iid = 1;
 
-    /* query encoding is not implemented */
+    /* query encoding: aid only when there is no input */
     content = JsonObject_New();
     TINY_TEST_CHECK(content != NULL);
     if (content != NULL)
     {
-        TINY_TEST_CHECK(!ActionOperationCodec_Invoke_Query_Encode(action, content));
-        TINY_TEST_CHECK(JsonObject_IsEmpty(content));
+        TINY_TEST_CHECK(ActionOperationCodec_Invoke_Query_Encode(action, content));
+        TINY_TEST_CHECK(strcmp(JsonObject_GetStringValue(content, "aid"), "did-9.3.1") == 0);
+        TINY_TEST_CHECK(!JsonObject_ContainsKey(content, "in"));
         TINY_TEST_CHECK(!ActionOperationCodec_Invoke_Query_Encode(NULL, content));
         TINY_TEST_CHECK(!ActionOperationCodec_Invoke_Query_Encode(action, NULL));
+        JsonObject_Delete(content);
+    }
+
+    /* query encoding with one input argument */
+    {
+        ArgumentOperation *in = ActionOperation_EnsureIn(action, 2);
+
+        TINY_TEST_CHECK(in != NULL);
+        if (in != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(&in->values, 7) == TINY_RET_OK);
+        }
+    }
+
+    content = JsonObject_New();
+    if (content != NULL)
+    {
+        TINY_TEST_CHECK(ActionOperationCodec_Invoke_Query_Encode(action, content));
+        array = JsonObject_GetArray(content, "in");
+        TINY_TEST_CHECK(array != NULL);
+        if (array != NULL)
+        {
+            TINY_TEST_CHECK(array->values.size == 1);
+        }
         JsonObject_Delete(content);
     }
 
@@ -820,7 +884,9 @@ static void test_action_codec(void)
         TINY_TEST_CHECK(strcmp(decoded->aid.did, "did-9") == 0);
         TINY_TEST_CHECK(decoded->aid.siid == 3);
         TINY_TEST_CHECK(decoded->aid.iid == 1);
-        TINY_TEST_CHECK(decoded->in.values.size == 2);
+        TINY_TEST_CHECK(decoded->in.size == 2);
+        TINY_TEST_CHECK(ActionOperation_GetIn(decoded, 5) != NULL);
+        TINY_TEST_CHECK(ActionOperation_GetIn(decoded, 6) != NULL);
 
         TINY_TEST_CHECK(ActionOperationCodec_Invoke_Query_Decode(NULL, decoded) == TINY_RET_E_NULL_PTR);
         TINY_TEST_CHECK(ActionOperationCodec_Invoke_Query_Decode(content, NULL) == TINY_RET_E_NULL_PTR);
@@ -845,9 +911,22 @@ static void test_action_codec(void)
         JsonObject_Delete(content);
     }
 
-    /* result encoding reports the output only on success */
-    TINY_TEST_CHECK(JsonArray_AddInteger(&action->out, 1) == TINY_RET_OK);
-    TINY_TEST_CHECK(JsonArray_AddInteger(&action->out, 2) == TINY_RET_OK);
+    /* result encoding reports the output on success */
+    {
+        ArgumentOperation *out1 = ActionOperation_EnsureOut(action, 1);
+        ArgumentOperation *out2 = ActionOperation_EnsureOut(action, 2);
+
+        TINY_TEST_CHECK(out1 != NULL);
+        TINY_TEST_CHECK(out2 != NULL);
+        if (out1 != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(&out1->values, 1) == TINY_RET_OK);
+        }
+        if (out2 != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(&out2->values, 2) == TINY_RET_OK);
+        }
+    }
 
     content = JsonObject_New();
     TINY_TEST_CHECK(content != NULL);
@@ -865,25 +944,109 @@ static void test_action_codec(void)
         JsonObject_Delete(content);
     }
 
-    /* a failure status is encoded without out and reported as false */
+    /* a failure status is encoded with status and without out */
     action->status = IOT_STATUS_ACTION_IN_ERROR;
-    JsonArray_Clean(&action->out);
-    content = JsonObject_New();
-    if (content != NULL)
-    {
-        TINY_TEST_CHECK(!ActionOperationCodec_Invoke_Result_Encode(action, content));
-        TINY_TEST_CHECK(JsonObject_ContainsKey(content, "aid"));
-        TINY_TEST_CHECK(!JsonObject_ContainsKey(content, "out"));
-        JsonObject_Delete(content);
-    }
+    TinyList_RemoveAll(&action->out);
 
     content = JsonObject_New();
     if (content != NULL)
     {
-        TINY_TEST_CHECK(ActionOperationCodec_Invoke_Result_Decode(content, decoded) == TINY_RET_E_NOT_IMPLEMENT);
-        TINY_TEST_CHECK(ActionOperationCodec_Invoke_Result_Decode(NULL, decoded) == TINY_RET_E_NOT_IMPLEMENT);
+        TINY_TEST_CHECK(ActionOperationCodec_Invoke_Result_Encode(action, content));
+        TINY_TEST_CHECK(JsonObject_ContainsKey(content, "aid"));
+        TINY_TEST_CHECK(JsonObject_ContainsKey(content, "status"));
+        TINY_TEST_CHECK(!JsonObject_ContainsKey(content, "out"));
         JsonObject_Delete(content);
     }
+
+    /* result decoding: completed with out arguments */
+    content = JsonObject_New();
+    array = JsonArray_New();
+    if (content != NULL && array != NULL)
+    {
+        JsonObject *entry = JsonObject_New();
+        JsonArray *values = JsonArray_New();
+
+        if (entry != NULL && values != NULL)
+        {
+            TINY_TEST_CHECK(JsonArray_AddInteger(values, 42) == TINY_RET_OK);
+            TINY_TEST_CHECK(JsonObject_PutInteger(entry, "piid", 1) == TINY_RET_OK);
+            if (RET_FAILED(JsonObject_PutArray(entry, "values", values)))
+            {
+                JsonArray_Delete(values);
+                JsonObject_Delete(entry);
+                JsonObject_Delete(content);
+                JsonArray_Delete(array);
+                ActionOperation_Delete(decoded);
+                ActionOperation_Delete(action);
+                return;
+            }
+
+            values = NULL;
+
+            if (RET_FAILED(JsonArray_AddObject(array, entry)))
+            {
+                JsonObject_Delete(entry);
+                JsonObject_Delete(content);
+                JsonArray_Delete(array);
+                ActionOperation_Delete(decoded);
+                ActionOperation_Delete(action);
+                return;
+            }
+
+            entry = NULL;
+        }
+        else
+        {
+            JsonObject_Delete(entry);
+            JsonArray_Delete(values);
+        }
+
+        TINY_TEST_CHECK(JsonObject_PutString(content, "aid", "did-9.3.1") == TINY_RET_OK);
+        TINY_TEST_CHECK(JsonObject_PutInteger(content, "status", IOT_STATUS_COMPLETED) == TINY_RET_OK);
+        if (RET_FAILED(JsonObject_PutArray(content, "out", array)))
+        {
+            JsonArray_Delete(array);
+            JsonObject_Delete(content);
+            ActionOperation_Delete(decoded);
+            ActionOperation_Delete(action);
+            return;
+        }
+
+        array = NULL;
+
+        TINY_TEST_CHECK(ActionOperationCodec_Invoke_Result_Decode(content, decoded) == TINY_RET_OK);
+        TINY_TEST_CHECK(decoded->status == IOT_STATUS_COMPLETED);
+
+        {
+            ArgumentOperation *out = ActionOperation_GetOut(decoded, 1);
+
+            TINY_TEST_CHECK(out != NULL);
+            if (out != NULL)
+            {
+                TINY_TEST_CHECK(JsonArray_GetSize(&out->values) == 1);
+                if (JsonArray_GetSize(&out->values) == 1)
+                {
+                    JsonValue *value = JsonArray_GetValue(&out->values, 0);
+
+                    TINY_TEST_CHECK(value != NULL);
+                    if (value != NULL)
+                    {
+                        TINY_TEST_CHECK(value->type == JSON_NUMBER);
+                        TINY_TEST_CHECK(value->data.number->value.intValue == 42);
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        JsonObject_Delete(content);
+        content = NULL;
+        JsonArray_Delete(array);
+        array = NULL;
+    }
+
+    JsonObject_Delete(content);
 
     ActionOperation_Delete(decoded);
     ActionOperation_Delete(action);

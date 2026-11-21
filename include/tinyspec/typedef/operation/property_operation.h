@@ -21,6 +21,7 @@ typedef struct
     PropertyId      pid;
     JsonValue     * value;
     int             status;
+    bool            argumentsCompact;  /* 组合值解码自紧凑形态（"#iid" 键） */
     char            description[IOT_DESCRIPTION_LENGTH];
 } PropertyOperation;
 
@@ -32,6 +33,14 @@ PropertyOperation * PropertyOperation_NewFrom(const char *did, uint16_t siid, ui
 
 TINYSPEC_API
 PropertyOperation * PropertyOperation_NewValue(const char *did, uint16_t siid, uint16_t piid, JsonValue *value);
+
+/** 从 wire 值解码：组合值会递归规范化为裸 iid 键对象，并记录是否紧凑形态。 */
+TINYSPEC_API
+TinyRet PropertyOperation_SetWireValue(PropertyOperation *thiz, const JsonValue *wire);
+
+/** 把当前值编码为 wire 形态（组合值按 argumentsCompact 输出），调用方持有。 */
+TINYSPEC_API
+JsonValue * PropertyOperation_NewWireValue(const PropertyOperation *thiz);
 
 TINYSPEC_API
 PropertyOperation * PropertyOperation_CopyFrom(PropertyOperation *other);

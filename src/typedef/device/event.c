@@ -120,18 +120,34 @@ void Event_Delete(Event *thiz)
 
 TinyRet Event_ArgumentAdd(Event *thiz, uint16_t iid)
 {
+    return Event_ArgumentAddEx(thiz, iid, 1, 1);
+}
+
+TinyRet Event_ArgumentAddEx(Event *thiz, uint16_t iid, uint16_t min, uint16_t max)
+{
     TinyRet ret = TINY_RET_OK;
 
     RETURN_VAL_IF_FAIL(thiz, TINY_RET_E_NULL_PTR);
 
     do
     {
-        Argument * argument = Argument_NewValue(iid);
+        Argument * argument = NULL;
+
+        if (min > max)
+        {
+            ret = TINY_RET_E_PARAM_INVALID;
+            break;
+        }
+
+        argument = Argument_NewValue(iid);
         if (argument == NULL)
         {
             ret = TINY_RET_E_NO_MEMORY;
             break;
         }
+
+        argument->minRepeat = min;
+        argument->maxRepeat = max;
 
         if (TinyList_AddTail(&thiz->arguments, argument) == NULL)
         {
@@ -144,54 +160,78 @@ TinyRet Event_ArgumentAdd(Event *thiz, uint16_t iid)
     return ret;
 }
 
-static Property* Event_GetProperty(Event *thiz, TinyList *arguments, uint32_t index)
-{
-    Argument * argument = NULL;
-
-    RETURN_VAL_IF_FAIL(thiz, NULL);
-    RETURN_VAL_IF_FAIL(arguments, NULL);
-
-    argument = (Argument *) TinyList_GetAt(arguments, index);
-    if (argument == NULL)
-    {
-        return NULL;
-    }
-
-    return Service_GetProperty(thiz->service, argument->iid);
-}
-
 void Event_TryProduce(Event *thiz, EventOperation *o)
 {
+    uint32_t size = 0;
+    uint32_t i = 0;
+
     RETURN_IF_FAIL(thiz);
     RETURN_IF_FAIL(o);
 
-    do
+    size = TinyList_GetSize(&thiz->arguments);
+    for (i = 0; i < size; ++i)
     {
-        uint32_t count = (o->arguments != NULL) ? o->arguments->values.size : 0;
+        Argument *argument = (Argument *) TinyList_GetAt(&thiz->arguments, i);
+        ArgumentOperation *operation = NULL;
+        Property *property = NULL;
+        uint32_t count = 0;
+        uint32_t j = 0;
 
-        if (thiz->arguments.size != count)
+        if (argument == NULL)
         {
-            o->status = IOT_STATUS_ACTION_IN_ERROR;
+            o->status = IOT_STATUS_EVENT_ARGUMENTS_ERROR;
             break;
         }
 
-        for (uint32_t i = 0; i < thiz->arguments.size; ++i)
+        operation = EventOperation_GetArgument(o, argument->iid);
+        property = Service_GetProperty(thiz->service, argument->iid);
+
+        if (property == NULL)
         {
-            JsonValue * value = (JsonValue *)TinyList_GetAt(&o->arguments->values, i);
-            Property *property = Event_GetProperty(thiz, &thiz->arguments, i);
-            if (property == NULL)
+            TINY_LOG_ERROR("property not found: %u", (unsigned int) argument->iid);
+            o->status = IOT_STATUS_EVENT_ARGUMENTS_ERROR;
+            break;
+        }
+
+        if (operation == NULL)
+        {
+            if (argument->minRepeat > 0)
             {
-                TINY_LOG_ERROR("property not found");
-                o->status = IOT_STATUS_INTERNAL_ERROR;
+                TINY_LOG_ERROR("event argument missing: %u", (unsigned int) argument->iid);
+                o->status = IOT_STATUS_EVENT_ARGUMENTS_ERROR;
                 break;
             }
 
+            continue;
+        }
+
+        count = JsonArray_GetSize(&operation->values);
+        if (count < (uint32_t) argument->minRepeat || count > (uint32_t) argument->maxRepeat)
+        {
+            TINY_LOG_ERROR("event argument count invalid: %u, count: %u, expected: [%u, %u]",
+                           (unsigned int) argument->iid,
+                           (unsigned int) count,
+                           (unsigned int) argument->minRepeat,
+                           (unsigned int) argument->maxRepeat);
+            o->status = IOT_STATUS_EVENT_ARGUMENTS_ERROR;
+            break;
+        }
+
+        for (j = 0; j < count; ++j)
+        {
+            JsonValue *value = JsonArray_GetValue(&operation->values, j);
+
             if (! Property_CheckValue(property, value))
             {
-                TINY_LOG_ERROR("property value invalid");
+                TINY_LOG_ERROR("event argument value invalid: %u", (unsigned int) argument->iid);
                 o->status = IOT_STATUS_EVENT_ARGUMENTS_VALUE_ERROR;
                 break;
             }
         }
-    } while (false);
+
+        if (o->status == IOT_STATUS_EVENT_ARGUMENTS_VALUE_ERROR)
+        {
+            break;
+        }
+    }
 }
