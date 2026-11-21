@@ -11,7 +11,6 @@
 #include <string.h>
 #include <tinycore/json_number.h>
 #include <tinycore/json_object.h>
-#include <tinycore/json_util.h>
 #include <tinycore/tiny_alloc.h>
 #include <tinycore/tiny_log.h>
 #include <tinycore/tiny_map.h>
@@ -19,6 +18,30 @@
 #include <tinyspec/typedef/operation/argument_operation.h>
 
 #define IID_KEY_LENGTH 16
+
+/*
+ * 深拷贝数组内容到已构造的 dst。TinyCore 只提供 JsonArray_NewFrom()，
+ * 不提供就地拷贝；这里本地实现，避免依赖未发布到 tiny-core 的 json_util.h。
+ */
+static TinyRet ArgumentOperation_CopyValues(JsonArray *dst, const JsonArray *src)
+{
+    JsonArray *copy = NULL;
+
+    RETURN_VAL_IF_FAIL(dst, TINY_RET_E_NULL_PTR);
+    RETURN_VAL_IF_FAIL(src, TINY_RET_E_NULL_PTR);
+
+    copy = JsonArray_NewFrom(src);
+    if (copy == NULL)
+    {
+        return TINY_RET_E_NO_MEMORY;
+    }
+
+    JsonArray_Dispose(dst);
+    *dst = *copy;
+    tiny_free(copy);
+
+    return TINY_RET_OK;
+}
 
 ArgumentOperation * ArgumentOperation_New(uint16_t piid)
 {
@@ -86,14 +109,7 @@ TinyRet ArgumentOperation_Copy(ArgumentOperation *dst, const ArgumentOperation *
 
         dst->piid = src->piid;
 
-        JsonArray_Dispose(&dst->values);
-        ret = JsonArray_Construct(&dst->values);
-        if (RET_FAILED(ret))
-        {
-            break;
-        }
-
-        ret = JsonArray_CopyInto(&dst->values, &src->values);
+        ret = ArgumentOperation_CopyValues(&dst->values, &src->values);
         if (RET_FAILED(ret))
         {
             break;
@@ -223,7 +239,7 @@ static TinyRet ArgumentOperation_DecodeArrayItem(const JsonValue *item, TinyList
         values = JsonObject_GetArray(item->data.object, "values");
         if (values != NULL)
         {
-            ret = JsonArray_CopyInto(&operation->values, values);
+            ret = ArgumentOperation_CopyValues(&operation->values, values);
             if (RET_FAILED(ret))
             {
                 break;
@@ -273,7 +289,7 @@ static TinyRet ArgumentOperation_DecodeCompactItem(const char *key, const JsonVa
         return TINY_RET_E_NO_MEMORY;
     }
 
-    ret = JsonArray_CopyInto(&operation->values, value->data.array);
+    ret = ArgumentOperation_CopyValues(&operation->values, value->data.array);
     if (RET_FAILED(ret))
     {
         ArgumentOperation_Delete(operation);
